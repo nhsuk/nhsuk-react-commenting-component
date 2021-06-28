@@ -1,0 +1,8 @@
+node_modules
+*.min.js
+**/lib/
+public/
+coverage/
+gulp/
+**/vendor/
+gulpfile.js

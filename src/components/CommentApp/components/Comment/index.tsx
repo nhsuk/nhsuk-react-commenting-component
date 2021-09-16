@@ -229,13 +229,15 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader
-          descriptionId={descriptionId}
-          commentReply={comment}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        <div className="comment__original">
+          <CommentHeader
+            descriptionId={descriptionId}
+            commentReply={comment}
+            store={store}
+            strings={strings}
+            focused={isFocused}
+          />
+        </div>
         <form onSubmit={onSave}>
           <TextArea
             focusTarget={isFocused}
@@ -344,13 +346,13 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
+        <p className="comment__text">{comment.text}</p>
         <CommentHeader
           commentReply={comment}
           store={store}
           strings={strings}
           focused={isFocused}
         />
-        <p className="comment__text">{comment.text}</p>
         <div className="comment__progress">{strings.SAVING}</div>
         {this.renderReplies({ hideNewReply: true })}
       </>
@@ -368,18 +370,20 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
-        <p className="comment__text">{comment.text}</p>
-        {this.renderReplies({ hideNewReply: true })}
-        <div className="comment__error">
-          {strings.SAVE_ERROR}
-          <button
-            type="button"
-            className="comment__button"
-            onClick={onClickRetry}
-          >
-            {strings.RETRY}
-          </button>
+        <div className="comment__original">
+          <p className="comment__text">{comment.text}</p>
+          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          {this.renderReplies({ hideNewReply: true })}
+          <div className="comment__error">
+            {strings.SAVE_ERROR}
+            <button
+              type="button"
+              className="comment__button"
+              onClick={onClickRetry}
+            >
+              {strings.RETRY}
+            </button>
+          </div>
         </div>
       </>
     );
@@ -406,24 +410,26 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
-        <p className="comment__text">{comment.text}</p>
-        <div className="comment__confirm-delete">
-          {strings.CONFIRM_DELETE_COMMENT}
-          <button
-            type="button"
-            className="comment__button"
-            onClick={onClickCancel}
-          >
-            {strings.CANCEL}
-          </button>
-          <button
-            type="button"
-            className="comment__button comment__button--primary"
-            onClick={onClickDelete}
-          >
-            {strings.DELETE}
-          </button>
+        <div className="comment__original">
+          <p className="comment__text">{comment.text}</p>
+          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          <div className="comment__confirm-delete">
+            {strings.CONFIRM_DELETE_COMMENT}
+            <button
+              type="button"
+              className="comment__button"
+              onClick={onClickCancel}
+            >
+              {strings.CANCEL}
+            </button>
+            <button
+              type="button"
+              className="comment__button comment__button--primary"
+              onClick={onClickDelete}
+            >
+              {strings.DELETE}
+            </button>
+          </div>
         </div>
         {this.renderReplies({ hideNewReply: true })}
       </>
@@ -435,8 +441,8 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
         <p className="comment__text">{comment.text}</p>
+        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
         <div className="comment__progress">{strings.DELETING}</div>
         {this.renderReplies({ hideNewReply: true })}
       </>
@@ -464,8 +470,10 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
-        <p className="comment__text">{comment.text}</p>
+        <div className="comment__original">
+          <p className="comment__text">{comment.text}</p>
+          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+        </div>
         {this.renderReplies({ hideNewReply: true })}
         <div className="comment__error">
           {strings.DELETE_ERROR}
@@ -524,24 +532,26 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <p className="comment__text">{comment.text}</p>
-        <CommentHeader
-          commentReply={comment}
-          store={store}
-          strings={strings}
-          onResolve={doResolveComment}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          focused={isFocused}
-        />
-        {notice &&
-          <div className="comment__notice-placeholder">
-            <div className="comment__notice" role="status">
-              <Icon name="info-circle" />
-              {notice}
+        <div className="comment__original">
+          <p className="comment__text">{comment.text}</p>
+          <CommentHeader
+            commentReply={comment}
+            store={store}
+            strings={strings}
+            onResolve={doResolveComment}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            focused={isFocused}
+          />
+          {notice &&
+            <div className="comment__notice-placeholder">
+              <div className="comment__notice" role="status">
+                <Icon name="info-circle" />
+                {notice}
+              </div>
             </div>
-          </div>
-        }
+          }
+        </div>
         {this.renderReplies()}
       </>
     );

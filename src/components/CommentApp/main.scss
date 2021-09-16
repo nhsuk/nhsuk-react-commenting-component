@@ -70,7 +70,7 @@ $box-padding: 10px;
 @mixin box {
     background-color: $color-box-background;
     border: 1px solid $color-box-border;
-    padding: $box-padding;
+    // padding: $box-padding;
     font-size: 11px;
     border-radius: $box-border-radius;
     color: $color-box-text;

@@ -6,7 +6,6 @@
     transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
     pointer-events: auto;
     box-sizing: border-box;
-    padding-bottom: 0;
     right: -2000px;
 
     &--focused {
@@ -20,6 +19,7 @@
         margin-bottom: 0;
         padding-top: 10px;
         padding-bottom: 10px;
+        max-width: calc(95%);
 
         &--mode-deleting {
             color: $color-grey-1;

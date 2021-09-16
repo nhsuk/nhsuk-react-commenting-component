@@ -1,6 +1,7 @@
 .comment-header {
     position: relative;
 
+    // This might need deleting if not used anywhere
     &__avatar {
         position: absolute;
         width: 30px;
@@ -12,9 +13,9 @@
     &__date {
         max-width: calc(100% - 110px);  // Leave room for actions to the right and avatar to the left
         margin: 0;
-        margin-left: 45px;
         font-size: 11px;
         line-height: 15px;
+        padding-bottom: 10px;
     }
 
     &__date {

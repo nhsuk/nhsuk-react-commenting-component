@@ -152,11 +152,8 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
           </div>
         }
       </div>
-      {author && author.avatarUrl &&
-        <img className="comment-header__avatar" src={author.avatarUrl} role="presentation" />}
       <span id={descriptionId}>
-        <p className="comment-header__author">{author ? author.name : ''}</p>
-        <p className="comment-header__date">{dateFormat(date, 'd mmm yyyy HH:MM')}</p>
+        <p className="comment-header__author comment-header__date">{author ? author.name : ''} | {dateFormat(date, 'HH:MM mmmm d')}</p>
       </span>
     </div>
   );

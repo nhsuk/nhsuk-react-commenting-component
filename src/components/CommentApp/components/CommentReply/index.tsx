@@ -306,6 +306,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
+        <p className="comment-reply__text">{reply.text}</p>
         <CommentHeader
           commentReply={reply}
           store={store}
@@ -314,7 +315,6 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
           onDelete={onDelete}
           focused={isFocused}
         />
-        <p className="comment-reply__text">{reply.text}</p>
         {notice &&
           <div className="comment__notice-placeholder">
             <div className="comment__notice" role="status">

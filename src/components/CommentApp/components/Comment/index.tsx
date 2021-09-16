@@ -524,6 +524,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
+        <p className="comment__text">{comment.text}</p>
         <CommentHeader
           commentReply={comment}
           store={store}
@@ -533,7 +534,6 @@ export default class CommentComponent extends React.Component<CommentProps> {
           onDelete={onDelete}
           focused={isFocused}
         />
-        <p className="comment__text">{comment.text}</p>
         {notice &&
           <div className="comment__notice-placeholder">
             <div className="comment__notice" role="status">

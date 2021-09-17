@@ -129,7 +129,7 @@ export const CommentFooter: FunctionComponent<CommentFooterProps> = ({
 
   return (
     <div className="comment-footer">
-      <div className="comment-footer__actions">
+    {/* <div className="comment-footer__actions">
         {(onEdit || onDelete || onResolve) &&
           <div className="comment-footer__action comment-footer__action--more" ref={menuContainerRef}>
             <Details open={menuOpen} onClick={toggleMenu}>
@@ -151,7 +151,7 @@ export const CommentFooter: FunctionComponent<CommentFooterProps> = ({
             </Details>
           </div>
         }
-      </div>
+      </div> */}
       <span id={descriptionId}>
         <p className="comment-footer__author comment-footer__date">{author ? author.name : ''} | {dateFormat(date, 'HH:MM mmmm d')}</p>
       </span>

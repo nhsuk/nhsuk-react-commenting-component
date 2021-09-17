@@ -18,7 +18,7 @@ import { LayoutController } from '../../utils/layout';
 import { getNextReplyId } from '../../utils/sequences';
 import CommentReplyComponent from '../CommentReply';
 import type { TranslatableStrings } from '../../main';
-import { CommentHeader }  from '../CommentHeader';
+import { CommentFooter }  from '../CommentFooter';
 import TextArea from '../TextArea';
 
 async function saveComment(comment: Comment, store: Store) {
@@ -230,7 +230,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
-          <CommentHeader
+          <CommentFooter
             descriptionId={descriptionId}
             commentReply={comment}
             store={store}
@@ -302,7 +302,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <CommentHeader
+        <CommentFooter
           descriptionId={descriptionId}
           commentReply={comment}
           store={store}
@@ -347,7 +347,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <p className="comment__text">{comment.text}</p>
-        <CommentHeader
+        <CommentFooter
           commentReply={comment}
           store={store}
           strings={strings}
@@ -372,7 +372,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <p className="comment__text">{comment.text}</p>
-          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
           {this.renderReplies({ hideNewReply: true })}
           <div className="comment__error">
             {strings.SAVE_ERROR}
@@ -412,7 +412,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <p className="comment__text">{comment.text}</p>
-          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
           <div className="comment__confirm-delete">
             {strings.CONFIRM_DELETE_COMMENT}
             <button
@@ -441,9 +441,11 @@ export default class CommentComponent extends React.Component<CommentProps> {
 
     return (
       <>
-        <p className="comment__text">{comment.text}</p>
-        <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
-        <div className="comment__progress">{strings.DELETING}</div>
+        <div className="comment__original">
+          <p className="comment__text">{comment.text}</p>
+          <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          <div className="comment__progress">{strings.DELETING}</div>
+        </div>
         {this.renderReplies({ hideNewReply: true })}
       </>
     );
@@ -472,7 +474,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <p className="comment__text">{comment.text}</p>
-          <CommentHeader commentReply={comment} store={store} strings={strings} focused={isFocused} />
+          <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
         </div>
         {this.renderReplies({ hideNewReply: true })}
         <div className="comment__error">
@@ -534,7 +536,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <p className="comment__text">{comment.text}</p>
-          <CommentHeader
+          <CommentFooter
             commentReply={comment}
             store={store}
             strings={strings}

@@ -6,7 +6,7 @@ import type { Store } from '../../state';
 import type { Comment, CommentReply, Author } from '../../state/comments';
 import { updateReply, deleteReply } from '../../actions/comments';
 import type { TranslatableStrings } from '../../main';
-import { CommentHeader }  from '../CommentHeader';
+import { CommentFooter }  from '../CommentFooter';
 import TextArea from '../TextArea';
 import Icon from '../../../Icon/Icon';
 
@@ -101,7 +101,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
-        <CommentHeader
+        <CommentFooter
           commentReply={reply}
           store={store}
           strings={strings}
@@ -140,7 +140,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader commentReply={reply} store={store} strings={strings} focused={isFocused} />
+        <CommentFooter commentReply={reply} store={store} strings={strings} focused={isFocused} />
         <div className="comment-reply__progress">{strings.SAVING}</div>
       </>
     );
@@ -158,7 +158,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader commentReply={reply} store={store} strings={strings} focused={isFocused} />
+        <CommentFooter commentReply={reply} store={store} strings={strings} focused={isFocused} />
         <div className="comment-reply__error">
           {strings.SAVE_ERROR}
           <button
@@ -195,7 +195,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader commentReply={reply} store={store} strings={strings} focused={isFocused} />
+        <CommentFooter commentReply={reply} store={store} strings={strings} focused={isFocused} />
         <div className="comment-reply__confirm-delete">
           {strings.CONFIRM_DELETE_COMMENT}
           <button
@@ -223,7 +223,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader commentReply={reply} store={store} strings={strings} focused={isFocused} />
+        <CommentFooter commentReply={reply} store={store} strings={strings} focused={isFocused} />
         <div className="comment-reply__progress">{strings.DELETING}</div>
       </>
     );
@@ -251,7 +251,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader commentReply={reply} store={store} strings={strings} focused={isFocused} />
+        <CommentFooter commentReply={reply} store={store} strings={strings} focused={isFocused} />
         <div className="comment-reply__error">
           {strings.DELETE_ERROR}
           <button
@@ -307,7 +307,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentHeader
+        <CommentFooter
           commentReply={reply}
           store={store}
           strings={strings}

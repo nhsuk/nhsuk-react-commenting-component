@@ -1,4 +1,4 @@
-.comment-header {
+.comment-footer {
     position: relative;
 
     // This might need deleting if not used anywhere
@@ -130,16 +130,16 @@
     }
 }
 
-.comment--mode-deleting .comment-header,
-.comment-reply--mode-deleting .comment-header {
+.comment--mode-deleting .comment-footer,
+.comment-reply--mode-deleting .comment-footer {
     opacity: 0.5;
 }
 
 // IE11 only uses these classes
-.details-fallback .comment-header__more-actions {
+.details-fallback .comment-footer__more-actions {
     display: none;
 }
 
-.details-fallback--open .comment-header__more-actions {
+.details-fallback--open .comment-footer__more-actions {
     display: block;
 }

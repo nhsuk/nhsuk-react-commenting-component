@@ -53,7 +53,7 @@ interface CommentReply {
   date: number;
 }
 
-interface CommentHeaderProps {
+interface CommentFooterProps {
   commentReply: CommentReply;
   store: Store;
   strings: TranslatableStrings;
@@ -64,7 +64,7 @@ interface CommentHeaderProps {
   focused: boolean;
 }
 
-export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
+export const CommentFooter: FunctionComponent<CommentFooterProps> = ({
   commentReply, store, strings, onResolve, onEdit, onDelete, descriptionId, focused
 }) => {
   const { author, date } = commentReply;
@@ -128,10 +128,10 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
   }, []);
 
   return (
-    <div className="comment-header">
-      <div className="comment-header__actions">
+    <div className="comment-footer">
+      <div className="comment-footer__actions">
         {(onEdit || onDelete || onResolve) &&
-          <div className="comment-header__action comment-header__action--more" ref={menuContainerRef}>
+          <div className="comment-footer__action comment-footer__action--more" ref={menuContainerRef}>
             <Details open={menuOpen} onClick={toggleMenu}>
               <Summary
                 aria-label={strings.MORE_ACTIONS}
@@ -143,7 +143,7 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
                 <Icon name="ellipsis-v" />
               </Summary>
 
-              <div className="comment-header__more-actions" role="menu" ref={menuRef}>
+              <div className="comment-footer__more-actions" role="menu" ref={menuRef}>
                 {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
                 {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
                 {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
@@ -153,7 +153,7 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
         }
       </div>
       <span id={descriptionId}>
-        <p className="comment-header__author comment-header__date">{author ? author.name : ''} | {dateFormat(date, 'HH:MM mmmm d')}</p>
+        <p className="comment-footer__author comment-footer__date">{author ? author.name : ''} | {dateFormat(date, 'HH:MM mmmm d')}</p>
       </span>
     </div>
   );

@@ -231,13 +231,6 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
-          {/* <CommentFooter
-            descriptionId={descriptionId}
-            commentReply={comment}
-            store={store}
-            strings={strings}
-            focused={isFocused}
-          /> */}
         </div>
         <form onSubmit={onSave}>
           <TextArea
@@ -372,6 +365,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
+          <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
           {this.renderReplies({ hideNewReply: true })}
@@ -412,6 +406,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
+          <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
           <div className="comment__confirm-delete">
@@ -443,6 +438,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
+          <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
           <div className="comment__progress">{strings.DELETING}</div>
@@ -474,6 +470,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
+          <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentReply={comment} store={store} strings={strings} focused={isFocused} />
         </div>
@@ -536,7 +533,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <div className="comment__original">
-          <p className="comment__highlighted_text nhsuk-body-s">This is the highlighted text.</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">This is the highlighted text.</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter
             commentReply={comment}

@@ -7,6 +7,17 @@
   "publishConfig": {
     "access": "public"
   },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhsuk/nhsuk-react-commenting-component.git"
+  },
+  "homepage": "https://nhsuk.github.io/nhsuk-react-commenting-component/",
+  "bugs": {
+    "url": "https://github.com/nhsuk/nhsuk-react-commenting-component/issues"
+  },
   "browserslist": [
     "Firefox ESR",
     "ie 11",
@@ -106,8 +117,6 @@
     "element-closest": "^2.0.2",
     "focus-trap-react": "^8.4.2",
     "formdata-polyfill": "^3.0.20",
-    "gulp-zip": "^5.0.2",
-    "gulp": "^4.0.2",
     "immer": "^9.0.1",
     "nhsuk-frontend": "^5.1.0",
     "postcss-calc": "^7.0.5",
@@ -139,7 +148,6 @@
     "test:unit:watch": "jest --watch",
     "test:unit:coverage": "jest --coverage",
     "storybook": "start-storybook -c .storybook -p 6006",
-    "build-storybook": "build-storybook -c .storybook",
-    "build-gh-release": "gulp zip"
+    "build-storybook": "build-storybook -c .storybook"
   }
 }

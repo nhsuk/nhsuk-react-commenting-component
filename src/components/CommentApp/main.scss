@@ -179,6 +179,8 @@ $box-padding: 10px;
     pointer-events: none;
 }
 
+@import '~bootstrap/scss/bootstrap';
+@import 'components/CommentHeader/style';
 @import 'components/Comment/style';
 @import 'components/CommentFooter/style';
 @import 'components/CommentMenu/style';

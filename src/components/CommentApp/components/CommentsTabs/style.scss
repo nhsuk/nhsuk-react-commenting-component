@@ -1,0 +1,15 @@
+.comments-tabs {
+    .nav-link {
+        color: #005eb8;
+        font-size: 19px;
+        background: none;
+        border: 0;
+        border-bottom: 5px solid #d9dde1;
+    }
+
+    .nav-link.active {
+        border-bottom: 5px solid #0d5da3;
+        color: #212b32;
+        background: none;
+    }
+}

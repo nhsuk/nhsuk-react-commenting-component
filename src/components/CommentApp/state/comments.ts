@@ -97,6 +97,7 @@ export interface Comment {
   replies: Map<number, CommentReply>;
   newReply: string;
   remoteReplyCount: number;
+  highlightedText: string;
   // There are three variables used for text
   // text is the canonical text, that will be output to the form
   // newText stores the edited version of the text until it is saved
@@ -110,6 +111,7 @@ export interface Comment {
 export interface NewCommentOptions {
   remoteId?: number | null;
   mode?: CommentMode;
+  highlightedText?: string;
   text?: string;
   resolved?: boolean;
   deleted?: boolean;
@@ -126,6 +128,7 @@ export function newComment(
   {
     remoteId = null,
     mode = 'default',
+    highlightedText = '',
     text = '',
     resolved = false,
     deleted = false,
@@ -141,6 +144,7 @@ export function newComment(
     mode,
     author,
     date,
+    highlightedText,
     text,
     originalText: text,
     replies,

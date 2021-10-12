@@ -87,7 +87,6 @@ $box-padding: 10px;
         background-color: $color-textarea-background;
         border: 1px solid $color-textarea-border;
         box-sizing: border-box;
-        border-radius: 5px;
         -moz-outline-radius: 8px;
         color: $color-box-text;
 
@@ -144,7 +143,6 @@ $box-padding: 10px;
     -moz-outline-radius: 6px;
     color: $color-teal;
     cursor: pointer;
-    text-transform: uppercase;
     font-family: inherit;
     font-size: 12px;
     font-weight: bold;
@@ -181,6 +179,7 @@ $box-padding: 10px;
     pointer-events: none;
 }
 
+@import 'components/Comment/style';
 @import 'components/CommentFooter/style';
 @import 'components/CommentMenu/style';
 @import 'components/CommentReply/style';

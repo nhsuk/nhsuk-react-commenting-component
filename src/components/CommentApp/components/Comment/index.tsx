@@ -167,7 +167,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
         <form onSubmit={sendReply}>
           <TextArea
             className="comment__reply-input"
-            placeholder="Enter your reply..."
+            placeholder="Type your comment"
             value={comment.newReply}
             onChange={onChangeNewReply}
           />
@@ -177,7 +177,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
               type="submit"
               className="comment__button comment__button--primary"
             >
-              {strings.REPLY}
+              {strings.SAVE}
             </button>
             <button
               type="button"
@@ -245,7 +245,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             className="comment__input"
             value={comment.newText}
             onChange={onChangeText}
-            placeholder="Enter your comments..."
+            placeholder="Type your comment"
             additionalAttributes={{
               'aria-describedby': descriptionId
             }}
@@ -256,7 +256,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
               type="submit"
               className="comment__button comment__button--primary"
             >
-              {strings.COMMENT}
+              {strings.SAVE}
             </button>
             <button
               type="button"

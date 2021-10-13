@@ -99,14 +99,12 @@ export interface InitialComment {
 }
 /* eslint-enable */
 
-// eslint-disable-next-line camelcase
-const getAuthor = (authors: Map<string, {name: string, avatar_url: string}>, id: any): Author => {
-  const authorData = getOrDefault(authors, String(id), { name: '', avatar_url: '' });
+const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
+  const authorData = getOrDefault(authors, String(id), { name: '' });
 
   return {
     id,
     name: authorData.name,
-    avatarUrl: authorData.avatar_url,
   };
 };
 
@@ -142,10 +140,6 @@ function renderCommentsUi(
   return (
     <ol>{commentsRendered}</ol>
   );
-  // return (
-  //   <ol className="comments-list">{commentsRendered}</ol>
-  // );
-  /* eslint-enable react/no-danger */
 }
 
 export class CommentApp {
@@ -170,8 +164,7 @@ export class CommentApp {
     });
     this.layout = new LayoutController();
   }
-  // eslint-disable-next-line camelcase
-  setUser(userId: any, authors: Map<string, {name: string, avatar_url: string}>) {
+  setUser(userId: any, authors: Map<string, {name: string}>) {
     this.store.dispatch(
       updateGlobalSettings({
         user: getAuthor(authors, userId)
@@ -242,8 +235,7 @@ export class CommentApp {
     outputElement: HTMLElement,
     userId: any,
     initialComments: InitialComment[],
-    // eslint-disable-next-line camelcase
-    authors: Map<string, {name: string, avatar_url: string}>,
+    authors: Map<string, {name: string}>,
     translationStrings: TranslatableStrings | null
   ) {
     let pinnedComment: number | null = null;

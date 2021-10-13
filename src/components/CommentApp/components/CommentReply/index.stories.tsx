@@ -43,7 +43,6 @@ export function replyFromSomeoneElse() {
     author: {
       id: 2,
       name: 'Someone else',
-      avatarUrl: 'https://gravatar.com/avatar/31c3d5cc27d1faa321c2413589e8a53f?s=200&d=robohash&r=x',
     },
   });
 

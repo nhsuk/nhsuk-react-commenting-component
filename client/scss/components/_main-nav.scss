@@ -362,16 +362,6 @@ body.explorer-open {
                 text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
             }
 
-            .avatar {
-                float: left;
-                margin-right: 0.9em;
-
-                &:before {
-                    color: inherit;
-                    border-color: inherit;
-                }
-            }
-
             em {
                 box-sizing: border-box;
                 padding-right: 1.8em;

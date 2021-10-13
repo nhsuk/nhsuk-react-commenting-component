@@ -15,10 +15,6 @@
         }
     }
 
-    &--mode-deleting &__avatar {
-        opacity: 0.5;
-    }
-
     &--mode-deleting &__text {
         color: $color-grey-3;
     }

@@ -177,6 +177,7 @@ $box-padding: 10px;
     z-index: 50;
     font-family: 'Open Sans', sans-serif;
     pointer-events: none;
+    padding-left: 0;
 }
 
 @import '~bootstrap/scss/bootstrap';

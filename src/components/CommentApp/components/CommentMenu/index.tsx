@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 
-import dateFormat from 'dateformat';
 import React, { FunctionComponent, useState, useEffect, useRef } from 'react';
 import Icon from '../../../Icon/Icon';
 import type { Store } from '../../state';
@@ -53,22 +52,19 @@ interface CommentReply {
   date: number;
 }
 
-interface CommentHeaderProps {
+interface CommentMenuProps {
   commentReply: CommentReply;
   store: Store;
   strings: TranslatableStrings;
   onResolve?(commentReply: CommentReply, store: Store): void;
   onEdit?(commentReply: CommentReply, store: Store): void;
   onDelete?(commentReply: CommentReply, store: Store): void;
-  descriptionId?: string;
   focused: boolean;
 }
 
-export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
-  commentReply, store, strings, onResolve, onEdit, onDelete, descriptionId, focused
+export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
+  commentReply, store, strings, onResolve, onEdit, onDelete, focused
 }) => {
-  const { author, date } = commentReply;
-
   const onClickResolve = (e: React.MouseEvent) => {
     e.preventDefault();
 
@@ -128,10 +124,10 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
   }, []);
 
   return (
-    <div className="comment-header">
-      <div className="comment-header__actions">
+    <div className="comment-menu">
+      <div className="comment-menu__actions">
         {(onEdit || onDelete || onResolve) &&
-          <div className="comment-header__action comment-header__action--more" ref={menuContainerRef}>
+          <div className="comment-menu__action comment-menu__action--more" ref={menuContainerRef}>
             <Details open={menuOpen} onClick={toggleMenu}>
               <Summary
                 aria-label={strings.MORE_ACTIONS}
@@ -143,7 +139,7 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
                 <Icon name="ellipsis-v" />
               </Summary>
 
-              <div className="comment-header__more-actions" role="menu" ref={menuRef}>
+              <div className="comment-menu__more-actions" role="menu" ref={menuRef}>
                 {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
                 {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
                 {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
@@ -152,12 +148,6 @@ export const CommentHeader: FunctionComponent<CommentHeaderProps> = ({
           </div>
         }
       </div>
-      {author && author.avatarUrl &&
-        <img className="comment-header__avatar" src={author.avatarUrl} role="presentation" />}
-      <span id={descriptionId}>
-        <p className="comment-header__author">{author ? author.name : ''}</p>
-        <p className="comment-header__date">{dateFormat(date, 'd mmm yyyy HH:MM')}</p>
-      </span>
     </div>
   );
 };

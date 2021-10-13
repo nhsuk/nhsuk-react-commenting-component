@@ -60,7 +60,7 @@ $color-textarea-background-focused: #f2fcfc;
 $color-textarea-border: #ccc;
 $color-textarea-border-focused: #00b0b1;
 $color-textarea-placeholder-text: $color-grey-2;
-$box-border-radius: 5px;
+$box-border-radius: 4px;
 $box-padding: 10px;
 
 @mixin focus-outline {
@@ -70,7 +70,6 @@ $box-padding: 10px;
 @mixin box {
     background-color: $color-box-background;
     border: 1px solid $color-box-border;
-    padding: $box-padding;
     font-size: 11px;
     border-radius: $box-border-radius;
     color: $color-box-text;
@@ -88,7 +87,6 @@ $box-padding: 10px;
         background-color: $color-textarea-background;
         border: 1px solid $color-textarea-border;
         box-sizing: border-box;
-        border-radius: 5px;
         -moz-outline-radius: 8px;
         color: $color-box-text;
 
@@ -145,7 +143,6 @@ $box-padding: 10px;
     -moz-outline-radius: 6px;
     color: $color-teal;
     cursor: pointer;
-    text-transform: uppercase;
     font-family: inherit;
     font-size: 12px;
     font-weight: bold;
@@ -177,15 +174,13 @@ $box-padding: 10px;
 
 .comments-list {
     width: 400px;
-    // position: absolute;
-    // top: 30px;
-    // right: 30px;
     z-index: 50;
     font-family: 'Open Sans', sans-serif;
     pointer-events: none;
 }
 
-@import 'components/CommentHeader/style';
 @import 'components/Comment/style';
+@import 'components/CommentFooter/style';
+@import 'components/CommentMenu/style';
 @import 'components/CommentReply/style';
 @import '../../../node_modules/nhsuk-frontend/packages/nhsuk';

@@ -1,34 +1,16 @@
-.comment-header {
+.comment-menu {
     position: relative;
-
-    &__avatar {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        border-radius: 15px;
-    }
-
-    &__author,
-    &__date {
-        max-width: calc(100% - 110px);  // Leave room for actions to the right and avatar to the left
-        margin: 0;
-        margin-left: 45px;
-        font-size: 11px;
-        line-height: 15px;
-    }
-
-    &__date {
-        color: $color-grey-25;
-    }
 
     &__actions {
         position: absolute;
         right: 0;
+        top: 0;
     }
 
     &__action {
         float: left;
         margin-left: 5px;
+        border: 1px solid #000;
         border-radius: 5px;
         width: 30px;
         height: 30px;
@@ -129,16 +111,16 @@
     }
 }
 
-.comment--mode-deleting .comment-header,
-.comment-reply--mode-deleting .comment-header {
+.comment--mode-deleting .comment-menu,
+.comment-reply--mode-deleting .comment-menu {
     opacity: 0.5;
 }
 
 // IE11 only uses these classes
-.details-fallback .comment-header__more-actions {
+.details-fallback .comment-menu__more-actions {
     display: none;
 }
 
-.details-fallback--open .comment-header__more-actions {
+.details-fallback--open .comment-menu__more-actions {
     display: block;
 }

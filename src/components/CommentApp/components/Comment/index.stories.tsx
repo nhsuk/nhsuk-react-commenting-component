@@ -15,6 +15,7 @@ export function addNewComment() {
 
   addTestComment(store, {
     mode: 'creating',
+    highlightedText: 'This is the highlighted text.',
     focused: true,
   });
 
@@ -26,6 +27,7 @@ export function comment() {
 
   addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -37,22 +39,7 @@ export function commentFromSomeoneElse() {
 
   addTestComment(store, {
     mode: 'default',
-    text: 'An example comment',
-    author: {
-      id: 2,
-      name: 'Someone else',
-      avatarUrl: 'https://gravatar.com/avatar/31c3d5cc27d1faa321c2413589e8a53f?s=200&d=robohash&r=x',
-    },
-  });
-
-  return <RenderCommentsForStorybook store={store} />;
-}
-
-export function commentFromSomeoneElseWithoutAvatar() {
-  const store: Store = createStore(reducer);
-
-  addTestComment(store, {
-    mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     author: {
       id: 2,
@@ -68,12 +55,11 @@ export function commentFromSomeoneWithAReallyLongName() {
 
   addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     author: {
       id: 1,
       name: 'This person has a really long name and it should wrap to the next line',
-      avatarUrl: 'https://gravatar.com/avatar/31c3d5cc27d1faa321c2413589e8a53f?s=200&d=robohash&r=x',
-
     },
   });
 
@@ -85,6 +71,7 @@ export function focused() {
 
   addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -97,6 +84,7 @@ export function saving() {
 
   addTestComment(store, {
     mode: 'saving',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -108,6 +96,7 @@ export function saveError() {
 
   addTestComment(store, {
     mode: 'save_error',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -119,6 +108,7 @@ export function deleteConfirm() {
 
   addTestComment(store, {
     mode: 'delete_confirm',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -130,6 +120,7 @@ export function deleting() {
 
   addTestComment(store, {
     mode: 'deleting',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -140,6 +131,7 @@ export function deleteError() {
   const store: Store = createStore(reducer);
   addTestComment(store, {
     mode: 'delete_error',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 

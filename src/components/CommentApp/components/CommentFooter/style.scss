@@ -1,0 +1,16 @@
+.comment-footer {
+    position: relative;
+
+    &__author {
+        max-width: calc(100% - 110px);  // Leave room for actions to the right
+        margin: 0;
+        font-size: 11px;
+        line-height: 15px;
+        padding-bottom: 10px;
+    }
+}
+
+.comment--mode-deleting .comment-footer,
+.comment-reply--mode-deleting .comment-footer {
+    opacity: 0.5;
+}

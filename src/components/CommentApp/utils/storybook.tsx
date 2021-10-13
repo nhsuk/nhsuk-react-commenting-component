@@ -47,7 +47,6 @@ export function RenderCommentsForStorybook({
         author || {
           id: 1,
           name: 'Admin',
-          avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
         }
       }
       comment={comment}
@@ -78,7 +77,6 @@ export function addTestComment(
   const author = options.author || {
     id: 1,
     name: 'Admin',
-    avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
   };
 
   // We must have a remoteId unless the comment is being created
@@ -118,7 +116,6 @@ export function addTestReply(
   const author = options.author || {
     id: 1,
     name: 'Admin',
-    avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
   };
 
   if (!options.remoteId) {

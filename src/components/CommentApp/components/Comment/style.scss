@@ -6,32 +6,50 @@
     transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
     pointer-events: auto;
     box-sizing: border-box;
-    padding-bottom: 0;
     right: -2000px;
 
     &--focused {
         right: 35px;
     }
 
+    &__original {
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
     &__text {
         color: $color-box-text;
-        font-size: 13px;
+        font-size: 15px;
         line-height: 19px;
         margin-bottom: 0;
-        padding-top: 10px;
         padding-bottom: 10px;
+        max-width: calc(95%);
 
         &--mode-deleting {
             color: $color-grey-1;
         }
     }
 
+    &__highlighted_text {
+        border-left: 3px solid #4f6270;
+        padding-left: 5px;
+        font-style: italic;
+        color: #4f6270;
+        margin-bottom: 10px;
+    }
+
     form {
-        border-top: 1px solid $color-comment-separator;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+        margin: 0;
+        border-top: 1px solid #e6e6e6;
+        border-left: 10px solid #d9d9d9;
     }
 
     &--mode-creating form {
-        border-top: 0;
+        border: 0;
         margin-top: 10px;
     }
 
@@ -45,8 +63,10 @@
 
     &__replies {
         list-style-type: none;
-        padding: 0;
+        padding: 10px 10px 10px 10px;
         margin: 0;
+        border-top: 1px solid #e6e6e6;
+        border-left: 10px solid #d9d9d9;
     }
 
     &__button {
@@ -56,11 +76,12 @@
     &__actions,
     &__reply-actions {
         padding-bottom: 10px;
+        text-align: right;
     }
 
     &__actions &__button,
     &__reply-actions &__button {
-        margin-right: 10px;
+        margin-left: 10px;
         margin-top: 10px;
     }
 

@@ -16,6 +16,7 @@ export function reply() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -32,6 +33,7 @@ export function replyFromSomeoneElse() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
   });
 
@@ -41,7 +43,6 @@ export function replyFromSomeoneElse() {
     author: {
       id: 2,
       name: 'Someone else',
-      avatarUrl: 'https://gravatar.com/avatar/31c3d5cc27d1faa321c2413589e8a53f?s=200&d=robohash&r=x',
     },
   });
 
@@ -53,6 +54,7 @@ export function focused() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -70,6 +72,7 @@ export function editing() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -87,6 +90,7 @@ export function saving() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -103,6 +107,7 @@ export function saveError() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -120,6 +125,7 @@ export function deleteConfirm() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -137,6 +143,7 @@ export function deleting() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -154,6 +161,7 @@ export function deleteError() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });
@@ -171,6 +179,7 @@ export function deleted() {
 
   const commentId = addTestComment(store, {
     mode: 'default',
+    highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     focused: true,
   });

@@ -29,7 +29,30 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
     state.comments.comments.values()
   );
 
-  const commentsRendered = commentsToRender.map((comment) => (
+  const resolvedCommentsToRender = commentsToRender.filter(({ resolved }) => (resolved));
+
+  const activeCommentsToRender = commentsToRender.filter(({ deleted, resolved }) => !(deleted || resolved));
+
+  const resolvedCommentsRendered = resolvedCommentsToRender.map((comment) => (
+    <CommentComponent
+      key={comment.localId}
+      store={store}
+      layout={layout}
+      user={
+        author || {
+          id: 1,
+          name: 'Admin',
+          avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
+        }
+      }
+      comment={comment}
+      isVisible={true}
+      isFocused={comment.localId === state.comments.focusedComment}
+      strings={defaultStrings}
+    />
+  ));
+
+  const activeCommentsRendered = activeCommentsToRender.map((comment) => (
     <CommentComponent
       key={comment.localId}
       store={store}
@@ -51,10 +74,10 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
   const tabs = (
     <Tabs defaultActiveKey="activeComments" id="uncontrolled-tab" className="mb-3 comments-tabs">
       <Tab eventKey="activeComments" title="Active Comments">
-        <ol className="comments-list">{commentsRendered}</ol>
+        <ol className="comments-list">{activeCommentsRendered}</ol>
       </Tab>
       <Tab eventKey="resolvedComments" title="Resolved Comments">
-        <p>nothing</p>
+        <ol className="comments-list">{resolvedCommentsRendered}</ol>
       </Tab>
     </Tabs>
   );

@@ -14,12 +14,30 @@ export function ActiveAndResolvedComments() {
 
   addTestComment(store, {
     mode: 'default',
-    text: 'An example comment',
+    text: 'An example active comment',
+    resolved: false,
+    deleted: false,
   });
 
   addTestComment(store, {
     mode: 'default',
-    text: 'An second example comment',
+    text: 'An second example active comment',
+    resolved: false,
+    deleted: false,
+  });
+
+  addTestComment(store, {
+    mode: 'default',
+    text: 'An example resolved comment',
+    resolved: true,
+    deleted: false,
+  });
+
+  addTestComment(store, {
+    mode: 'default',
+    text: 'An second example resolved comment',
+    resolved: true,
+    deleted: false,
   });
 
   return (

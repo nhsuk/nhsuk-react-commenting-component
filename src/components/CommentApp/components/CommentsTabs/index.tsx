@@ -9,13 +9,11 @@ import Tab from 'react-bootstrap/Tab';
 
 interface CommentsTabsProps {
   store: Store;
-  // commentsToRender: Comment[];
   author?: Author;
 }
 
 export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
   store,
-  // commentsToRender,
   author,
 }) => {
   const layout = new LayoutController();
@@ -33,43 +31,29 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
 
   const activeCommentsToRender = commentsToRender.filter(({ deleted, resolved }) => !(deleted || resolved));
 
-  const resolvedCommentsRendered = resolvedCommentsToRender.map((comment) => (
-    <CommentComponent
-      key={comment.localId}
-      store={store}
-      layout={layout}
-      user={
-        author || {
-          id: 1,
-          name: 'Admin',
-          avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
+  function commentsRenderd(comments: Comment[]) {
+    return comments.map((comment) => (
+      <CommentComponent
+        key={comment.localId}
+        store={store}
+        layout={layout}
+        user={
+          author || {
+            id: 1,
+            name: 'Admin',
+          }
         }
-      }
-      comment={comment}
-      isVisible={true}
-      isFocused={comment.localId === state.comments.focusedComment}
-      strings={defaultStrings}
-    />
-  ));
+        comment={comment}
+        isVisible={true}
+        isFocused={comment.localId === state.comments.focusedComment}
+        strings={defaultStrings}
+      />
+    ));
+  }
 
-  const activeCommentsRendered = activeCommentsToRender.map((comment) => (
-    <CommentComponent
-      key={comment.localId}
-      store={store}
-      layout={layout}
-      user={
-        author || {
-          id: 1,
-          name: 'Admin',
-          avatarUrl: 'https://gravatar.com/avatar/e31ec811942afbf7b9ce0ac5affe426f?s=200&d=robohash&r=x',
-        }
-      }
-      comment={comment}
-      isVisible={true}
-      isFocused={comment.localId === state.comments.focusedComment}
-      strings={defaultStrings}
-    />
-  ));
+  const resolvedCommentsRendered = commentsRenderd(resolvedCommentsToRender);
+
+  const activeCommentsRendered = commentsRenderd(activeCommentsToRender);
 
   const tabs = (
     <Tabs defaultActiveKey="activeComments" id="uncontrolled-tab" className="mb-3 comments-tabs">

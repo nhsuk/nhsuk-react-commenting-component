@@ -12,6 +12,14 @@ interface CommentsTabsProps {
   author?: Author;
 }
 
+export function filterResolvedComments(commentsToRender: Comment[]) {
+  return commentsToRender.filter(({ deleted, resolved }) => (!deleted && resolved));
+}
+
+export function filterActiveComments(commentsToRender: Comment[]) {
+  return commentsToRender.filter(({ deleted, resolved }) => (!deleted && !resolved));
+}
+
 export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
   store,
   author,
@@ -27,9 +35,9 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
     state.comments.comments.values()
   );
 
-  const resolvedCommentsToRender = commentsToRender.filter(({ resolved }) => (resolved));
+  const resolvedCommentsToRender = filterResolvedComments(commentsToRender);
 
-  const activeCommentsToRender = commentsToRender.filter(({ deleted, resolved }) => !(deleted || resolved));
+  const activeCommentsToRender = filterActiveComments(commentsToRender);
 
   function commentsRenderd(comments: Comment[]) {
     return comments.map((comment) => (
@@ -45,6 +53,7 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
         }
         comment={comment}
         isVisible={true}
+        forceFocus={false}
         isFocused={comment.localId === state.comments.focusedComment}
         strings={defaultStrings}
       />

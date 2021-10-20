@@ -2,12 +2,16 @@
     @include box;
 
     display: block;
-    transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
+    transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s, border 0.5s;
     pointer-events: auto;
     box-sizing: border-box;
     right: -2000px;
     margin-left: 20px;
     margin-right: 20px;
+
+    &:hover {
+        border-color: #005eb8;
+    }
 
     &--focused {
         right: 35px;

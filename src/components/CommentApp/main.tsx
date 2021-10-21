@@ -26,7 +26,7 @@ import {
   selectIsDirty,
   selectCommentCount
 } from './selectors';
-import CommentComponent from './components/Comment';
+import { CommentsTabs } from './components/CommentsTabs/index';
 import { CommentFormSetComponent } from './components/Form';
 import { INITIAL_STATE as INITIAL_SETTINGS_STATE } from './state/settings';
 
@@ -110,35 +110,12 @@ const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
 
 function renderCommentsUi(
   store: Store,
-  layout: LayoutController,
-  comments: Comment[],
   strings: TranslatableStrings
 ): React.ReactElement {
-  const state = store.getState();
-  const { commentsEnabled, user, currentTab } = state.settings;
-  const { focusedComment, forceFocus } = state.comments;
-  let commentsToRender = comments;
-
-  if (!commentsEnabled || !user) {
-    commentsToRender = [];
-  }
-  // Hide all resolved/deleted comments
-  commentsToRender = commentsToRender.filter(({ deleted, resolved }) => !(deleted || resolved));
-  const commentsRendered = commentsToRender.map((comment) => (
-    <CommentComponent
-      key={comment.localId}
-      store={store}
-      layout={layout}
-      user={user}
-      comment={comment}
-      isFocused={comment.localId === focusedComment}
-      forceFocus={forceFocus}
-      isVisible={layout.getCommentVisible(currentTab, comment.localId)}
-      strings={strings}
-    />
-  ));
   return (
-    <ol>{commentsRendered}</ol>
+    <ol>
+      <CommentsTabs store={store} strings={strings} />
+    </ol>
   );
 }
 
@@ -275,7 +252,7 @@ export class CommentApp {
       }
 
       ReactDOM.render(
-        renderCommentsUi(this.store, this.layout, commentList, strings),
+        renderCommentsUi(this.store, strings),
         element,
         () => {
           // Render again if layout has changed (eg, a comment was added, deleted or resized)
@@ -283,7 +260,7 @@ export class CommentApp {
           this.layout.refreshDesiredPositions(state.settings.currentTab);
           if (this.layout.refreshLayout()) {
             ReactDOM.render(
-              renderCommentsUi(this.store, this.layout, commentList, strings),
+              renderCommentsUi(this.store, strings),
               element
             );
           }

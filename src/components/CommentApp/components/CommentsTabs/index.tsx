@@ -3,13 +3,14 @@ import type { Store } from '../../state';
 import CommentComponent from '../Comment/index';
 import { LayoutController } from '../../utils/layout';
 import { Author, Comment } from '../../state/comments';
-import { defaultStrings } from '../../main';
+import type { TranslatableStrings } from '../../main';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
 interface CommentsTabsProps {
   store: Store;
   author?: Author;
+  strings: TranslatableStrings;
 }
 
 export function filterResolvedComments(commentsToRender: Comment[]) {
@@ -22,22 +23,24 @@ export function filterActiveComments(commentsToRender: Comment[]) {
 
 export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
   store,
-  author,
+  strings,
 }) => {
   const layout = new LayoutController();
-
   const [state, setState] = React.useState(store.getState());
   store.subscribe(() => {
     setState(store.getState());
   });
-
   const commentsToRender: Comment[] = Array.from(
     state.comments.comments.values()
   );
-
-  const resolvedCommentsToRender = filterResolvedComments(commentsToRender);
-
-  const activeCommentsToRender = filterActiveComments(commentsToRender);
+  const { focusedComment, forceFocus } = state.comments;
+  const { commentsEnabled, user, currentTab } = state.settings;
+  let resolvedCommentsToRender = filterResolvedComments(commentsToRender);
+  let activeCommentsToRender = filterActiveComments(commentsToRender);
+  if (!commentsEnabled || !user) {
+    resolvedCommentsToRender = [];
+    activeCommentsToRender = [];
+  }
 
   function commentsRenderd(comments: Comment[]) {
     return comments.map((comment) => (
@@ -45,17 +48,12 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
         key={comment.localId}
         store={store}
         layout={layout}
-        user={
-          author || {
-            id: 1,
-            name: 'Admin',
-          }
-        }
+        user={user}
         comment={comment}
-        isVisible={true}
-        forceFocus={false}
-        isFocused={comment.localId === state.comments.focusedComment}
-        strings={defaultStrings}
+        isFocused={comment.localId === focusedComment}
+        forceFocus={forceFocus}
+        isVisible={layout.getCommentVisible(currentTab, comment.localId)}
+        strings={strings}
       />
     ));
   }

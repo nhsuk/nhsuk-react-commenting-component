@@ -4,14 +4,26 @@ import { CommentsTabs } from './index';
 import { Store, reducer } from '../../state';
 
 import { defaultStrings } from '../../main';
+import { SettingsState } from '../../state/settings';
 import {
   addTestComment,
 } from '../../utils/storybook';
 
 export default { title: 'Commenting/Comments Tabs' };
 
+const testSettingsState: SettingsState = {
+  user: {
+    id: 1,
+    name: 'Admin',
+  },
+  commentsEnabled: true,
+  currentTab: null,
+};
+
 export function ActiveAndResolvedComments() {
-  const store: Store = createStore(reducer);
+  const store: Store = createStore(reducer, {
+    settings: testSettingsState,
+  });
 
   addTestComment(store, {
     mode: 'default',

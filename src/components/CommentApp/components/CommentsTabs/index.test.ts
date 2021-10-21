@@ -53,12 +53,14 @@ let activeComments = filterActiveComments(commentsToRender);
 
 describe('filterResolvedComments', () => {
   it('filters only resolved comments', () => {
+    expect(resolvedComments.length).toBe(2);
     expect(resolvedComments.every(comment => comment.resolved)).toBeTruthy();
     expect(resolvedComments.every(comment => comment.deleted)).toBeFalsy();
 
-    commentsToRender[1].resolved = false;
+    commentsToRender[2].deleted = false;
     resolvedComments = filterResolvedComments(commentsToRender);
 
+    expect(resolvedComments.length).toBe(3);
     expect(resolvedComments.every(comment => comment.resolved)).toBeTruthy();
     expect(resolvedComments.every(comment => comment.deleted)).toBeFalsy();
   });
@@ -67,12 +69,15 @@ describe('filterResolvedComments', () => {
 
 describe('filterActiveComments', () => {
   it('filters only active comments', () => {
+    expect(activeComments.length).toBe(2);
     expect(activeComments.every(comment => comment.resolved)).toBeFalsy();
     expect(activeComments.every(comment => comment.deleted)).toBeFalsy();
 
-    commentsToRender[4].resolved = true;
+    commentsToRender[3].resolved = false;
+    commentsToRender[3].deleted = false;
     activeComments = filterActiveComments(commentsToRender);
 
+    expect(activeComments.length).toBe(3);
     expect(activeComments.every(comment => comment.resolved)).toBeFalsy();
     expect(activeComments.every(comment => comment.deleted)).toBeFalsy();
   });

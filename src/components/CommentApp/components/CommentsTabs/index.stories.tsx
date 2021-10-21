@@ -3,6 +3,7 @@ import { createStore } from 'redux';
 import { CommentsTabs } from './index';
 import { Store, reducer } from '../../state';
 
+import { defaultStrings } from '../../main';
 import {
   addTestComment,
 } from '../../utils/storybook';
@@ -41,6 +42,6 @@ export function ActiveAndResolvedComments() {
   });
 
   return (
-    <CommentsTabs store={store} />
+    <CommentsTabs store={store} strings={defaultStrings} />
   );
 }

@@ -256,9 +256,11 @@ window.comments = (() => {
       throw new Error('Comments app failed to initialise. Missing HTML element');
     }
     const data = JSON.parse(dataElement.textContent);
-    commentApp.renderApp(
-      commentsElement, commentsOutputElement, data.user, data.comments, new Map(Object.entries(data.authors)), STRINGS
-    );
+    if (data && Object.keys(data).length > 0) {
+      commentApp.renderApp(
+        commentsElement, commentsOutputElement, data.user, data.comments, new Map(Object.entries(data.authors)), STRINGS
+      );
+    }
 
     const updateCommentVisibility = (visible) => {
       // Show/hide comments

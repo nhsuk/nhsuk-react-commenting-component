@@ -180,7 +180,7 @@ $box-padding: 10px;
     padding-left: 0;
 }
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap.min.css';
 @import 'components/Comment/style';
 @import 'components/CommentFooter/style';
 @import 'components/CommentMenu/style';

@@ -248,7 +248,7 @@ window.comments = (() => {
   }
 
   // function initCommentsInterface(formElement) {
-  function initCommentsInterface() {
+  function initCommentsInterface(componentStyle = null) {
     const commentsElement = document.getElementById('comments');
     const commentsOutputElement = document.getElementById('comments-output');
     const dataElement = document.getElementById('comments-data');
@@ -258,7 +258,13 @@ window.comments = (() => {
     const data = JSON.parse(dataElement.textContent);
     if (data && Object.keys(data).length > 0) {
       commentApp.renderApp(
-        commentsElement, commentsOutputElement, data.user, data.comments, new Map(Object.entries(data.authors)), STRINGS
+        commentsElement,
+        commentsOutputElement,
+        data.user,
+        data.comments,
+        new Map(Object.entries(data.authors)),
+        STRINGS,
+        componentStyle,
       );
     }
 

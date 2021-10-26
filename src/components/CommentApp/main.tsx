@@ -110,10 +110,19 @@ const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
 
 function renderCommentsUi(
   store: Store,
-  strings: TranslatableStrings
+  strings: TranslatableStrings,
 ): React.ReactElement {
+  let classname = '';
+  switch (store.getState().settings.componentStyle) {
+  case 'full-width':
+    classname = 'comments-component-width-full';
+    break;
+  default:
+    break;
+  }
+
   return (
-    <ol>
+    <ol className={classname}>
       <CommentsTabs store={store} strings={strings} />
     </ol>
   );
@@ -172,6 +181,9 @@ export class CommentApp {
   setCurrentTab(tab: string | null) {
     this.store.dispatch(updateGlobalSettings({ currentTab: tab }));
   }
+  setComponentStyle(componentStyle: string | null) {
+    this.store.dispatch(updateGlobalSettings({ componentStyle: componentStyle }));
+  }
   makeComment(annotation: Annotation, contentpath: string, position = '') {
     const commentId = getNextCommentId();
 
@@ -213,10 +225,12 @@ export class CommentApp {
     userId: any,
     initialComments: InitialComment[],
     authors: Map<string, {name: string}>,
-    translationStrings: TranslatableStrings | null
+    translationStrings: TranslatableStrings | null,
+    componentStyle: string | null,
   ) {
     let pinnedComment: number | null = null;
     this.setUser(userId, authors);
+    this.setComponentStyle(componentStyle);
 
     const strings = translationStrings || defaultStrings;
 

@@ -173,10 +173,18 @@ $box-padding: 10px;
 }
 
 .comments-list {
+    max-width: 470px;
     z-index: 50;
     font-family: 'Open Sans', sans-serif;
     pointer-events: none;
-    padding-left: 0;
+    padding: 0;
+}
+
+.comments-component-width-full {
+    .comments-list {
+        width: 100%;
+        max-width: none;
+    }
 }
 
 // Bootstrap

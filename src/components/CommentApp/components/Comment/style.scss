@@ -1,7 +1,6 @@
 .comment {
     @include box;
 
-    width: 100%;
     display: block;
     transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
     pointer-events: auto;

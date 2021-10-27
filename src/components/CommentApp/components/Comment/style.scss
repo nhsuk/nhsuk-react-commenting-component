@@ -1,15 +1,17 @@
 .comment {
     @include box;
 
-    width: 100%;
     display: block;
     transition: top 0.5s ease 0s, right 0.5s ease 0s, height 0.5s ease 0s;
     pointer-events: auto;
     box-sizing: border-box;
     right: -2000px;
+    margin-left: 20px;
+    margin-right: 20px;
 
     &--focused {
         right: 35px;
+        margin-left: 0;
     }
 
     &__original {
@@ -148,5 +150,9 @@
     &__reply-input {
         /* stylelint-disable-next-line declaration-no-important */
         margin-top: 20px !important;
+    }
+
+    ol {
+        margin: 0;
     }
 }

@@ -173,14 +173,30 @@ $box-padding: 10px;
 }
 
 .comments-list {
-    width: 400px;
+    max-width: 470px;
     z-index: 50;
     font-family: 'Open Sans', sans-serif;
     pointer-events: none;
+    padding: 0;
 }
+
+.comments-component-width-full {
+    .comments-list {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+// Bootstrap
+@import '../../../node_modules/bootstrap/scss/functions';
+@import '../../../node_modules/bootstrap/scss/variables';
+@import '../../../node_modules/bootstrap/scss/mixins';
+@import '../../../node_modules/bootstrap/scss/utilities';
+@import '../../../node_modules/bootstrap/scss/nav';
 
 @import 'components/Comment/style';
 @import 'components/CommentFooter/style';
 @import 'components/CommentMenu/style';
 @import 'components/CommentReply/style';
+@import 'components/CommentsTabs/style';
 @import '../../../node_modules/nhsuk-frontend/packages/nhsuk';

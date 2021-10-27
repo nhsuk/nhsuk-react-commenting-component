@@ -7,6 +7,7 @@ export interface SettingsState {
   user: Author | null;
   commentsEnabled: boolean;
   currentTab: string | null;
+  componentStyle: string | null;
 }
 
 export type SettingsStateUpdate = Partial<SettingsState>;
@@ -16,6 +17,7 @@ export const INITIAL_STATE: SettingsState = {
   user: null,
   commentsEnabled: false,
   currentTab: null,
+  componentStyle: null,
 };
 
 export const reducer = produce((draft: SettingsState, action: actions.Action) => {

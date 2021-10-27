@@ -25,6 +25,7 @@
     &--focused {
         right: 35px;
         border: 3px solid #005eb8;
+        margin-left: 0;
 
         .comment__replies,
         form {

@@ -1,12 +1,15 @@
+@import '../../../../../node_modules/nhsuk-frontend/packages/core/settings/colours';
+
 .comment-footer {
     position: relative;
 
     &__author {
         max-width: calc(100% - 110px);  // Leave room for actions to the right
         margin: 0;
-        font-size: 11px;
+        font-size: 12px;
         line-height: 15px;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
+        color: $nhsuk-secondary-text-color;
     }
 }
 

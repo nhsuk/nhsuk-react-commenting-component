@@ -89,10 +89,12 @@ $box-padding: 10px;
         box-sizing: border-box;
         -moz-outline-radius: 8px;
         color: $color-box-text;
+        font-size: 12px;
 
         &::placeholder {
             color: $color-textarea-placeholder-text;
             opacity: 1;
+            font-size: 12px;
         }
 
         &:focus {
@@ -149,11 +151,16 @@ $box-padding: 10px;
     height: 25px;
     padding-left: 5px;
     padding-right: 5px;
+    width: 60px;
 
     &--primary {
         color: $color-white;
         border: 1px solid $color-teal;
-        background-color: $color-teal;
+        background-color: $nhsuk-button-color;
+    }
+
+    &--cancel {
+        color: $nhsuk-secondary-text-color;
     }
 
     &--red {

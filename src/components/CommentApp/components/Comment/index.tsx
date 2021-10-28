@@ -182,7 +182,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             <button
               type="button"
               onClick={onClickCancelReply}
-              className="comment__button"
+              className="comment__button comment__button--cancel"
             >
               {strings.CANCEL}
             </button>

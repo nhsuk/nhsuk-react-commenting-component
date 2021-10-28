@@ -1,3 +1,5 @@
+@import '../../../../../node_modules/nhsuk-frontend/packages/core/settings/colours';
+
 .comment {
     @include box;
 
@@ -38,17 +40,17 @@
     }
 
     &__original {
-        padding-top: 10px;
-        padding-right: 10px;
-        padding-left: 10px;
+        padding-top: 15px;
+        padding-right: 15px;
+        padding-left: 15px;
     }
 
     &__text {
-        color: $color-box-text;
-        font-size: 15px;
+        color: $nhsuk-text-color;
+        font-size: 16px;
         line-height: 19px;
         margin-bottom: 0;
-        padding-bottom: 10px;
+        padding-bottom: 15px;
         max-width: calc(95%);
 
         &--mode-deleting {
@@ -57,11 +59,11 @@
     }
 
     &__highlighted_text {
-        border-left: 3px solid #4f6270;
+        border-left: 3px solid $nhsuk-form-border-color;
         padding-left: 5px;
         font-style: italic;
         color: #4f6270;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
 
     &--mode-creating form {
@@ -79,7 +81,7 @@
 
     &__replies {
         list-style-type: none;
-        padding: 10px 10px 10px 10px;
+        padding: 15px 15px 0 15px;
         margin: 0;
         border-top: 1px solid #e6e6e6;
         border-left: 10px solid #d9d9d9;
@@ -91,7 +93,6 @@
 
     &__actions,
     &__reply-actions {
-        padding-bottom: 10px;
         text-align: right;
     }
 
@@ -163,7 +164,7 @@
 
     &__reply-input {
         /* stylelint-disable-next-line declaration-no-important */
-        margin-top: 20px !important;
+        margin-top: 10px !important;
     }
 
     ol {

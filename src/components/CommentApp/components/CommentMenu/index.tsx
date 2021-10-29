@@ -6,7 +6,7 @@ import type { Store } from '../../state';
 import { TranslatableStrings } from '../../main';
 import { IS_IE11 } from '../../../../config/wagtailConfig';
 
-import { Author } from '../../state/comments';
+import { Comment, Author } from '../../state/comments';
 
 // Details/Summary components that just become <details>/<summary> tags
 // except for IE11 where they become <div> tags to allow us to style them
@@ -65,11 +65,23 @@ interface CommentMenuProps {
 export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
   commentReply, store, strings, onResolve, onEdit, onDelete, focused
 }) => {
+  const setUnresolvedCommentsPresent = () => {
+    const unresolvedComments: Comment[] = Array.from(store.getState().comments.comments.values())
+      .filter(comment => !comment.resolved);
+    window.unresolvedCommentsPresent = false;
+    if (unresolvedComments.length > 0) {
+      window.unresolvedCommentsPresent = true;
+    }
+  };
+
+  setUnresolvedCommentsPresent();
+
   const onClickResolve = (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (onResolve) {
       onResolve(commentReply, store);
+      setUnresolvedCommentsPresent();
     }
   };
 
@@ -86,6 +98,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
 
     if (onDelete) {
       onDelete(commentReply, store);
+      setUnresolvedCommentsPresent();
     }
   };
 

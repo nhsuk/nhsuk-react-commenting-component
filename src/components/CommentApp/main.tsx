@@ -99,6 +99,12 @@ export interface InitialComment {
 }
 /* eslint-enable */
 
+declare global {
+  interface Window {
+      unresolvedCommentsPresent: boolean;
+  }
+}
+
 const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
   const authorData = getOrDefault(authors, String(id), { name: '' });
 

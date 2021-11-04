@@ -6,20 +6,20 @@ import React, { FunctionComponent } from 'react';
 import { Author } from '../../state/comments';
 
 
-interface CommentReply {
+interface CommentItem {
   author: Author | null;
   date: number;
 }
 
 interface CommentFooterProps {
-  commentReply: CommentReply;
+  commentItem: CommentItem;
   descriptionId?: string;
 }
 
 export const CommentFooter: FunctionComponent<CommentFooterProps> = ({
-  commentReply, descriptionId
+  commentItem, descriptionId
 }) => {
-  const { author, date } = commentReply;
+  const { author, date } = commentItem;
 
   return (
     <div className="comment-footer">

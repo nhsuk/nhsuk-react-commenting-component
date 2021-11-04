@@ -232,7 +232,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             focused={isFocused}
@@ -305,7 +305,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <CommentFooter
           descriptionId={descriptionId}
-          commentReply={comment}
+          commentItem={comment}
         />
         <form onSubmit={onSave}>
           <TextArea
@@ -345,14 +345,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return (
       <>
         <CommentMenu
-          commentReply={comment}
+          commentItem={comment}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment__text">{comment.text}</p>
         <CommentFooter
-          commentReply={comment}
+          commentItem={comment}
         />
         <div className="comment__progress">{strings.SAVING}</div>
         {this.renderReplies({ hideNewReply: true })}
@@ -373,14 +373,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             focused={isFocused}
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
-          <CommentFooter commentReply={comment} />
+          <CommentFooter commentItem={comment} />
           {this.renderReplies({ hideNewReply: true })}
           <div className="comment__error">
             {strings.SAVE_ERROR}
@@ -420,14 +420,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             focused={isFocused}
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
-          <CommentFooter commentReply={comment} />
+          <CommentFooter commentItem={comment} />
           <div className="comment__confirm-delete">
             {strings.CONFIRM_DELETE_COMMENT}
             <button
@@ -458,14 +458,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             focused={isFocused}
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
-          <CommentFooter commentReply={comment} />
+          <CommentFooter commentItem={comment} />
           <div className="comment__progress">{strings.DELETING}</div>
         </div>
         {this.renderReplies({ hideNewReply: true })}
@@ -496,14 +496,14 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             focused={isFocused}
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
-          <CommentFooter commentReply={comment} />
+          <CommentFooter commentItem={comment} />
         </div>
         {this.renderReplies({ hideNewReply: true })}
         <div className="comment__error">
@@ -565,7 +565,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       <>
         <div className="comment__original">
           <CommentMenu
-            commentReply={comment}
+            commentItem={comment}
             store={store}
             strings={strings}
             onResolve={doResolveComment}
@@ -575,7 +575,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
-          <CommentFooter commentReply={comment} />
+          <CommentFooter commentItem={comment} />
           {notice &&
             <div className="comment__notice-placeholder">
               <div className="comment__notice" role="status">

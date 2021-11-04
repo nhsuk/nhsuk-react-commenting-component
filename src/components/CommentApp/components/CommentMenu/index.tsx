@@ -47,23 +47,23 @@ const Summary: React.FunctionComponent<React.ComponentPropsWithoutRef<'summary'>
   );
 };
 
-interface CommentReply {
+interface CommentItem {
   author: Author | null;
   date: number;
 }
 
 interface CommentMenuProps {
-  commentReply: CommentReply;
+  commentItem: CommentItem;
   store: Store;
   strings: TranslatableStrings;
-  onResolve?(commentReply: CommentReply, store: Store): void;
-  onEdit?(commentReply: CommentReply, store: Store): void;
-  onDelete?(commentReply: CommentReply, store: Store): void;
+  onResolve?(commentItem: CommentItem, store: Store): void;
+  onEdit?(commentItem: CommentItem, store: Store): void;
+  onDelete?(commentItem: CommentItem, store: Store): void;
   focused: boolean;
 }
 
 export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
-  commentReply, store, strings, onResolve, onEdit, onDelete, focused
+  commentItem, store, strings, onResolve, onEdit, onDelete, focused
 }) => {
   const setUnresolvedCommentsPresent = () => {
     const unresolvedComments: Comment[] = Array.from(store.getState().comments.comments.values())
@@ -80,7 +80,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     e.preventDefault();
 
     if (onResolve) {
-      onResolve(commentReply, store);
+      onResolve(commentItem, store);
       setUnresolvedCommentsPresent();
     }
   };
@@ -89,7 +89,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     e.preventDefault();
 
     if (onEdit) {
-      onEdit(commentReply, store);
+      onEdit(commentItem, store);
     }
   };
 
@@ -97,7 +97,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     e.preventDefault();
 
     if (onDelete) {
-      onDelete(commentReply, store);
+      onDelete(commentItem, store);
       setUnresolvedCommentsPresent();
     }
   };

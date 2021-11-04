@@ -103,12 +103,12 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <form onSubmit={onSave}>
           <TextArea
             className="comment-reply__input"
@@ -142,13 +142,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <div className="comment-reply__progress">{strings.SAVING}</div>
       </>
     );
@@ -166,13 +166,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <div className="comment-reply__error">
           {strings.SAVE_ERROR}
           <button
@@ -209,13 +209,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <div className="comment-reply__confirm-delete">
           {strings.CONFIRM_DELETE_COMMENT}
           <button
@@ -243,13 +243,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <div className="comment-reply__progress">{strings.DELETING}</div>
       </>
     );
@@ -277,13 +277,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         <div className="comment-reply__error">
           {strings.DELETE_ERROR}
           <button
@@ -339,7 +339,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     return (
       <>
         <CommentMenu
-          commentReply={reply}
+          commentItem={reply}
           store={store}
           strings={strings}
           onEdit={onEdit}
@@ -347,7 +347,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
           focused={isFocused}
         />
         <p className="comment-reply__text">{reply.text}</p>
-        <CommentFooter commentReply={reply} />
+        <CommentFooter commentItem={reply} />
         {notice &&
           <div className="comment__notice-placeholder">
             <div className="comment__notice" role="status">

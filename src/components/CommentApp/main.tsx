@@ -77,7 +77,7 @@ export const defaultStrings = {
 /* eslint-disable camelcase */
 // This is done as this is serialized pretty directly from the Django model
 export interface InitialCommentReply {
-  pk: number;
+  id: number;
   user: any;
   text: string;
   created_at: string;
@@ -86,7 +86,7 @@ export interface InitialCommentReply {
 }
 
 export interface InitialComment {
-  pk: number;
+  id: number;
   user: any;
   text: string;
   created_at: string;
@@ -329,7 +329,7 @@ export class CommentApp {
             getAuthor(authors, comment.user),
             Date.parse(comment.created_at),
             {
-              remoteId: comment.pk,
+              remoteId: comment.id,
               text: comment.text,
               deleted: comment.deleted,
               resolved: comment.resolved
@@ -348,7 +348,7 @@ export class CommentApp {
               getAuthor(authors, reply.user),
               Date.parse(reply.created_at),
               {
-                remoteId: reply.pk,
+                remoteId: reply.id,
                 text: reply.text,
                 deleted: reply.deleted
               }
@@ -359,7 +359,7 @@ export class CommentApp {
 
       // If this is the initial focused comment. Focus and pin it
       // TODO: Scroll to this comment
-      if (initialFocusedCommentId && comment.pk === initialFocusedCommentId) {
+      if (initialFocusedCommentId && comment.id === initialFocusedCommentId) {
         this.store.dispatch(setFocusedComment(commentId, { updatePinnedComment: true, forceFocus: true }));
       }
     }

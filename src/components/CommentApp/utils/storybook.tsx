@@ -46,7 +46,11 @@ export function RenderCommentsForStorybook({
       user={
         author || {
           id: 1,
-          name: 'Admin',
+          type: 'external',
+          firstname: 'Joe',
+          lastname: 'Bloggins',
+          jobTitle: 'Developer',
+          organisation: 'Nhs',
         }
       }
       comment={comment}
@@ -76,7 +80,11 @@ export function addTestComment(
 
   const author = options.author || {
     id: 1,
-    name: 'Admin',
+    type: 'external',
+    firstname: 'Joe',
+    lastname: 'Bloggins',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
   };
 
   // We must have a remoteId unless the comment is being created
@@ -115,7 +123,11 @@ export function addTestReply(
   const addReplyOptions = options;
   const author = options.author || {
     id: 1,
-    name: 'Admin',
+    type: 'external',
+    firstname: 'Joe',
+    lastname: 'Bloggins',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
   };
 
   if (!options.remoteId) {

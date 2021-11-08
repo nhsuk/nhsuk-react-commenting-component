@@ -136,6 +136,29 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     };
   }, []);
 
+  function renderAuthorMenu(author) {
+    if (author.type === 'wagtail') {
+      return (
+        <ul>
+          <li>{author.id}</li>
+          <li>{author.firstname}</li>
+          <li>{author.lastname}</li>
+          <li>{author.type}</li>
+        </ul>
+      );
+    }
+    return (
+      <ul>
+        <li>{author.id}</li>
+        <li>{author.type}</li>
+        <li>{author.firstname}</li>
+        <li>{author.lastname}</li>
+        <li>{author.jobTitle}</li>
+        <li>{author.organisation}</li>
+      </ul>
+    );
+  }
+
   return (
     <div className="comment-menu">
       <div className="comment-menu__actions">
@@ -157,6 +180,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
                 {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
                 {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
               </div>
+              {commentItem.author && renderAuthorMenu(commentItem.author)}
             </Details>
           </div>
         }

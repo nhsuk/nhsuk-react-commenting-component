@@ -8,7 +8,11 @@ enableMapSet();
 
 export interface Author {
   id: any;
-  name: string;
+  type: string;
+  firstname: string;
+  lastname: string;
+  jobTitle?: string;
+  organisation?: string;
 }
 
 export type CommentReplyMode =

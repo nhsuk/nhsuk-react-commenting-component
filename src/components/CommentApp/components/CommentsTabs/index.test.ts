@@ -7,7 +7,11 @@ import {
 
 const author = {
   id: 1,
-  name: 'Admin',
+  type: 'external',
+  firstname: 'Joe',
+  lastname: 'Bloggins',
+  jobTitle: 'Developer',
+  organisation: 'Nhs',
 };
 
 const comments: Comment[] = [];

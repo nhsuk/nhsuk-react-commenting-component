@@ -105,12 +105,26 @@ declare global {
   }
 }
 
-const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
-  const authorData = getOrDefault(authors, String(id), { name: '' });
-
+const getAuthor = (authors: Map<string, {type: string,
+  firstname: string,
+  lastname: string,
+  jobTitle: string,
+  organisation: string,
+}>, id: any): Author => {
+  const authorData = getOrDefault(authors, String(id), {
+    type: '',
+    firstname: '',
+    lastname: '',
+    jobTitle: '',
+    organisation: ''
+  });
   return {
     id,
-    name: authorData.name,
+    type: authorData.type,
+    firstname: authorData.firstname,
+    lastname: authorData.lastname,
+    jobTitle: authorData.jobTitle,
+    organisation: authorData.organisation,
   };
 };
 
@@ -156,7 +170,13 @@ export class CommentApp {
     });
     this.layout = new LayoutController();
   }
-  setUser(userId: any, authors: Map<string, {name: string}>) {
+  setUser(userId: any, authors: Map<string, {
+    type: string,
+    firstname: string,
+    lastname: string,
+    jobTitle: string,
+    organisation: string,
+  }>) {
     this.store.dispatch(
       updateGlobalSettings({
         user: getAuthor(authors, userId)
@@ -230,7 +250,13 @@ export class CommentApp {
     outputElement: HTMLElement,
     userId: any,
     initialComments: InitialComment[],
-    authors: Map<string, {name: string}>,
+    authors: Map<string, {
+      type: string,
+      firstname: string,
+      lastname: string,
+      jobTitle: string,
+      organisation: string,
+    }>,
     translationStrings: TranslatableStrings | null,
     componentStyle: string | null,
   ) {

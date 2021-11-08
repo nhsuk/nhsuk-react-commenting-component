@@ -14,7 +14,11 @@ export default { title: 'Commenting/Comments Tabs' };
 const testSettingsState: SettingsState = {
   user: {
     id: 1,
-    name: 'Admin',
+    type: 'external',
+    firstname: 'Joe',
+    lastname: 'Bloggins',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
   },
   commentsEnabled: true,
   currentTab: null,

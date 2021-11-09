@@ -43,7 +43,11 @@ export function commentFromSomeoneElse() {
     text: 'An example comment',
     author: {
       id: 2,
-      name: 'Someone else',
+      type: 'external',
+      firstname: 'John',
+      lastname: 'Doe',
+      jobTitle: 'Designer',
+      organisation: 'Nhs D',
     },
   });
 
@@ -59,7 +63,11 @@ export function commentFromSomeoneWithAReallyLongName() {
     text: 'An example comment',
     author: {
       id: 1,
-      name: 'This person has a really long name and it should wrap to the next line',
+      type: 'external',
+      firstname: 'This person has a really long name',
+      lastname: 'and it should wrap to the next line',
+      jobTitle: 'Developer',
+      organisation: 'Nhs',
     },
   });
 

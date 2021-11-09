@@ -42,7 +42,11 @@ export function replyFromSomeoneElse() {
     text: 'An example reply',
     author: {
       id: 2,
-      name: 'Someone else',
+      type: 'external',
+      firstname: 'John',
+      lastname: 'Doe',
+      jobTitle: 'Designer',
+      organisation: 'Nhs D',
     },
   });
 

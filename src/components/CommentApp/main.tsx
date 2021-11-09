@@ -77,7 +77,7 @@ export const defaultStrings = {
 /* eslint-disable camelcase */
 // This is done as this is serialized pretty directly from the Django model
 export interface InitialCommentReply {
-  pk: number;
+  id: number;
   user: any;
   text: string;
   created_at: string;
@@ -86,7 +86,7 @@ export interface InitialCommentReply {
 }
 
 export interface InitialComment {
-  pk: number;
+  id: number;
   user: any;
   text: string;
   created_at: string;
@@ -105,12 +105,26 @@ declare global {
   }
 }
 
-const getAuthor = (authors: Map<string, {name: string}>, id: any): Author => {
-  const authorData = getOrDefault(authors, String(id), { name: '' });
-
+const getAuthor = (authors: Map<string, {type: string,
+  firstname: string,
+  lastname: string,
+  jobTitle: string,
+  organisation: string,
+}>, id: any): Author => {
+  const authorData = getOrDefault(authors, String(id), {
+    type: '',
+    firstname: '',
+    lastname: '',
+    jobTitle: '',
+    organisation: ''
+  });
   return {
     id,
-    name: authorData.name,
+    type: authorData.type,
+    firstname: authorData.firstname,
+    lastname: authorData.lastname,
+    jobTitle: authorData.jobTitle,
+    organisation: authorData.organisation,
   };
 };
 
@@ -156,7 +170,13 @@ export class CommentApp {
     });
     this.layout = new LayoutController();
   }
-  setUser(userId: any, authors: Map<string, {name: string}>) {
+  setUser(userId: any, authors: Map<string, {
+    type: string,
+    firstname: string,
+    lastname: string,
+    jobTitle: string,
+    organisation: string,
+  }>) {
     this.store.dispatch(
       updateGlobalSettings({
         user: getAuthor(authors, userId)
@@ -230,7 +250,13 @@ export class CommentApp {
     outputElement: HTMLElement,
     userId: any,
     initialComments: InitialComment[],
-    authors: Map<string, {name: string}>,
+    authors: Map<string, {
+      type: string,
+      firstname: string,
+      lastname: string,
+      jobTitle: string,
+      organisation: string,
+    }>,
     translationStrings: TranslatableStrings | null,
     componentStyle: string | null,
   ) {
@@ -303,7 +329,7 @@ export class CommentApp {
             getAuthor(authors, comment.user),
             Date.parse(comment.created_at),
             {
-              remoteId: comment.pk,
+              remoteId: comment.id,
               text: comment.text,
               deleted: comment.deleted,
               resolved: comment.resolved
@@ -322,7 +348,7 @@ export class CommentApp {
               getAuthor(authors, reply.user),
               Date.parse(reply.created_at),
               {
-                remoteId: reply.pk,
+                remoteId: reply.id,
                 text: reply.text,
                 deleted: reply.deleted
               }
@@ -333,7 +359,7 @@ export class CommentApp {
 
       // If this is the initial focused comment. Focus and pin it
       // TODO: Scroll to this comment
-      if (initialFocusedCommentId && comment.pk === initialFocusedCommentId) {
+      if (initialFocusedCommentId && comment.id === initialFocusedCommentId) {
         this.store.dispatch(setFocusedComment(commentId, { updatePinnedComment: true, forceFocus: true }));
       }
     }

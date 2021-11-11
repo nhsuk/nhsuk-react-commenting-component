@@ -268,6 +268,18 @@ export default class CommentComponent extends React.Component<CommentProps> {
       return <></>;
     }
 
+    if (replies.length > 1) {
+      return (
+        <>
+          <ul className="comment__replies">
+            <a className="comment__replies-collapsed">Show 1 or more replies</a>
+            {replies[replies.length - 1]}
+          </ul>
+          {replyForm}
+        </>
+      );
+    }
+
     return (
       <>
         <ul className="comment__replies">{replies}</ul>

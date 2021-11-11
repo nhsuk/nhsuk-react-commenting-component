@@ -33,6 +33,7 @@
         margin-right: 40px;
 
         .comment__replies,
+        .comment__replies-collapsed,
         form {
             border-color: #005eb8;
             border-left-width: 8px;
@@ -81,10 +82,17 @@
 
     &__replies {
         list-style-type: none;
-        padding: 15px 15px 0 15px;
+        padding: 0;
         margin: 0;
-        border-top: 1px solid #e6e6e6;
+        border-top: 1px solid $color-comment-separator;
         border-left: 10px solid #d9d9d9;
+
+        &-collapsed {
+            font-size: 12px;
+            padding: 10px 15px 10px 15px;
+            display: block;
+            border-bottom: 1px solid $color-comment-separator;
+        }
     }
 
     &__button {

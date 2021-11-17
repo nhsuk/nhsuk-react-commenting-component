@@ -26,6 +26,7 @@ import {
   selectIsDirty,
   selectCommentCount
 } from './selectors';
+import { CommentHelpPanel } from './components/CommentHelpPanel';
 import { CommentsTabs } from './components/CommentsTabs/index';
 import { CommentFormSetComponent } from './components/Form';
 import { INITIAL_STATE as INITIAL_SETTINGS_STATE } from './state/settings';
@@ -143,6 +144,7 @@ function renderCommentsUi(
 
   return (
     <ol className={classname}>
+      <CommentHelpPanel />
       <CommentsTabs store={store} strings={strings} />
     </ol>
   );

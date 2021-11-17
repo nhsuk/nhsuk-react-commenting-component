@@ -247,33 +247,32 @@ window.comments = (() => {
     }
   }
 
-  // function initCommentsInterface(formElement) {
-  function initCommentsInterface(componentStyle = null) {
-    const commentsElement = document.getElementById('comments');
-    const commentsOutputElement = document.getElementById('comments-output');
-    const dataElement = document.getElementById('comments-data');
-    if (!commentsElement || !commentsOutputElement || !dataElement) {
-      throw new Error('Comments app failed to initialise. Missing HTML element');
-    }
-    const data = JSON.parse(dataElement.textContent);
-    if (data && Object.keys(data).length > 0) {
+  function initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle = null) {
+    if (commentData && Object.keys(commentData).length > 0) {
       commentApp.renderApp(
         commentsElement,
         commentsOutputElement,
-        data.user,
-        data.comments,
-        new Map(Object.entries(data.authors)),
+        commentData.user,
+        commentData.comments,
+        new Map(Object.entries(commentData.authors)),
         STRINGS,
         componentStyle,
       );
+      commentApp.setVisible(true);
     }
+  }
 
-    const updateCommentVisibility = (visible) => {
-      // Show/hide comments
-      commentApp.setVisible(visible);
-    };
-
-    updateCommentVisibility(true);
+  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiCommentEntrypoint,
+    componentStyle = null) {
+    // fetch comments from api entrypoint
+    async function fetchCommentsJSON() {
+      const response = await fetch(apiCommentEntrypoint);
+      const commentData = await response.json();
+      return commentData;
+    }
+    fetchCommentsJSON().then(commentData => {
+      initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle);
+    });
   }
 
   return {
@@ -282,5 +281,6 @@ window.comments = (() => {
     isCommentShortcut,
     initAddCommentButton,
     initCommentsInterface,
+    initCommentsInterfaceFromApi,
   };
 })();

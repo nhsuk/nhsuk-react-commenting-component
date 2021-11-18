@@ -157,7 +157,6 @@ export interface CommentProps {
   layout: LayoutController;
   user: Author | null;
   strings: TranslatableStrings;
-  // replies: React.ReactNode[];
 }
 
 export interface CommentState {
@@ -167,11 +166,11 @@ export interface CommentState {
 export default class CommentComponent extends React.Component<CommentProps, CommentState> {
   constructor(props) {
     super(props);
-    this.state = { collapseReplies: false };
-
-    if (props.comment.replies.length > 1) {
-      this.setState({ collapseReplies: true });
+    let collapseReplies = false;
+    if (props.comment.replies.size > 1) {
+      collapseReplies = true;
     }
+    this.state = { collapseReplies };
   }
 
   renderReplies({ hideNewReply = false } = {}): React.ReactFragment {
@@ -282,7 +281,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       return <></>;
     }
 
-    if (this.state.collapseReplies) {
+    if (this.props.comment.replies.size) {
       return (
         <>
           <ul className="comment__replies">

@@ -157,9 +157,23 @@ export interface CommentProps {
   layout: LayoutController;
   user: Author | null;
   strings: TranslatableStrings;
+  // replies: React.ReactNode[];
 }
 
-export default class CommentComponent extends React.Component<CommentProps> {
+export interface CommentState {
+  collapseReplies: boolean;
+}
+
+export default class CommentComponent extends React.Component<CommentProps, CommentState> {
+  constructor(props) {
+    super(props);
+    this.state = { collapseReplies: false };
+
+    if (props.comment.replies.length > 1) {
+      this.setState({ collapseReplies: true });
+    }
+  }
+
   renderReplies({ hideNewReply = false } = {}): React.ReactFragment {
     const { comment, isFocused, store, user, strings } = this.props;
 
@@ -268,7 +282,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
       return <></>;
     }
 
-    if (replies.length > 1) {
+    if (this.state.collapseReplies) {
       return (
         <>
           <ul className="comment__replies">

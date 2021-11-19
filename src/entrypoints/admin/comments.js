@@ -262,15 +262,31 @@ window.comments = (() => {
     }
   }
 
-  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiCommentEntrypoint,
+  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiCommentEntrypoint, csrfToken = null,
     componentStyle = null) {
-    // fetch comments from api entrypoint
-    async function fetchCommentsJSON() {
-      const response = await fetch(apiCommentEntrypoint);
-      const commentData = await response.json();
-      return commentData;
+    let mode = 'cors';
+    const headers = new Headers();
+
+    if (csrfToken !== null) {
+      mode = 'same-origin';
+      headers.append('X-CSRFToken', csrfToken);
     }
-    fetchCommentsJSON().then(commentData => {
+
+    const resquestOptions = {
+      method: 'POST',
+      headers,
+      mode,
+    };
+
+    const request = new Request(
+      apiCommentEntrypoint,
+      resquestOptions,
+    );
+
+    fetch(request).then((response) => {
+      const commentData = response.json();
+      return commentData;
+    }).then((commentData) => {
       initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle);
     });
   }

@@ -262,25 +262,17 @@ window.comments = (() => {
     }
   }
 
-  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiCommentEntrypoint, csrfToken = null,
-    componentStyle = null) {
-    let mode = 'cors';
-    const headers = new Headers();
-
-    if (csrfToken !== null) {
-      mode = 'same-origin';
-      headers.append('X-CSRFToken', csrfToken);
-    }
-
-    const resquestOptions = {
+  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiUrl, apiCommentsEntrypoint,
+    mode = 'cors', headerOptions = {}, componentStyle = null) {
+    const headers = new Headers(headerOptions);
+    const requestOptions = {
       method: 'POST',
       headers,
       mode,
     };
-
     const request = new Request(
-      apiCommentEntrypoint,
-      resquestOptions,
+      apiUrl + apiCommentsEntrypoint,
+      requestOptions,
     );
 
     fetch(request).then((response) => {

@@ -247,33 +247,40 @@ window.comments = (() => {
     }
   }
 
-  // function initCommentsInterface(formElement) {
-  function initCommentsInterface(componentStyle = null) {
-    const commentsElement = document.getElementById('comments');
-    const commentsOutputElement = document.getElementById('comments-output');
-    const dataElement = document.getElementById('comments-data');
-    if (!commentsElement || !commentsOutputElement || !dataElement) {
-      throw new Error('Comments app failed to initialise. Missing HTML element');
-    }
-    const data = JSON.parse(dataElement.textContent);
-    if (data && Object.keys(data).length > 0) {
+  function initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle = null) {
+    if (commentData && Object.keys(commentData).length > 0) {
       commentApp.renderApp(
         commentsElement,
         commentsOutputElement,
-        data.user,
-        data.comments,
-        new Map(Object.entries(data.authors)),
+        commentData.user,
+        commentData.comments,
+        new Map(Object.entries(commentData.authors)),
         STRINGS,
         componentStyle,
       );
+      commentApp.setVisible(true);
     }
+  }
 
-    const updateCommentVisibility = (visible) => {
-      // Show/hide comments
-      commentApp.setVisible(visible);
+  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiUrl, apiCommentsEntrypoint,
+    mode = 'cors', headerOptions = {}, componentStyle = null) {
+    const headers = new Headers(headerOptions);
+    const requestOptions = {
+      method: 'POST',
+      headers,
+      mode,
     };
+    const request = new Request(
+      apiUrl + apiCommentsEntrypoint,
+      requestOptions,
+    );
 
-    updateCommentVisibility(true);
+    fetch(request).then((response) => {
+      const commentData = response.json();
+      return commentData;
+    }).then((commentData) => {
+      initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle);
+    });
   }
 
   return {
@@ -282,5 +289,6 @@ window.comments = (() => {
     isCommentShortcut,
     initAddCommentButton,
     initCommentsInterface,
+    initCommentsInterfaceFromApi,
   };
 })();

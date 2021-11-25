@@ -140,21 +140,18 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     if (author.type === 'wagtail') {
       return (
         <ul>
-          <li>{author.id}</li>
-          <li>{author.firstname}</li>
-          <li>{author.lastname}</li>
-          <li>{author.type}</li>
+          <li>Author</li>
+          <li className="comment-menu__author-name">{author.firstname} {author.lastname}</li>
+          <li className="comment-menu__author-type">{author.type}</li>
         </ul>
       );
     }
     return (
       <ul>
-        <li>{author.id}</li>
-        <li>{author.type}</li>
-        <li>{author.firstname}</li>
-        <li>{author.lastname}</li>
-        <li>{author.jobTitle}</li>
-        <li>{author.organisation}</li>
+        <li>Author</li>
+        <li className="comment-menu__author-name">{author.firstname} {author.lastname}</li>
+        <li className="comment-menu__author-job-title">{author.jobTitle}</li>
+        <li className="comment-menu__author-org">{author.organisation}</li>
       </ul>
     );
   }
@@ -176,11 +173,15 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
               </Summary>
 
               <div className="comment-menu__more-actions" role="menu" ref={menuRef}>
-                {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
-                {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
-                {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+                <div className="comment-menu__buttons">
+                  {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+                  {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
+                  {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
+                </div>
+                <div className="comment-menu__author-info">
+                  {commentItem.author && renderAuthorMenu(commentItem.author)}
+                </div>
               </div>
-              {commentItem.author && renderAuthorMenu(commentItem.author)}
             </Details>
           </div>
         }

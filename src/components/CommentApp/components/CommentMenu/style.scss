@@ -52,10 +52,41 @@
         > .details-fallback {  // IE11 uses divs instead with these classes
             position: relative;
 
-            > div {
+            > .comment-menu__more-actions {
                 position: absolute;
-                right: 0;
-                top: 35px;
+                right: 30px;
+                top: 0;
+                width: 151px;
+                border-radius: 5px;
+                border: 1px solid #c1c7cc;
+                box-shadow: 0 3px 3px #00000029;
+            }
+        }
+
+        .comment-menu__buttons {
+            padding: 21px 22px 22px 22px;
+            border-bottom: 1px solid #c1c7cc;
+        }
+
+        .comment-menu__author-info {
+            padding: 21px 22px 22px 22px;
+
+            > ul {
+                padding: 0;
+                margin: 0;
+            }
+
+            li {
+                list-style: none;
+                font-size: 12px;
+                color: #2e2e2e;
+            }
+
+            .comment-menu__author-name,
+            .comment-menu__author-type,
+            .comment-menu__author-job-title,
+            .comment-menu__author-org {
+                color: #768691;
             }
         }
 
@@ -63,7 +94,7 @@
             > button,
             > details > summary,
             > .details-fallback > .details-fallback__summary {  // IE11 uses divs instead with these classes
-                color: #767676;
+                color: #a79696;
 
                 // stylelint-disable-next-line max-nesting-depth
                 &:hover {
@@ -74,7 +105,7 @@
     }
 
     &__more-actions {
-        background-color: #333;
+        background-color: $color-white;
         color: $color-grey-5;
         text-transform: none;
         position: absolute;
@@ -83,25 +114,16 @@
         text-align: left;
         border-radius: 3px;
 
-        &:before {
-            content: '';
-            border: 6px solid transparent;
-            border-bottom-color: #333;
-            display: block;
-            position: absolute;
-            bottom: 100%;
-            right: 9px;
-        }
-
         button {
             display: block;
             background: none;
             border: 0;
-            color: #fff;
-            padding: 5px 10px;
-            font-size: 13px;
+            color: #005eb8;
+            padding: 0 0 12px 0;
+            font-size: 14px;
             width: 100px;
             text-align: left;
+            text-decoration: underline;
 
             &:hover {
                 color: #aaa;

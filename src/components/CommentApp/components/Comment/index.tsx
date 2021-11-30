@@ -76,6 +76,67 @@ function doResolveComment(comment: Comment, store: Store) {
   );
 }
 
+function highlightContent(comment: Comment, mode: string) {
+  const highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  if (highlightElement) {
+    if (mode === 'hover' && highlightElement.className === 'highlight-comment') {
+      highlightElement.className = 'highlight-comment-hover';
+    } else if (mode === 'click') {
+      highlightElement.className = 'highlight-comment-selected';
+    }
+  }
+}
+
+function unHighlightContent(comment: Comment) {
+  const highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  if (highlightElement) {
+    if (highlightElement.className === 'highlight-comment-hover') {
+      highlightElement.className = 'highlight-comment';
+    }
+  }
+}
+
+export function getAdjustedIndex(contentText: string, start: number) {
+  let actualIndex = 0;
+  let adjustedIndex = 0;
+  let countChars = true;
+  // This compensates for overlapping start and end values
+  let startPosition = start;
+  if (startPosition > 0) {
+    startPosition += 1;
+  }
+  for (const char of Object.keys(contentText)) {
+    if (adjustedIndex === startPosition) {
+      break;
+    }
+    actualIndex += 1;
+    if (contentText[char] === '<') {
+      countChars = false;
+      continue;
+    }
+    if (contentText[char] === '>') {
+      countChars = true;
+      continue;
+    }
+    if (countChars) {
+      adjustedIndex += 1;
+    }
+  }
+  if (actualIndex > 0) {
+    actualIndex -= 1;
+  }
+  return actualIndex;
+}
+
+export function getContentPathParts(contentpath: string) {
+  const contentPathParts = contentpath.split('.');
+  if (contentPathParts[2] === 'content') {
+    contentPathParts[2] = 'content.' + contentPathParts[3];
+    contentPathParts.pop();
+  }
+  return contentPathParts;
+}
+
 export interface CommentProps {
   store: Store;
   comment: Comment;
@@ -633,12 +694,21 @@ export default class CommentComponent extends React.Component<CommentProps> {
           { updatePinnedComment: false, forceFocus: this.props.isFocused && this.props.forceFocus }
         )
       );
+      highlightContent(this.props.comment, 'click');
     };
 
     const onDoubleClick = () => {
       this.props.store.dispatch(
         setFocusedComment(this.props.comment.localId, { updatePinnedComment: true, forceFocus: true })
       );
+    };
+
+    const onMouseEnter = () => {
+      highlightContent(this.props.comment, 'hover');
+    };
+
+    const onMouseLeave = () => {
+      unHighlightContent(this.props.comment);
     };
 
     // const top = this.props.layout.getCommentPosition(
@@ -674,6 +744,8 @@ export default class CommentComponent extends React.Component<CommentProps> {
           data-comment-id={this.props.comment.localId}
           onClick={onClick}
           onDoubleClick={onDoubleClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         >
           {inner}
         </li>
@@ -693,6 +765,50 @@ export default class CommentComponent extends React.Component<CommentProps> {
           element.offsetHeight
         );
       }
+    }
+    this.highlightContent();
+  }
+
+  highlightContent() {
+    const contentPathParts = getContentPathParts(this.props.comment.contentpath);
+    const highlightNode = this.getHighlightNode(contentPathParts, document);
+
+    if (this.props.comment.position.length > 0) {
+      this.highlightBlocknode(highlightNode);
+    } else {
+      highlightNode.innerHTML = '<span class= "highlight-comment" id="'
+        + this.props.comment.contentpath
+        + '-">'
+        + highlightNode.innerHTML
+        + '</span>';
+    }
+  }
+
+  getHighlightNode(contentPathParts: string[], parentNode: any) {
+    const node = parentNode.querySelector('[data-contentpath="' + contentPathParts[0] + '"]');
+    if (contentPathParts.length === 1) {
+      return node;
+    }
+    contentPathParts.shift();
+    return this.getHighlightNode(contentPathParts, node);
+  }
+
+  highlightBlocknode(highlightNode) {
+    const contentPositionsJson = JSON.parse(this.props.comment.position);
+    for (const position of Object.keys(contentPositionsJson)) {
+      const blockNode = highlightNode.querySelector('[data-block-key="' + contentPositionsJson[position].key + '"]');
+      const start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start);
+      const end = start + (contentPositionsJson[position].end - contentPositionsJson[position].start);
+
+      const highlighted = blockNode.innerHTML.slice(0, start)
+        + '<span class="highlight-comment" id="'
+        + this.props.comment.contentpath
+        + '-'
+        + this.props.comment.position.replace(/"/gi, '') + '">'
+        + blockNode.innerHTML.slice(start, end)
+        + '</span>'
+        + blockNode.innerHTML.slice(end, blockNode.innerHTML.length);
+      blockNode.innerHTML = highlighted;
     }
   }
 

@@ -379,6 +379,11 @@ export class CommentApp {
           }, 200);
         }
       }
+      // reset all content highlighting.
+      const highlights = document.querySelectorAll('[class^=highlight-comment]');
+      for (const highlight of Object.keys(highlights)) {
+        highlights[highlight].className = 'highlight-comment';
+      }
     });
 
     document.body.addEventListener('commentAnchorVisibilityChange', () => {

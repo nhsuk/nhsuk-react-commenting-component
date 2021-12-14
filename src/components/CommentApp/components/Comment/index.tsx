@@ -72,10 +72,42 @@ async function doDeleteComment(comment: Comment, store: Store) {
 }
 
 function doResolveComment(comment: Comment, store: Store) {
+<<<<<<< HEAD
   const user = store.getState().settings.user;
   if (!user) {
     return;
   }
+=======
+  let csrftoken = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('csrftoken='));
+  if (csrftoken){
+    csrftoken = csrftoken.split('=')[1];
+  } else {
+    // error condition - error message and return
+    return;
+  }
+ 
+  const headerOptions = {
+    'X-CSRFToken': csrftoken,
+    'subscription-key': 'SOMEKEY', 
+  }
+  const headers = new Headers(headerOptions);
+  const requestOptions = {
+    method: 'POST',
+    headers,
+    mode: 'same-origin' as RequestMode,
+  };
+  const request = new Request(
+    'http://127.0.0.1:8000/workflow-api/comment/' + comment.remoteId + '/resolve/',
+    requestOptions,
+  );
+  fetch(request)
+  .then( response => {
+    // Check the response status for != 200, show error message?
+    console.log(response);
+  });
+>>>>>>> Get and resolve can now be performed using API calls
   store.dispatch(
     resolveComment(comment.localId, user)
   );

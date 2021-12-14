@@ -97,7 +97,7 @@ export interface InitialComment {
   contentpath: string;
   position: string;
   deleted: boolean;
-  resolved: boolean;
+  resolved_at: string;
 }
 /* eslint-enable */
 
@@ -318,7 +318,6 @@ export class CommentApp {
     // Fetch existing comments
     for (const comment of initialComments) {
       const commentId = getNextCommentId();
-
       // Create comment
       this.store.dispatch(
         addComment(
@@ -333,7 +332,7 @@ export class CommentApp {
               remoteId: comment.id,
               text: comment.text,
               deleted: comment.deleted,
-              resolved: comment.resolved
+              resolved: ((comment.resolved_at == null) ? false : true)
             }
           )
         )

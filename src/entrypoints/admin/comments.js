@@ -275,11 +275,13 @@ window.comments = (() => {
       requestOptions,
     );
 
-    fetch(request).then((response) => {
-      const commentData = response.json();
-      return commentData;
-    }).then((commentData) => {
-      initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle);
+    fetch(request)
+    .then( response => {
+      const responseReader = response.body.getReader();
+      responseReader.read().then(({ done, value}) => {
+        const commentData =  new TextDecoder().decode(value);
+        initCommentsInterface(commentsElement, commentsOutputElement, JSON.parse(commentData), componentStyle);
+      })
     });
   }
 
@@ -291,4 +293,5 @@ window.comments = (() => {
     initCommentsInterface,
     initCommentsInterfaceFromApi,
   };
+
 })();

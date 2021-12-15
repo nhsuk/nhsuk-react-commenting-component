@@ -81,7 +81,7 @@ function highlightContent(comment: Comment, mode: string) {
   if (highlightElement) {
     if (mode === 'hover' && highlightElement.className === 'highlight-comment') {
       highlightElement.className = 'highlight-comment-hover';
-    } else if (mode === 'click') {
+    } else if (mode === 'click' && highlightElement.className !== '') {
       highlightElement.className = 'highlight-comment-selected';
     }
   }
@@ -772,9 +772,17 @@ export default class CommentComponent extends React.Component<CommentProps> {
   highlightContent() {
     const contentPathParts = getContentPathParts(this.props.comment.contentpath);
     const highlightNode = this.getHighlightNode(contentPathParts, document);
+    if (this.props.comment.resolved) {
+      if (this.props.comment.position.length > 0) {
+        this.highlightBlocknode(highlightNode, true);
+      } else {
+        highlightNode.classList.remove('highlight-comment');
+      }
+      return;
+    }
 
     if (this.props.comment.position.length > 0) {
-      this.highlightBlocknode(highlightNode);
+      this.highlightBlocknode(highlightNode, false);
     } else {
       highlightNode.innerHTML = '<span class= "highlight-comment" id="'
         + this.props.comment.contentpath
@@ -793,13 +801,20 @@ export default class CommentComponent extends React.Component<CommentProps> {
     return this.getHighlightNode(contentPathParts, node);
   }
 
-  highlightBlocknode(highlightNode) {
+  highlightBlocknode(highlightNode, resolved: boolean) {
+    if (resolved) {
+      const highlightSpan = document.getElementById(this.props.comment.contentpath
+        + '-' + this.props.comment.position.replace(/"/gi, ''));
+      if (highlightSpan) {
+        highlightSpan.classList.remove('highlight-comment');
+      }
+      return;
+    }
     const contentPositionsJson = JSON.parse(this.props.comment.position);
     for (const position of Object.keys(contentPositionsJson)) {
       const blockNode = highlightNode.querySelector('[data-block-key="' + contentPositionsJson[position].key + '"]');
       const start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start);
       const end = start + (contentPositionsJson[position].end - contentPositionsJson[position].start);
-
       const highlighted = blockNode.innerHTML.slice(0, start)
         + '<span class="highlight-comment" id="'
         + this.props.comment.contentpath

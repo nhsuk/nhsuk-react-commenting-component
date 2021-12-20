@@ -22,6 +22,7 @@ const testSettingsState: SettingsState = {
   },
   commentsEnabled: true,
   currentTab: null,
+  componentStyle: null,
 };
 
 export function ActiveAndResolvedComments() {
@@ -48,14 +49,32 @@ export function ActiveAndResolvedComments() {
   addTestComment(store, {
     mode: 'default',
     text: 'An example resolved comment',
+    highlightedText: 'This is the highlighted text.',
     resolved: true,
+    resolvedAuthor: {
+      id: 2,
+      type: 'external',
+      firstname: 'Jane',
+      lastname: 'Doe',
+      jobTitle: 'Developer',
+      organisation: 'Nhs',
+    },
     deleted: false,
   });
 
   addTestComment(store, {
     mode: 'default',
     text: 'An second example resolved comment',
+    highlightedText: 'This is the highlighted text.',
     resolved: true,
+    resolvedAuthor: {
+      id: 2,
+      type: 'external',
+      firstname: 'Jane',
+      lastname: 'Doe',
+      jobTitle: 'Developer',
+      organisation: 'Nhs',
+    },
     deleted: false,
   });
 

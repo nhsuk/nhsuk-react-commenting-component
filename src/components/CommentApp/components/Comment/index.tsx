@@ -72,7 +72,7 @@ async function doDeleteComment(comment: Comment, store: Store) {
 
 function doResolveComment(comment: Comment, store: Store) {
   store.dispatch(
-    resolveComment(comment.localId)
+    resolveComment(comment.localId, store.getState().settings.user)
   );
 }
 

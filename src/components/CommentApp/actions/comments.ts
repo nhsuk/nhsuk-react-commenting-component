@@ -3,6 +3,7 @@ import type {
   CommentUpdate,
   CommentReply,
   CommentReplyUpdate,
+  Author,
 } from '../state/comments';
 
 export const ADD_COMMENT = 'add-comment';
@@ -37,6 +38,7 @@ export interface DeleteCommentAction {
 export interface ResolveCommentAction {
   type: typeof RESOLVE_COMMENT;
   commentId: number;
+  user: Author;
 }
 
 export interface SetFocusedCommentAction {
@@ -68,6 +70,7 @@ export interface DeleteReplyAction {
 export interface InvalidateContentPathAction {
   type: typeof INVALIDATE_CONTENT_PATH;
   contentPath: string;
+  user: Author;
 }
 
 export type Action =
@@ -106,10 +109,11 @@ export function deleteComment(commentId: number): DeleteCommentAction {
   };
 }
 
-export function resolveComment(commentId: number): ResolveCommentAction {
+export function resolveComment(commentId: number, user: Author): ResolveCommentAction {
   return {
     type: RESOLVE_COMMENT,
     commentId,
+    user,
   };
 }
 
@@ -161,10 +165,11 @@ export function deleteReply(
   };
 }
 
-export function invalidateContentPath(contentPath: string): InvalidateContentPathAction {
+export function invalidateContentPath(contentPath: string, user: Author): InvalidateContentPathAction {
   return {
     type: INVALIDATE_CONTENT_PATH,
     contentPath,
+    user,
   };
 }
 

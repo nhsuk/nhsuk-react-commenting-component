@@ -1,5 +1,6 @@
 import { newComment, Comment } from '../../state/comments';
 import { getNextCommentId } from '../../utils/sequences';
+import { resolveComment } from '../../actions/comments';
 import {
   filterResolvedComments,
   filterActiveComments,
@@ -10,6 +11,15 @@ const author = {
   type: 'external',
   firstname: 'Joe',
   lastname: 'Bloggins',
+  jobTitle: 'Developer',
+  organisation: 'Nhs',
+};
+
+const resolvedAuthor = {
+  id: 2,
+  type: 'external',
+  firstname: 'Jane',
+  lastname: 'Doe',
   jobTitle: 'Developer',
   organisation: 'Nhs',
 };
@@ -30,21 +40,23 @@ const commentsToRender = Array.from(
 );
 
 // commentsToRender array contains 2 of all possible combinations of states
-// Resolved
+// RESOLVED
+resolveComment(commentsToRender[0].localId, resolvedAuthor);
+resolveComment(commentsToRender[1].localId, resolvedAuthor);
+// Statically set resolved to true as resolveComment only assigns true if remoteID exists
 commentsToRender[0].resolved = true;
-commentsToRender[0].deleted = false;
-
 commentsToRender[1].resolved = true;
-commentsToRender[1].deleted = false;
 
-// Deleted
+// DELETED
+resolveComment(commentsToRender[2].localId, resolvedAuthor);
+resolveComment(commentsToRender[3].localId, resolvedAuthor);
+// Statically set resolved to true as resolveComment only assigns true if remoteID exists
 commentsToRender[2].resolved = true;
 commentsToRender[2].deleted = true;
-
 commentsToRender[3].resolved = true;
 commentsToRender[3].deleted = true;
 
-// Active
+// ACTIVE
 commentsToRender[4].resolved = false;
 commentsToRender[4].deleted = false;
 

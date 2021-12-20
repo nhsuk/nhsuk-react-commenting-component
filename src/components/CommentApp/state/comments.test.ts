@@ -35,6 +35,7 @@ test('New comment added to state', () => {
       jobTitle: 'Developer',
       organisation: 'Nhs',
     },
+    resolvedByAuthor: null,
     date: 0,
     highlightedText: 'This is the highlighted text.',
     text: 'new comment',
@@ -71,6 +72,7 @@ test('Remote comment added to state', () => {
       jobTitle: 'Developer',
       organisation: 'Nhs',
     },
+    resolvedByAuthor: null,
     date: 0,
     highlightedText: 'This is the highlighted text.',
     text: 'new comment',
@@ -110,7 +112,15 @@ test('Local comment deleted', () => {
 
 test('Local comment resolved', () => {
   // Test that resolving a comment without a remoteId removes it from the state entirely
-  const resolveAction = actions.resolveComment(4);
+  const user = {
+    id: 2,
+    type: 'external',
+    firstname: 'Jane',
+    lastname: 'Doe',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
+  };
+  const resolveAction = actions.resolveComment(4, user);
   const newState = reducer(basicCommentsState, resolveAction);
   expect(newState.comments.has(4)).toBe(false);
 });
@@ -133,7 +143,15 @@ test('Remote comment deleted', () => {
 
 test('Remote comment resolved', () => {
   // Test that resolving a comment without a remoteId does not remove it from the state, but marks it as resolved
-  const resolveAction = actions.resolveComment(1);
+  const user = {
+    id: 2,
+    type: 'external',
+    firstname: 'Jane',
+    lastname: 'Doe',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
+  };
+  const resolveAction = actions.resolveComment(1, user);
   const newState = reducer(basicCommentsState, resolveAction);
   const comment = newState.comments.get(1);
   expect(comment).toBeDefined();

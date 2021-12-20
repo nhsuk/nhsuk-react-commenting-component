@@ -50,6 +50,7 @@ const Summary: React.FunctionComponent<React.ComponentPropsWithoutRef<'summary'>
 interface CommentItem {
   author: Author | null;
   date: number;
+  resolvedByAuthor?: Author;
 }
 
 interface CommentMenuProps {
@@ -156,6 +157,19 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     );
   }
 
+  function renderResolvedAuthorMenu(resolvedByAuthor: Author) {
+    return (
+      <div className="comment-menu__resolved-by-info">
+        <ul>
+          <li>Resolved By</li>
+          <li className="comment-menu__author-name">{resolvedByAuthor.firstname} {resolvedByAuthor.lastname}</li>
+          <li className="comment-menu__author-job-title">{resolvedByAuthor.jobTitle}</li>
+          <li className="comment-menu__author-org">{resolvedByAuthor.organisation}</li>
+        </ul>
+      </div>
+    );
+  }
+
   return (
     <div className="comment-menu">
       <div className="comment-menu__actions">
@@ -181,6 +195,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
                 <div className="comment-menu__author-info">
                   {commentItem.author && renderAuthorMenu(commentItem.author)}
                 </div>
+                {commentItem.resolvedByAuthor && renderResolvedAuthorMenu(commentItem.resolvedByAuthor)}
               </div>
             </Details>
           </div>

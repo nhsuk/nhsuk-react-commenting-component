@@ -68,7 +68,12 @@
             border-bottom: 1px solid #c1c7cc;
         }
 
-        .comment-menu__author-info {
+        .comment-menu__resolved-by-info {
+            border-top: 1px solid #c1c7cc;
+        }
+
+        .comment-menu__author-info,
+        .comment-menu__resolved-by-info {
             padding: 21px 22px 22px 22px;
 
             > ul {

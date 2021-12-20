@@ -241,9 +241,8 @@ export class CommentApp {
       commentsEnabled: visible,
     }));
   }
-  invalidateContentPath(contentPath: string) {
-    // Called when a given content path on the form is no longer valid (eg, a block has been deleted)
-    this.store.dispatch(invalidateContentPath(contentPath));
+  invalidateContentPath(contentPath: string, user: Author) {
+    this.store.dispatch(invalidateContentPath(contentPath, user));
   }
   renderApp(
     element: HTMLElement,

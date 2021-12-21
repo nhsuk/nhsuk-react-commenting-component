@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import FocusTrap from 'focus-trap-react';
 
-import Icon from '../../../Icon/Icon';
 import type { Store } from '../../state';
 import { Author, Comment, newCommentReply } from '../../state/comments';
 import {
@@ -19,11 +18,11 @@ import { LayoutController } from '../../utils/layout';
 import { getNextReplyId } from '../../utils/sequences';
 import CommentReplyComponent from '../CommentReply';
 import type { TranslatableStrings } from '../../main';
-import { CommentMenu }  from '../CommentMenu';
-import { CommentFooter }  from '../CommentFooter';
+import { CommentMenu } from '../CommentMenu';
+import { CommentFooter } from '../CommentFooter';
 import TextArea from '../TextArea';
 
-async function saveComment(comment: Comment, store: Store) {
+export async function saveComment(comment: Comment, store: Store) {
   store.dispatch(
     updateComment(comment.localId, {
       mode: 'saving',
@@ -49,15 +48,87 @@ async function saveComment(comment: Comment, store: Store) {
       })
     );
   }
+
+  if (!comment.remoteId || !comment.localId) {
+    return;
+  }
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    exports.makeRequest(comment.remoteId,
+      'PUT',
+      'update',
+      settings.apiUrl,
+      settings.apiKey,
+      comment.newText)
+      .then(response => {
+        /* eslint-disable-next-line dot-notation */
+        if (response['success'] === 'False') {
+          /* eslint-disable-next-line no-console, dot-notation */
+          console.error(response['error']);
+          return;
+        }
+      });
+  }
 }
 
-async function doDeleteComment(comment: Comment, store: Store) {
-  store.dispatch(
-    updateComment(comment.localId, {
-      mode: 'deleting',
-    })
-  );
+export function getRequestOptions(verb: string, apiKey: string, body?: string) {
+  let csrftoken = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('csrftoken='));
+  if (csrftoken) {
+    csrftoken = csrftoken.split('=')[1];
+  } else {
+    // error condition - error message and return
+    return {};
+  }
+  const headerOptions = {
+    'X-CSRFToken': csrftoken,
+    'Subscription-Key': apiKey,
+    'Content-Type': 'text/html; charset=UTF-8',
+  };
+  const headers = new Headers(headerOptions);
+  return {
+    method: verb,
+    headers,
+    mode: 'same-origin' as RequestMode,
+    body: body,
+  };
+}
 
+export async function makeRequest(remoteId: number,
+  verb: string,
+  action: string,
+  apiUrl: string,
+  apiKey: string,
+  body?: string) {
+  const request = new Request(
+    apiUrl + '/workflow-api/comment/' + remoteId + '/' + action + '/',
+    getRequestOptions(verb, apiKey, body),
+  );
+  const response = await fetch(request);
+  // Check the response status for != 200, show error message?
+  if (response.status !== 200) {
+    /* eslint-disable no-console */
+    console.error('Failed to make request ' + response);
+    console.error(response);
+    /* eslint-enable no-console */
+    return { success: 'False', error: response.status };
+  }
+
+  let decodedData = '';
+  if (response.body) {
+    const responseReader = response.body.getReader();
+    if (responseReader) {
+      const responseData = await responseReader.read();
+      decodedData = new TextDecoder().decode(responseData.value);
+      return decodedData;
+    }
+    return { success: 'False', error: 'Failed to retrieve response body' };
+  }
+  return { success: 'False', error: 'Failed to retrieve response body' };
+}
+
+export async function doDeleteComment(comment: Comment, store: Store) {
   try {
     store.dispatch(deleteComment(comment.localId));
   } catch (err) {
@@ -69,48 +140,65 @@ async function doDeleteComment(comment: Comment, store: Store) {
       })
     );
   }
+  if (!comment.remoteId || !comment.localId) {
+    return;
+  }
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    exports.makeRequest(comment.remoteId,
+      'DELETE',
+      'delete',
+      settings.apiUrl,
+      settings.apiKey)
+      .then(response => {
+        /* eslint-disable-next-line dot-notation */
+        if (response['success'] === 'False') {
+          /* eslint-disable-next-line no-console, dot-notation */
+          console.error(response['error']);
+          return;
+        }
+      });
+  }
 }
 
-function doResolveComment(comment: Comment, store: Store) {
-<<<<<<< HEAD
+export async function doResolveComment(comment: Comment, store: Store) {
   const user = store.getState().settings.user;
   if (!user) {
     return;
   }
-=======
-  let csrftoken = document.cookie
-  .split('; ')
-  .find(row => row.startsWith('csrftoken='));
-  if (csrftoken){
-    csrftoken = csrftoken.split('=')[1];
-  } else {
-    // error condition - error message and return
+  try {
+    store.dispatch(
+      resolveComment(comment.localId, user)
+    );
+  } catch (err) {
+    /* eslint-disable-next-line no-console */
+    console.error(err);
+    store.dispatch(
+      updateComment(comment.localId, {
+        mode: 'save_error',
+      })
+    );
+  }
+
+  if (!comment.remoteId || !comment.localId) {
     return;
   }
- 
-  const headerOptions = {
-    'X-CSRFToken': csrftoken,
-    'subscription-key': 'SOMEKEY', 
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    exports.makeRequest(comment.remoteId,
+      'PUT',
+      'resolve',
+      settings.apiUrl,
+      settings.apiKey)
+      .then(response => {
+        /* eslint-disable-next-line dot-notation */
+        if (response['success'] === 'False') {
+          /* eslint-disable-next-line no-console, dot-notation */
+          console.error(response['error']);
+          return;
+        }
+      });
   }
-  const headers = new Headers(headerOptions);
-  const requestOptions = {
-    method: 'POST',
-    headers,
-    mode: 'same-origin' as RequestMode,
-  };
-  const request = new Request(
-    'http://127.0.0.1:8000/workflow-api/comment/' + comment.remoteId + '/resolve/',
-    requestOptions,
-  );
-  fetch(request)
-  .then( response => {
-    // Check the response status for != 200, show error message?
-    console.log(response);
-  });
->>>>>>> Get and resolve can now be performed using API calls
-  store.dispatch(
-    resolveComment(comment.localId, user)
-  );
 }
 
 function highlightContent(comment: Comment, mode: string) {
@@ -178,6 +266,22 @@ function doReopenComment(comment: Comment, store: Store) {
   store.dispatch(
     reopenComment(comment.localId)
   );
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    exports.makeRequest(comment.remoteId,
+      'PUT',
+      'reopen',
+      settings.apiUrl,
+      settings.apiKey)
+      .then(response => {
+        /* eslint-disable-next-line dot-notation */
+        if (response['success'] === 'False') {
+          /* eslint-disable-next-line no-console, dot-notation */
+          console.error(response['error']);
+          return;
+        }
+      });
+  }
 }
 
 export interface CommentProps {
@@ -236,6 +340,23 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           newReply: '',
         })
       );
+      const settings = store.getState().settings;
+      if (settings.apiEnabled) {
+        exports.makeRequest(comment.remoteId,
+          'POST',
+          'add_reply',
+          settings.apiUrl,
+          settings.apiKey,
+          comment.newReply)
+          .then(response => {
+            /* eslint-disable-next-line dot-notation */
+            if (response['success'] === 'False') {
+              /* eslint-disable-next-line no-console, dot-notation */
+              console.error(response['error']);
+              return;
+            }
+          });
+      }
     };
 
     const onClickCancelReply = (e: React.MouseEvent) => {
@@ -687,7 +808,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     // Show edit/delete buttons if this comment was authored by the current user
     let onEdit;
     let onDelete;
-    if (comment.author === null || this.props.user && this.props.user.id === comment.author.id) {
+    if (comment.author === null || this.props.user && this.props.user.id === comment.author.userId) {
       onEdit = () => {
         store.dispatch(
           updateComment(comment.localId, {
@@ -706,15 +827,6 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       };
     }
 
-    let notice = '';
-    if (!comment.remoteId) {
-      // Save the page to add this comment
-      notice = strings.SAVE_PAGE_TO_ADD_COMMENT;
-    } else if (comment.text !== comment.originalText) {
-      // Save the page to save this comment
-      notice = strings.SAVE_PAGE_TO_SAVE_COMMENT_CHANGES;
-    }
-
     return (
       <>
         <div className="comment__original">
@@ -731,14 +843,6 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentItem={comment} />
-          {notice &&
-            <div className="comment__notice-placeholder">
-              <div className="comment__notice" role="status">
-                <Icon name="info-circle" />
-                {notice}
-              </div>
-            </div>
-          }
         </div>
         {this.renderReplies()}
       </>
@@ -752,31 +856,24 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     case 'creating':
       inner = this.renderCreating();
       break;
-
     case 'editing':
       inner = this.renderEditing();
       break;
-
     case 'saving':
       inner = this.renderSaving();
       break;
-
     case 'save_error':
       inner = this.renderSaveError();
       break;
-
     case 'delete_confirm':
       inner = this.renderDeleteConfirm();
       break;
-
     case 'deleting':
       inner = this.renderDeleting();
       break;
-
     case 'delete_error':
       inner = this.renderDeleteError();
       break;
-
     default:
       inner = this.renderDefault();
       break;
@@ -863,29 +960,6 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     this.highlightContent();
   }
 
-  highlightContent() {
-    const contentPathParts = getContentPathParts(this.props.comment.contentpath);
-    const highlightNode = this.getHighlightNode(contentPathParts, document);
-    if (this.props.comment.resolved) {
-      if (this.props.comment.position.length > 0) {
-        this.highlightBlocknode(highlightNode, true);
-      } else {
-        highlightNode.classList.remove('highlight-comment');
-      }
-      return;
-    }
-
-    if (this.props.comment.position.length > 0) {
-      this.highlightBlocknode(highlightNode, false);
-    } else {
-      highlightNode.innerHTML = '<span class= "highlight-comment" id="'
-        + this.props.comment.contentpath
-        + '-">'
-        + highlightNode.innerHTML
-        + '</span>';
-    }
-  }
-
   getHighlightNode(contentPathParts: string[], parentNode: any) {
     const node = parentNode.querySelector('[data-contentpath="' + contentPathParts[0] + '"]');
     if (contentPathParts.length === 1) {
@@ -918,6 +992,31 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
         + '</span>'
         + blockNode.innerHTML.slice(end, blockNode.innerHTML.length);
       blockNode.innerHTML = highlighted;
+    }
+  }
+
+  highlightContent() {
+    const contentPathParts = getContentPathParts(this.props.comment.contentpath);
+    const highlightNode = this.getHighlightNode(contentPathParts, document);
+    if (this.props.comment.resolved) {
+      if (this.props.comment.position.length > 0) {
+        this.highlightBlocknode(highlightNode, true);
+      } else if (highlightNode) {
+        highlightNode.classList.remove('highlight-comment');
+      }
+      return;
+    }
+
+    if (highlightNode) {
+      if (this.props.comment.position.length > 0) {
+        this.highlightBlocknode(highlightNode, false);
+      } else {
+        highlightNode.innerHTML = '<span class= "highlight-comment" id="'
+          + this.props.comment.contentpath
+          + '-">'
+          + highlightNode.innerHTML
+          + '</span>';
+      }
     }
   }
 

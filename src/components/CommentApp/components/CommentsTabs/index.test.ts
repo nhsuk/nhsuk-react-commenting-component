@@ -1,6 +1,5 @@
 import { newComment, Comment } from '../../state/comments';
 import { getNextCommentId } from '../../utils/sequences';
-import { resolveComment } from '../../actions/comments';
 import {
   filterResolvedComments,
   filterActiveComments,
@@ -11,15 +10,6 @@ const author = {
   type: 'external',
   firstname: 'Joe',
   lastname: 'Bloggins',
-  jobTitle: 'Developer',
-  organisation: 'Nhs',
-};
-
-const resolvedAuthor = {
-  id: 2,
-  type: 'external',
-  firstname: 'Jane',
-  lastname: 'Doe',
   jobTitle: 'Developer',
   organisation: 'Nhs',
 };
@@ -41,18 +31,16 @@ const commentsToRender = Array.from(
 
 // commentsToRender array contains 2 of all possible combinations of states
 // RESOLVED
-resolveComment(commentsToRender[0].localId, resolvedAuthor);
-resolveComment(commentsToRender[1].localId, resolvedAuthor);
-// Statically set resolved to true as resolveComment only assigns true if remoteID exists
 commentsToRender[0].resolved = true;
+commentsToRender[0].deleted = false;
+
 commentsToRender[1].resolved = true;
+commentsToRender[1].deleted = false;
 
 // DELETED
-resolveComment(commentsToRender[2].localId, resolvedAuthor);
-resolveComment(commentsToRender[3].localId, resolvedAuthor);
-// Statically set resolved to true as resolveComment only assigns true if remoteID exists
 commentsToRender[2].resolved = true;
 commentsToRender[2].deleted = true;
+
 commentsToRender[3].resolved = true;
 commentsToRender[3].deleted = true;
 
@@ -63,38 +51,50 @@ commentsToRender[4].deleted = false;
 commentsToRender[5].resolved = false;
 commentsToRender[5].deleted = false;
 
-let resolvedComments = filterResolvedComments(commentsToRender);
-let activeComments = filterActiveComments(commentsToRender);
+const resolvedComments = filterResolvedComments(commentsToRender);
+const activeComments = filterActiveComments(commentsToRender);
 
 
 describe('filterResolvedComments', () => {
-  it('filters only resolved comments', () => {
-    expect(resolvedComments.length).toBe(2);
-    expect(resolvedComments.every(comment => comment.resolved)).toBeTruthy();
-    expect(resolvedComments.every(comment => comment.deleted)).toBeFalsy();
+  it('filters only resolved, non-deleted comments', () => {
+    for (let i = 0; i < resolvedComments.length; i++) {
+      expect(resolvedComments[i].resolved).toBe(true);
+      expect(resolvedComments[i].deleted).toBe(false);
+    }
+  });
 
-    commentsToRender[2].deleted = false;
-    resolvedComments = filterResolvedComments(commentsToRender);
+  it('never filters deleted comments', () => {
+    for (let i = 0; i < resolvedComments.length; i++) {
+      expect(resolvedComments[i].deleted).toBe(false);
+    }
+  });
 
-    expect(resolvedComments.length).toBe(3);
-    expect(resolvedComments.every(comment => comment.resolved)).toBeTruthy();
-    expect(resolvedComments.every(comment => comment.deleted)).toBeFalsy();
+  it('never filters active comments', () => {
+    for (let i = 0; i < resolvedComments.length; i++) {
+      expect(resolvedComments[i].resolved).not.toBe(false);
+      expect(resolvedComments[i].deleted).toBe(false);
+    }
   });
 });
 
 
 describe('filterActiveComments', () => {
-  it('filters only active comments', () => {
-    expect(activeComments.length).toBe(2);
-    expect(activeComments.every(comment => comment.resolved)).toBeFalsy();
-    expect(activeComments.every(comment => comment.deleted)).toBeFalsy();
+  it('filters only active, non-deleted comments', () => {
+    for (let i = 0; i < activeComments.length; i++) {
+      expect(activeComments[i].resolved).toBe(false);
+      expect(activeComments[i].deleted).toBe(false);
+    }
+  });
 
-    commentsToRender[3].resolved = false;
-    commentsToRender[3].deleted = false;
-    activeComments = filterActiveComments(commentsToRender);
+  it('never filters deleted comments', () => {
+    for (let i = 0; i < activeComments.length; i++) {
+      expect(activeComments[i].deleted).toBe(false);
+    }
+  });
 
-    expect(activeComments.length).toBe(3);
-    expect(activeComments.every(comment => comment.resolved)).toBeFalsy();
-    expect(activeComments.every(comment => comment.deleted)).toBeFalsy();
+  it('never filters resolved comments', () => {
+    for (let i = 0; i < activeComments.length; i++) {
+      expect(activeComments[i].resolved).toBe(false);
+    }
   });
 });

@@ -220,6 +220,23 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     comment.resolvedByAuthor = user;
   };
 
+  const reopenComment = (comment: Comment) => {
+    if (!comment.remoteId) {
+      // If the comment doesn't exist in the database, there's no need to keep it around locally
+      draft.comments.delete(comment.localId);
+    } else {
+      comment.resolved = false;
+      comment.resolvedByAuthor = undefined;
+    }
+    // Unset focusedComment if the focused comment is the one being resolved
+    if (draft.focusedComment === comment.localId) {
+      draft.focusedComment = null;
+    }
+    if (draft.pinnedComment === comment.localId) {
+      draft.pinnedComment = null;
+    }
+  }
+
   switch (action.type) {
   case actions.ADD_COMMENT: {
     draft.comments.set(action.comment.localId, action.comment);
@@ -253,6 +270,14 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
       break;
     }
     resolveComment(comment, action.user);
+    break;
+  }
+  case actions.REOPEN_COMMENT: {
+    const comment = draft.comments.get(action.commentId);
+    if (!comment){
+      break;
+    }
+    reopenComment(comment);
     break;
   }
   case actions.SET_FOCUSED_COMMENT: {

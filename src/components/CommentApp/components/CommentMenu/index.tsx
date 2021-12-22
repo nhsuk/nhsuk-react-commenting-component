@@ -50,6 +50,7 @@ const Summary: React.FunctionComponent<React.ComponentPropsWithoutRef<'summary'>
 interface CommentItem {
   author: Author | null;
   date: number;
+  resolved: boolean;
   resolvedByAuthor?: Author;
 }
 
@@ -58,13 +59,14 @@ interface CommentMenuProps {
   store: Store;
   strings: TranslatableStrings;
   onResolve?(commentItem: CommentItem, store: Store): void;
+  onReopen?(commentItem: CommentItem, store: Store): void;
   onEdit?(commentItem: CommentItem, store: Store): void;
   onDelete?(commentItem: CommentItem, store: Store): void;
   focused: boolean;
 }
 
 export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
-  commentItem, store, strings, onResolve, onEdit, onDelete, focused
+  commentItem, store, strings, onResolve, onReopen, onEdit, onDelete, focused
 }) => {
   const setUnresolvedCommentsPresent = () => {
     const unresolvedComments: Comment[] = Array.from(store.getState().comments.comments.values())
@@ -82,6 +84,15 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
 
     if (onResolve) {
       onResolve(commentItem, store);
+      setUnresolvedCommentsPresent();
+    }
+  };
+
+  const onClickReopen = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (onReopen) {
+      onReopen(commentItem, store);
       setUnresolvedCommentsPresent();
     }
   };
@@ -170,6 +181,24 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     );
   }
 
+  function renderCommentMenuButtons() {
+    if (commentItem.resolved) {
+      return (
+        <div className="comment-menu__buttons">
+          {onReopen && <button type="button" role="menuitem" onClick={onClickReopen}>{strings.REOPEN}</button>}
+        </div>
+      );
+    } else {
+      return (
+        <div className="comment-menu__buttons">
+          {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+          {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
+          {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
+        </div>
+      );
+    };
+  }
+
   return (
     <div className="comment-menu">
       <div className="comment-menu__actions">
@@ -187,11 +216,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
               </Summary>
 
               <div className="comment-menu__more-actions" role="menu" ref={menuRef}>
-                <div className="comment-menu__buttons">
-                  {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
-                  {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
-                  {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
-                </div>
+                {renderCommentMenuButtons()}
                 <div className="comment-menu__author-info">
                   {commentItem.author && renderAuthorMenu(commentItem.author)}
                 </div>

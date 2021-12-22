@@ -140,7 +140,7 @@ test('Remote comment deleted', () => {
 });
 
 test('Remote comment resolved', () => {
-  // Test that resolving a comment without a remoteId does not remove it from the state, but marks it as resolved
+  // Test that resolving a comment with a remoteId does not remove it from the state, but marks it as resolved
   const user = {
     id: 2,
     type: 'external',
@@ -155,6 +155,23 @@ test('Remote comment resolved', () => {
   expect(comment).toBeDefined();
   if (comment) {
     expect(comment.resolved).toBe(true);
+  }
+  expect(newState.focusedComment).toBe(null);
+  expect(newState.pinnedComment).toBe(null);
+  expect(newState.remoteCommentCount).toBe(
+    basicCommentsState.remoteCommentCount
+  );
+});
+
+test('Remote comment reopened', () => {
+  // Test that reopening a resolved comment with a remoteId marks it as active
+  const reopenAction = actions.reopenComment(1);
+  const newState = reducer(basicCommentsState, reopenAction);
+  const comment = newState.comments.get(1);
+  expect(comment).toBeDefined();
+  if (comment) {
+    expect(comment.resolved).toBe(false);
+    expect(comment.resolvedByAuthor).toBe(undefined);
   }
   expect(newState.focusedComment).toBe(null);
   expect(newState.pinnedComment).toBe(null);

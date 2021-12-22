@@ -11,6 +11,7 @@ import {
   updateComment,
   deleteComment,
   resolveComment,
+  reopenComment,
   setFocusedComment,
   addReply
 } from '../../actions/comments';
@@ -139,6 +140,10 @@ export function getContentPathParts(contentpath: string) {
     contentPathParts.pop();
   }
   return contentPathParts;
+function doReopenComment(comment: Comment, store: Store) {
+  store.dispatch(
+    reopenComment(comment.localId)
+  );
 }
 
 export interface CommentProps {
@@ -634,6 +639,7 @@ export default class CommentComponent extends React.Component<CommentProps> {
             store={store}
             strings={strings}
             onResolve={doResolveComment}
+            onReopen={doReopenComment}
             onEdit={onEdit}
             onDelete={onDelete}
             focused={isFocused}

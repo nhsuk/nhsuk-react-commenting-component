@@ -10,6 +10,7 @@ export const ADD_COMMENT = 'add-comment';
 export const UPDATE_COMMENT = 'update-comment';
 export const DELETE_COMMENT = 'delete-comment';
 export const RESOLVE_COMMENT = 'resolve-comment';
+export const REOPEN_COMMENT = 'reopen-comment';
 export const SET_FOCUSED_COMMENT = 'set-focused-comment';
 export const SET_PINNED_COMMENT = 'set-pinned-comment';
 
@@ -39,6 +40,11 @@ export interface ResolveCommentAction {
   type: typeof RESOLVE_COMMENT;
   commentId: number;
   user: Author;
+}
+
+export interface ReopenCommentAction {
+  type: typeof REOPEN_COMMENT;
+  commentId: number;
 }
 
 export interface SetFocusedCommentAction {
@@ -78,6 +84,7 @@ export type Action =
   | UpdateCommentAction
   | DeleteCommentAction
   | ResolveCommentAction
+  | ReopenCommentAction
   | SetFocusedCommentAction
   | AddReplyAction
   | UpdateReplyAction
@@ -114,6 +121,13 @@ export function resolveComment(commentId: number, user: Author): ResolveCommentA
     type: RESOLVE_COMMENT,
     commentId,
     user,
+  };
+}
+
+export function reopenComment(commentId: number): ReopenCommentAction {
+  return {
+    type: REOPEN_COMMENT,
+    commentId,
   };
 }
 
@@ -178,6 +192,7 @@ export const commentActionFunctions = {
   updateComment,
   deleteComment,
   resolveComment,
+  reopenComment,
   setFocusedComment,
   addReply,
   updateReply,

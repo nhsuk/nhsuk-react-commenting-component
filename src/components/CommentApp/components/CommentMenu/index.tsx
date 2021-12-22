@@ -50,7 +50,7 @@ const Summary: React.FunctionComponent<React.ComponentPropsWithoutRef<'summary'>
 interface CommentItem {
   author: Author | null;
   date: number;
-  resolved: boolean;
+  resolved?: boolean;
   resolvedByAuthor?: Author;
 }
 

@@ -188,15 +188,14 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
           {onReopen && <button type="button" role="menuitem" onClick={onClickReopen}>{strings.REOPEN}</button>}
         </div>
       );
-    } else {
-      return (
-        <div className="comment-menu__buttons">
-          {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
-          {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
-          {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
-        </div>
-      );
-    };
+    }
+    return (
+      <div className="comment-menu__buttons">
+        {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+        {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
+        {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
+      </div>
+    );
   }
 
   return (

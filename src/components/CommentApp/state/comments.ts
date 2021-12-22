@@ -235,7 +235,7 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     if (draft.pinnedComment === comment.localId) {
       draft.pinnedComment = null;
     }
-  }
+  };
 
   switch (action.type) {
   case actions.ADD_COMMENT: {
@@ -274,7 +274,7 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
   }
   case actions.REOPEN_COMMENT: {
     const comment = draft.comments.get(action.commentId);
-    if (!comment){
+    if (!comment) {
       break;
     }
     reopenComment(comment);

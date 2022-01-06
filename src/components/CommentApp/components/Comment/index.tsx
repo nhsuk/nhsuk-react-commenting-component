@@ -140,6 +140,8 @@ export function getContentPathParts(contentpath: string) {
     contentPathParts.pop();
   }
   return contentPathParts;
+}
+
 function doReopenComment(comment: Comment, store: Store) {
   store.dispatch(
     reopenComment(comment.localId)

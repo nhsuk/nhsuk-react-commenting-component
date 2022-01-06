@@ -10,14 +10,9 @@
     &__action {
         float: left;
         margin-left: 5px;
-        border: 1px solid #000;
         border-radius: 5px;
-        width: 30px;
-        height: 30px;
-
-        &:hover {
-            background-color: $color-grey-7;
-        }
+        width: 24px;
+        height: 24px;
 
         > button,
         > details > summary,
@@ -26,8 +21,8 @@
             list-style-type: none;
             // Hides triangle on Chrome
             &::-webkit-details-marker { display: none; }
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             position: relative;
             background-color: unset;
             border: unset;
@@ -37,10 +32,8 @@
 
             svg {
                 position: absolute;
-                top: 7.5px;
-                left: 7.5px;
-                width: 15px;
-                height: 15px;
+                width: 24px;
+                height: 24px;
             }
 
             &:hover {

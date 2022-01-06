@@ -211,7 +211,7 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
                 onClick={toggleMenu}
                 aria-expanded={menuOpen}
               >
-                <Icon name="ellipsis-v" />
+                <Icon name="ellipsis" />
               </Summary>
 
               <div className="comment-menu__more-actions" role="menu" ref={menuRef}>

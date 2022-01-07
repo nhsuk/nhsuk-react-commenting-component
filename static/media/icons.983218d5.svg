@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="icon-ellipsis">
+	<g>
+	<title>background</title>
+	<rect fill="none" id="canvas_background" height="24" width="24" y="-1" x="-1"/>
+	<g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+	<rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+	</g>
+	</g>
+	<g>
+	<title>Layer 1</title>
+	<ellipse ry="2" rx="2" id="svg_4" cy="6" cx="12" fill-opacity="null" stroke-opacity="null" stroke-width="0.001" stroke="#748694" fill="#748694"/>
+	<ellipse ry="2" rx="2" id="svg_8" cy="12" cx="12" fill-opacity="null" stroke-opacity="null" stroke-width="0.001" stroke="#748694" fill="#748694"/>
+	<ellipse ry="2" rx="2" id="svg_9" cy="17.92614" cx="12" fill-opacity="null" stroke-opacity="null" stroke-width="0.001" stroke="#748694" fill="#748694"/>
+	</g>
+  </symbol>
+</svg>

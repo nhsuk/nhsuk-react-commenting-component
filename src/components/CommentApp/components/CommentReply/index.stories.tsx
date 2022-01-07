@@ -195,3 +195,25 @@ export function deleted() {
 
   return <RenderCommentsForStorybook store={store} />;
 }
+
+export function collapsedReplies() {
+  const store: Store = createStore(reducer);
+
+  const commentId = addTestComment(store, {
+    mode: 'default',
+    highlightedText: 'This is the highlighted text.',
+    text: 'An example comment',
+  });
+
+  addTestReply(store, commentId, {
+    mode: 'default',
+    text: 'An example reply',
+  });
+
+  addTestReply(store, commentId, {
+    mode: 'default',
+    text: 'A second example reply',
+  });
+
+  return <RenderCommentsForStorybook store={store} />;
+}

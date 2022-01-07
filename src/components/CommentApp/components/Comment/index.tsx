@@ -159,7 +159,20 @@ export interface CommentProps {
   strings: TranslatableStrings;
 }
 
-export default class CommentComponent extends React.Component<CommentProps> {
+export interface CommentState {
+  collapseReplies: boolean;
+}
+
+export default class CommentComponent extends React.Component<CommentProps, CommentState> {
+  constructor(props) {
+    super(props);
+    let collapseReplies = false;
+    if (props.comment.replies.size > 1) {
+      collapseReplies = true;
+    }
+    this.state = { collapseReplies };
+  }
+
   renderReplies({ hideNewReply = false } = {}): React.ReactFragment {
     const { comment, isFocused, store, user, strings } = this.props;
 
@@ -266,6 +279,43 @@ export default class CommentComponent extends React.Component<CommentProps> {
       // This is in case there is a warning after the comment, some special styling
       // is added if that element is that last child so we can't have any hidden elements here.
       return <></>;
+    }
+
+    if (this.state.collapseReplies && replies.length > 1) {
+      return (
+        <>
+          <ul className="comment__replies">
+            <button
+              type="button"
+              onClick={() => this.setState({ collapseReplies: false })}
+              className="comment__replies-collapse show-replies"
+            >
+              Show {replies.length - 1} more replies
+            </button>
+            {replies[replies.length - 1]}
+          </ul>
+          {replyForm}
+        </>
+      );
+    }
+
+    if (!this.state.collapseReplies && replies.length > 1) {
+      return (
+        <>
+          <ul className="comment__replies">
+            {replies.slice(0, -1)}
+            <button
+              type="button"
+              onClick={() => this.setState({ collapseReplies: true })}
+              className="comment__replies-collapse hide-replies"
+            >
+              Hide replies
+            </button>
+            {replies[replies.length - 1]}
+          </ul>
+          {replyForm}
+        </>
+      );
     }
 
     return (

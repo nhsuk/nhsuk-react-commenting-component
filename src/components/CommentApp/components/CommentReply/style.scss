@@ -1,6 +1,11 @@
 .comment-reply {
     pointer-events: auto;
     position: relative;
+    padding-top: 15px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-bottom: 1px solid $color-comment-separator;
+    margin: 0;
 
     &__text {
         color: $color-box-text;

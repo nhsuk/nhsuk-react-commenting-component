@@ -15,7 +15,7 @@ import {
   NewReplyOptions,
 } from '../state/comments';
 import { LayoutController } from '../utils/layout';
-import { getNextCommentId } from './sequences';
+import { getNextCommentId, getNextReplyId } from './sequences';
 import { defaultStrings } from '../main';
 
 import CommentComponent from '../components/Comment/index';
@@ -143,12 +143,13 @@ export function addTestReply(
     jobTitle: 'Developer',
     organisation: 'Nhs',
   };
+  const commentReplyId = getNextReplyId();
 
   if (!options.remoteId) {
     addReplyOptions.remoteId = 1;
   }
 
   store.dispatch(
-    addReply(commentId, newCommentReply(1, author, Date.now(), addReplyOptions))
+    addReply(commentId, newCommentReply(commentReplyId, author, Date.now(), addReplyOptions))
   );
 }

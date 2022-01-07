@@ -32,6 +32,10 @@
         margin-left: 0;
         margin-right: 40px;
 
+        .comment-reply {
+            border-bottom: 1px solid #005eb8;
+        }
+
         .comment__replies,
         .comment__replies-collapsed,
         form {
@@ -87,11 +91,17 @@
         border-top: 1px solid $color-comment-separator;
         border-left: 10px solid #d9d9d9;
 
-        &-collapsed {
+        &-collapse {
             font-size: 12px;
             padding: 10px 15px 10px 15px;
             display: block;
+            background-color: #fff;
+            border-top: 0;
+            border-right: 0;
             border-bottom: 1px solid $color-comment-separator;
+            border-left: 0;
+            width: 100%;
+            text-align: left;
         }
     }
 

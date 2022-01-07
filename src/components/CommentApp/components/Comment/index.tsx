@@ -281,11 +281,36 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       return <></>;
     }
 
-    if (this.props.comment.replies.size) {
+    if (this.state.collapseReplies && replies.length > 1) {
       return (
         <>
           <ul className="comment__replies">
-            <a className="comment__replies-collapsed">Show 1 or more replies</a>
+            <button
+              type="button"
+              onClick={() => this.setState({ collapseReplies: false })}
+              className="comment__replies-collapse show-replies"
+            >
+              Show {replies.length - 1} more replies
+            </button>
+            {replies[replies.length - 1]}
+          </ul>
+          {replyForm}
+        </>
+      );
+    }
+
+    if (!this.state.collapseReplies && replies.length > 1) {
+      return (
+        <>
+          <ul className="comment__replies">
+            {replies.slice(0, -1)}
+            <button
+              type="button"
+              onClick={() => this.setState({ collapseReplies: true })}
+              className="comment__replies-collapse hide-replies"
+            >
+              Hide replies
+            </button>
             {replies[replies.length - 1]}
           </ul>
           {replyForm}

@@ -50,6 +50,8 @@ const Summary: React.FunctionComponent<React.ComponentPropsWithoutRef<'summary'>
 interface CommentItem {
   author: Author | null;
   date: number;
+  resolved?: boolean;
+  resolvedByAuthor?: Author;
 }
 
 interface CommentMenuProps {
@@ -57,13 +59,14 @@ interface CommentMenuProps {
   store: Store;
   strings: TranslatableStrings;
   onResolve?(commentItem: CommentItem, store: Store): void;
+  onReopen?(commentItem: CommentItem, store: Store): void;
   onEdit?(commentItem: CommentItem, store: Store): void;
   onDelete?(commentItem: CommentItem, store: Store): void;
   focused: boolean;
 }
 
 export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
-  commentItem, store, strings, onResolve, onEdit, onDelete, focused
+  commentItem, store, strings, onResolve, onReopen, onEdit, onDelete, focused
 }) => {
   const setUnresolvedCommentsPresent = () => {
     const unresolvedComments: Comment[] = Array.from(store.getState().comments.comments.values())
@@ -81,6 +84,15 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
 
     if (onResolve) {
       onResolve(commentItem, store);
+      setUnresolvedCommentsPresent();
+    }
+  };
+
+  const onClickReopen = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (onReopen) {
+      onReopen(commentItem, store);
       setUnresolvedCommentsPresent();
     }
   };
@@ -140,22 +152,49 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
     if (author.type === 'wagtail') {
       return (
         <ul>
-          <li>{author.id}</li>
-          <li>{author.firstname}</li>
-          <li>{author.lastname}</li>
-          <li>{author.type}</li>
+          <li>Author</li>
+          <li className="comment-menu__author-name">{author.firstname} {author.lastname}</li>
+          <li className="comment-menu__author-type">{author.type}</li>
         </ul>
       );
     }
     return (
       <ul>
-        <li>{author.id}</li>
-        <li>{author.type}</li>
-        <li>{author.firstname}</li>
-        <li>{author.lastname}</li>
-        <li>{author.jobTitle}</li>
-        <li>{author.organisation}</li>
+        <li>Author</li>
+        <li className="comment-menu__author-name">{author.firstname} {author.lastname}</li>
+        <li className="comment-menu__author-job-title">{author.jobTitle}</li>
+        <li className="comment-menu__author-org">{author.organisation}</li>
       </ul>
+    );
+  }
+
+  function renderResolvedAuthorMenu(resolvedByAuthor: Author) {
+    return (
+      <div className="comment-menu__resolved-by-info">
+        <ul>
+          <li>Resolved By</li>
+          <li className="comment-menu__author-name">{resolvedByAuthor.firstname} {resolvedByAuthor.lastname}</li>
+          <li className="comment-menu__author-job-title">{resolvedByAuthor.jobTitle}</li>
+          <li className="comment-menu__author-org">{resolvedByAuthor.organisation}</li>
+        </ul>
+      </div>
+    );
+  }
+
+  function renderCommentMenuButtons() {
+    if (commentItem.resolved) {
+      return (
+        <div className="comment-menu__buttons">
+          {onReopen && <button type="button" role="menuitem" onClick={onClickReopen}>{strings.REOPEN}</button>}
+        </div>
+      );
+    }
+    return (
+      <div className="comment-menu__buttons">
+        {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+        {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
+        {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
+      </div>
     );
   }
 
@@ -172,15 +211,16 @@ export const CommentMenu: FunctionComponent<CommentMenuProps> = ({
                 onClick={toggleMenu}
                 aria-expanded={menuOpen}
               >
-                <Icon name="ellipsis-v" />
+                <Icon name="ellipsis" />
               </Summary>
 
               <div className="comment-menu__more-actions" role="menu" ref={menuRef}>
-                {onEdit && <button type="button" role="menuitem" onClick={onClickEdit}>{strings.EDIT}</button>}
-                {onDelete && <button type="button" role="menuitem" onClick={onClickDelete}>{strings.DELETE}</button>}
-                {onResolve && <button type="button" role="menuitem" onClick={onClickResolve}>{strings.RESOLVE}</button>}
+                {renderCommentMenuButtons()}
+                <div className="comment-menu__author-info">
+                  {commentItem.author && renderAuthorMenu(commentItem.author)}
+                </div>
+                {commentItem.resolvedByAuthor && renderResolvedAuthorMenu(commentItem.resolvedByAuthor)}
               </div>
-              {commentItem.author && renderAuthorMenu(commentItem.author)}
             </Details>
           </div>
         }

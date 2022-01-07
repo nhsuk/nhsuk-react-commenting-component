@@ -68,6 +68,7 @@ export function RenderCommentsForStorybook({
 interface AddTestCommentOptions extends NewCommentOptions {
   focused?: boolean;
   author?: Author;
+  resolvedAuthor?: Author;
 }
 
 export function addTestComment(
@@ -87,6 +88,15 @@ export function addTestComment(
     organisation: 'Nhs',
   };
 
+  const resolvedAuthor = {
+    id: 2,
+    type: 'external',
+    firstname: 'Jane',
+    lastname: 'Doe',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
+  };
+
   // We must have a remoteId unless the comment is being created
   if (options.mode !== 'creating' && options.remoteId === undefined) {
     addCommentOptions.remoteId = commentId;
@@ -95,6 +105,10 @@ export function addTestComment(
   // Comment must be focused if the mode is anything other than default
   if (options.mode !== 'default' && options.focused === undefined) {
     addCommentOptions.focused = true;
+  }
+
+  if (options.resolved === true) {
+    addCommentOptions.resolvedAuthor = resolvedAuthor;
   }
 
   store.dispatch(

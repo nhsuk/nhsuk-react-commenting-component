@@ -104,10 +104,6 @@ $box-padding: 10px;
         }
     }
 
-    *:focus {
-        @include focus-outline;
-    }
-
     &__notice-placeholder {
         position: relative;
         padding-bottom: 40px;

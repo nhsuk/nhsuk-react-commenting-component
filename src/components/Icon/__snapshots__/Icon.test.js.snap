@@ -3,11 +3,11 @@
 exports[`Icon #className 1`] = `
 <span>
   <svg
-    aria-hidden="true"
     className="icon icon-test u-test"
+    viewBox="0 0 24 24"
   >
     <use
-      href="#icon-test"
+      href="[object Object]#icon-test"
     />
   </svg>
 </span>
@@ -16,11 +16,11 @@ exports[`Icon #className 1`] = `
 exports[`Icon #name 1`] = `
 <span>
   <svg
-    aria-hidden="true"
     className="icon icon-test "
+    viewBox="0 0 24 24"
   >
     <use
-      href="#icon-test"
+      href="[object Object]#icon-test"
     />
   </svg>
 </span>
@@ -29,11 +29,11 @@ exports[`Icon #name 1`] = `
 exports[`Icon #title 1`] = `
 <span>
   <svg
-    aria-hidden="true"
     className="icon icon-test "
+    viewBox="0 0 24 24"
   >
     <use
-      href="#icon-test"
+      href="[object Object]#icon-test"
     />
   </svg>
   <span

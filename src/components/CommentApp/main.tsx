@@ -43,6 +43,7 @@ export interface TranslatableStrings {
   EDIT: string;
   REPLY: string;
   RESOLVE: string;
+  REOPEN: string;
   RETRY: string;
   DELETE_ERROR: string;
   CONFIRM_DELETE_COMMENT: string;
@@ -63,7 +64,8 @@ export const defaultStrings = {
   SHOW_COMMENTS: 'Show comments',
   EDIT: 'Edit',
   REPLY: 'Reply',
-  RESOLVE: 'Resolve',
+  RESOLVE: 'Resolve Thread',
+  REOPEN: 'Reopen',
   RETRY: 'Retry',
   DELETE_ERROR: 'Delete error',
   CONFIRM_DELETE_COMMENT: 'Are you sure?',
@@ -241,9 +243,8 @@ export class CommentApp {
       commentsEnabled: visible,
     }));
   }
-  invalidateContentPath(contentPath: string) {
-    // Called when a given content path on the form is no longer valid (eg, a block has been deleted)
-    this.store.dispatch(invalidateContentPath(contentPath));
+  invalidateContentPath(contentPath: string, user: Author) {
+    this.store.dispatch(invalidateContentPath(contentPath, user));
   }
   renderApp(
     element: HTMLElement,

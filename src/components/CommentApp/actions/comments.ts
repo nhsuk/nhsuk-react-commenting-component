@@ -3,12 +3,14 @@ import type {
   CommentUpdate,
   CommentReply,
   CommentReplyUpdate,
+  Author,
 } from '../state/comments';
 
 export const ADD_COMMENT = 'add-comment';
 export const UPDATE_COMMENT = 'update-comment';
 export const DELETE_COMMENT = 'delete-comment';
 export const RESOLVE_COMMENT = 'resolve-comment';
+export const REOPEN_COMMENT = 'reopen-comment';
 export const SET_FOCUSED_COMMENT = 'set-focused-comment';
 export const SET_PINNED_COMMENT = 'set-pinned-comment';
 
@@ -36,6 +38,12 @@ export interface DeleteCommentAction {
 
 export interface ResolveCommentAction {
   type: typeof RESOLVE_COMMENT;
+  commentId: number;
+  user: Author;
+}
+
+export interface ReopenCommentAction {
+  type: typeof REOPEN_COMMENT;
   commentId: number;
 }
 
@@ -68,6 +76,7 @@ export interface DeleteReplyAction {
 export interface InvalidateContentPathAction {
   type: typeof INVALIDATE_CONTENT_PATH;
   contentPath: string;
+  user: Author;
 }
 
 export type Action =
@@ -75,6 +84,7 @@ export type Action =
   | UpdateCommentAction
   | DeleteCommentAction
   | ResolveCommentAction
+  | ReopenCommentAction
   | SetFocusedCommentAction
   | AddReplyAction
   | UpdateReplyAction
@@ -106,9 +116,17 @@ export function deleteComment(commentId: number): DeleteCommentAction {
   };
 }
 
-export function resolveComment(commentId: number): ResolveCommentAction {
+export function resolveComment(commentId: number, user: Author): ResolveCommentAction {
   return {
     type: RESOLVE_COMMENT,
+    commentId,
+    user,
+  };
+}
+
+export function reopenComment(commentId: number): ReopenCommentAction {
+  return {
+    type: REOPEN_COMMENT,
     commentId,
   };
 }
@@ -161,10 +179,11 @@ export function deleteReply(
   };
 }
 
-export function invalidateContentPath(contentPath: string): InvalidateContentPathAction {
+export function invalidateContentPath(contentPath: string, user: Author): InvalidateContentPathAction {
   return {
     type: INVALIDATE_CONTENT_PATH,
     contentPath,
+    user,
   };
 }
 
@@ -173,6 +192,7 @@ export const commentActionFunctions = {
   updateComment,
   deleteComment,
   resolveComment,
+  reopenComment,
   setFocusedComment,
   addReply,
   updateReply,

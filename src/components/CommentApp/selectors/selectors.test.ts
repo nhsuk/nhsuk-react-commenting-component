@@ -37,12 +37,20 @@ test('Select is dirty', () => {
     comments: INITIAL_COMMENTS_STATE,
     settings: INITIAL_SETTINGS_STATE
   };
+  const author = {
+    id: 1,
+    type: 'external',
+    firstname: 'Joe',
+    lastname: 'Bloggins',
+    jobTitle: 'Developer',
+    organisation: 'Nhs',
+  };
   const stateWithUnsavedComment = reducer(state, actions.addComment(newComment(
     'test_contentpath',
     'test_position',
     1,
     null,
-    null,
+    author,
     0,
     {
       remoteId: null,
@@ -57,7 +65,7 @@ test('Select is dirty', () => {
     'test_position',
     1,
     null,
-    null,
+    author,
     0,
     {
       remoteId: 1,
@@ -81,7 +89,7 @@ test('Select is dirty', () => {
 
   const stateWithUnsavedReply = reducer(stateWithSavedComment, actions.addReply(1, newCommentReply(
     2,
-    null,
+    author,
     0,
     {
       remoteId: null,
@@ -93,7 +101,7 @@ test('Select is dirty', () => {
 
   const stateWithSavedReply = reducer(stateWithSavedComment, actions.addReply(1, newCommentReply(
     2,
-    null,
+    author,
     0,
     {
       remoteId: 2,

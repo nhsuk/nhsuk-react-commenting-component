@@ -96,6 +96,7 @@ export interface Comment {
   deleted: boolean;
   resolved: boolean;
   author: Author | null;
+  resolvedByAuthor?: Author;
   date: number;
   replies: Map<number, CommentReply>;
   newReply: string;
@@ -201,12 +202,31 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     }
   };
 
-  const resolveComment = (comment: Comment) => {
+  const resolveComment = (comment: Comment, user: Author) => {
     if (!comment.remoteId) {
       // If the comment doesn't exist in the database, there's no need to keep it around locally
       draft.comments.delete(comment.localId);
     } else {
       comment.resolved = true;
+    }
+    // Unset focusedComment if the focused comment is the one being resolved
+    if (draft.focusedComment === comment.localId) {
+      draft.focusedComment = null;
+    }
+    if (draft.pinnedComment === comment.localId) {
+      draft.pinnedComment = null;
+    }
+
+    comment.resolvedByAuthor = user;
+  };
+
+  const reopenComment = (comment: Comment) => {
+    if (!comment.remoteId) {
+      // If the comment doesn't exist in the database, there's no need to keep it around locally
+      draft.comments.delete(comment.localId);
+    } else {
+      comment.resolved = false;
+      comment.resolvedByAuthor = undefined;
     }
     // Unset focusedComment if the focused comment is the one being resolved
     if (draft.focusedComment === comment.localId) {
@@ -249,8 +269,15 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     if (!comment) {
       break;
     }
-
-    resolveComment(comment);
+    resolveComment(comment, action.user);
+    break;
+  }
+  case actions.REOPEN_COMMENT: {
+    const comment = draft.comments.get(action.commentId);
+    if (!comment) {
+      break;
+    }
+    reopenComment(comment);
     break;
   }
   case actions.SET_FOCUSED_COMMENT: {
@@ -311,7 +338,7 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     const comments = draft.comments;
     for (const comment of comments.values()) {
       if (comment.contentpath.startsWith(action.contentPath)) {
-        resolveComment(comment);
+        resolveComment(comment, action.user);
       }
     }
     break;

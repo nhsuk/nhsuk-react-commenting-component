@@ -1,6 +1,5 @@
-import { initCommentApp } from '../../components/CommentApp/main';
+import { initCommentApp, defaultStrings } from '../../components/CommentApp/main';
 import { STRINGS } from '../../config/wagtailConfig';
-
 const KEYCODE_M = 77;
 
 /**
@@ -248,25 +247,31 @@ window.comments = (() => {
   }
 
   function initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle = null) {
-    if (commentData && Object.keys(commentData).length > 0) {
+    if (commentData && Object.keys(commentData).length > 0 && commentData.comments) {
       commentApp.renderApp(
         commentsElement,
         commentsOutputElement,
-        commentData.user,
+        commentData.userId,
         commentData.comments,
         new Map(Object.entries(commentData.authors)),
-        STRINGS,
+        defaultStrings,
         componentStyle,
       );
       commentApp.setVisible(true);
     }
   }
 
-  function initCommentsInterfaceFromApi(commentsElement, commentsOutputElement, apiUrl, apiCommentsEntrypoint,
-    mode = 'cors', headerOptions = {}, componentStyle = null) {
+  function initCommentsInterfaceFromApi(commentsElement,
+    commentsOutputElement,
+    apiUrl,
+    apiCommentsEntrypoint,
+    apiKey,
+    mode = 'cors',
+    headerOptions = {},
+    componentStyle = null) {
     const headers = new Headers(headerOptions);
     const requestOptions = {
-      method: 'POST',
+      method: 'GET',
       headers,
       mode,
     };
@@ -275,12 +280,18 @@ window.comments = (() => {
       requestOptions,
     );
 
-    fetch(request).then((response) => {
-      const commentData = response.json();
-      return commentData;
-    }).then((commentData) => {
-      initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle);
-    });
+    commentApp.setApiEnabled(true);
+    commentApp.setApiUrl(apiUrl);
+    commentApp.setApiKey(apiKey);
+
+    fetch(request)
+      .then(response => {
+        const responseReader = response.body.getReader();
+        responseReader.read().then(({ done, value }) => {
+          const commentData =  new TextDecoder().decode(value);
+          initCommentsInterface(commentsElement, commentsOutputElement, JSON.parse(commentData), componentStyle);
+        });
+      });
   }
 
   return {

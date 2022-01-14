@@ -50,8 +50,6 @@ export interface TranslatableStrings {
   SAVE_ERROR: string;
   MORE_ACTIONS: string;
   SAVE_PAGE_TO_ADD_COMMENT: string;
-  SAVE_PAGE_TO_SAVE_COMMENT_CHANGES: string;
-  SAVE_PAGE_TO_SAVE_REPLY: string;
 }
 
 export const defaultStrings = {
@@ -72,8 +70,6 @@ export const defaultStrings = {
   SAVE_ERROR: 'Save error',
   MORE_ACTIONS: 'More actions',
   SAVE_PAGE_TO_ADD_COMMENT: 'Save the page to add this comment',
-  SAVE_PAGE_TO_SAVE_COMMENT_CHANGES: 'Save the page to save this comment',
-  SAVE_PAGE_TO_SAVE_REPLY: 'Save the page to save this reply',
 };
 
 /* eslint-disable camelcase */
@@ -97,7 +93,7 @@ export interface InitialComment {
   contentpath: string;
   position: string;
   deleted: boolean;
-  resolved: boolean;
+  resolved_at: string;
 }
 /* eslint-enable */
 
@@ -112,13 +108,15 @@ const getAuthor = (authors: Map<string, {type: string,
   lastname: string,
   jobTitle: string,
   organisation: string,
+  userId: number,
 }>, id: any): Author => {
   const authorData = getOrDefault(authors, String(id), {
     type: '',
     firstname: '',
     lastname: '',
     jobTitle: '',
-    organisation: ''
+    organisation: '',
+    userId: 0,
   });
   return {
     id,
@@ -127,6 +125,7 @@ const getAuthor = (authors: Map<string, {type: string,
     lastname: authorData.lastname,
     jobTitle: authorData.jobTitle,
     organisation: authorData.organisation,
+    userId: authorData.userId,
   };
 };
 
@@ -142,7 +141,6 @@ function renderCommentsUi(
   default:
     break;
   }
-
   return (
     <ol className={classname}>
       <CommentsTabs store={store} strings={strings} />
@@ -178,6 +176,7 @@ export class CommentApp {
     lastname: string,
     jobTitle: string,
     organisation: string,
+    userId: number,
   }>) {
     this.store.dispatch(
       updateGlobalSettings({
@@ -211,6 +210,16 @@ export class CommentApp {
   }
   setComponentStyle(componentStyle: string | null) {
     this.store.dispatch(updateGlobalSettings({ componentStyle: componentStyle }));
+  }
+  setApiUrl(apiUrl: string) {
+    this.store.dispatch(updateGlobalSettings({
+      apiUrl: apiUrl
+    }));
+  }
+  setApiKey(apiKey: string) {
+    this.store.dispatch(updateGlobalSettings({
+      apiKey: apiKey
+    }));
   }
   makeComment(annotation: Annotation, contentpath: string, position = '') {
     const commentId = getNextCommentId();
@@ -246,6 +255,12 @@ export class CommentApp {
   invalidateContentPath(contentPath: string, user: Author) {
     this.store.dispatch(invalidateContentPath(contentPath, user));
   }
+  setApiEnabled(useApi: boolean) {
+    this.store.dispatch(updateGlobalSettings({
+      apiEnabled: useApi,
+    }));
+  }
+
   renderApp(
     element: HTMLElement,
     outputElement: HTMLElement,
@@ -257,6 +272,7 @@ export class CommentApp {
       lastname: string,
       jobTitle: string,
       organisation: string,
+      userId: number,
     }>,
     translationStrings: TranslatableStrings | null,
     componentStyle: string | null,
@@ -318,7 +334,6 @@ export class CommentApp {
     // Fetch existing comments
     for (const comment of initialComments) {
       const commentId = getNextCommentId();
-
       // Create comment
       this.store.dispatch(
         addComment(
@@ -333,7 +348,7 @@ export class CommentApp {
               remoteId: comment.id,
               text: comment.text,
               deleted: comment.deleted,
-              resolved: comment.resolved
+              resolved: (comment.resolved_at !== null)
             }
           )
         )

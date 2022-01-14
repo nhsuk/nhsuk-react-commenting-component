@@ -13,6 +13,7 @@ export interface Author {
   lastname: string;
   jobTitle?: string;
   organisation?: string;
+  userId?: number;
 }
 
 export type CommentReplyMode =

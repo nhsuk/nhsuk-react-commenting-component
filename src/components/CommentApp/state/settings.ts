@@ -8,6 +8,9 @@ export interface SettingsState {
   commentsEnabled: boolean;
   currentTab: string | null;
   componentStyle: string | null;
+  apiEnabled: boolean;
+  apiUrl: string;
+  apiKey: string;
 }
 
 export type SettingsStateUpdate = Partial<SettingsState>;
@@ -18,6 +21,9 @@ export const INITIAL_STATE: SettingsState = {
   commentsEnabled: false,
   currentTab: null,
   componentStyle: null,
+  apiEnabled: false,
+  apiUrl: '',
+  apiKey: '',
 };
 
 export const reducer = produce((draft: SettingsState, action: actions.Action) => {

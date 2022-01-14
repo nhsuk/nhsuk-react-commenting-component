@@ -51,7 +51,18 @@ module.exports = function exports() {
             'style-loader',
             'css-loader',
           ]
-        }
+        },
+        {
+          test: /\.svg$/,
+          use: [
+           {
+             loader: 'svg-url-loader',
+             options: {
+               limit: 10000,
+             },
+           },
+          ],
+        },
       ].concat(Object.keys(exposedDependencies).map((name) => {
         const globalName = exposedDependencies[name];
 

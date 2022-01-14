@@ -6,10 +6,66 @@ import type { Store } from '../../state';
 import type { Comment, CommentReply, Author } from '../../state/comments';
 import { updateReply, deleteReply } from '../../actions/comments';
 import type { TranslatableStrings } from '../../main';
-import { CommentMenu }  from '../CommentMenu';
-import { CommentFooter }  from '../CommentFooter';
+import { CommentMenu } from '../CommentMenu';
+import { CommentFooter } from '../CommentFooter';
 import TextArea from '../TextArea';
-import Icon from '../../../Icon/Icon';
+
+export function getRequestOptions(verb: string, apiKey: string, body?: string) {
+  let csrftoken = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('csrftoken='));
+  if (csrftoken) {
+    csrftoken = csrftoken.split('=')[1];
+  } else {
+    // error condition - error message and return
+    return {};
+  }
+  const headerOptions = {
+    'X-CSRFToken': csrftoken,
+    'subscription-key': apiKey,
+    'Content-Type': 'text/html; charset=UTF-8',
+  };
+  const headers = new Headers(headerOptions);
+  return {
+    method: verb,
+    headers,
+    mode: 'same-origin' as RequestMode,
+    body: body,
+  };
+}
+
+export async function makeRequest(remoteId: number,
+  verb: string,
+  action: string,
+  apiUrl: string,
+  apiKey: string,
+  body?: string) {
+  const request = new Request(
+    apiUrl + '/workflow-api/reply/' + remoteId + '/' + action + '/',
+    getRequestOptions(verb, apiKey, body),
+  );
+  const response = await fetch(request);
+  // Check the response status for != 200, show error message?
+  if (response.status !== 200) {
+    /* eslint-disable no-console */
+    console.error('Failed to make request ' + response);
+    console.error(response);
+    /* eslint-enable no-console */
+    return { success: 'False', error: response.status };
+  }
+
+  let decodedData = '';
+  if (response.body) {
+    const responseReader = response.body.getReader();
+    if (responseReader) {
+      const responseData = await responseReader.read();
+      decodedData = new TextDecoder().decode(responseData.value);
+      return decodedData;
+    }
+    return { success: 'False', error: 'Failed to retrieve response body' };
+  }
+  return { success: 'False', error: 'Failed to retrieve response body' };
+}
 
 export async function saveCommentReply(
   comment: Comment,
@@ -39,9 +95,28 @@ export async function saveCommentReply(
       })
     );
   }
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    if (reply.remoteId) {
+      exports.makeRequest(reply.remoteId,
+        'PUT',
+        'update',
+        settings.apiUrl,
+        settings.apiKey,
+        reply.newText)
+        .then(response => {
+          /* eslint-disable-next-line dot-notation */
+          if (response['success'] === 'False') {
+            /* eslint-disable-next-line no-console, dot-notation */
+            console.error(response['error']);
+            return;
+          }
+        });
+    }
+  }
 }
 
-async function deleteCommentReply(
+export async function deleteCommentReply(
   comment: Comment,
   reply: CommentReply,
   store: Store
@@ -60,6 +135,24 @@ async function deleteCommentReply(
         mode: 'delete_error',
       })
     );
+  }
+  const settings = store.getState().settings;
+  if (settings.apiEnabled) {
+    if (reply.remoteId) {
+      exports.makeRequest(reply.remoteId,
+        'DELETE',
+        'delete',
+        settings.apiUrl,
+        settings.apiKey)
+        .then(response => {
+          /* eslint-disable-next-line dot-notation */
+          if (response['success'] === 'False') {
+            /* eslint-disable-next-line no-console, dot-notation */
+            console.error(response['error']);
+            return;
+          }
+        });
+    }
   }
 }
 
@@ -311,7 +404,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     // Show edit/delete buttons if this reply was authored by the current user
     let onEdit;
     let onDelete;
-    if (reply.author === null || this.props.user && this.props.user.id === reply.author.id) {
+    if (reply.author === null || this.props.user && this.props.user.id === reply.author.userId) {
       onEdit = () => {
         store.dispatch(
           updateReply(comment.localId, reply.localId, {
@@ -330,12 +423,6 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
       };
     }
 
-    let notice = '';
-    if (!reply.remoteId || reply.text !== reply.originalText) {
-      // Save the page to save this reply
-      notice = strings.SAVE_PAGE_TO_SAVE_REPLY;
-    }
-
     return (
       <>
         <CommentMenu
@@ -348,14 +435,6 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
         />
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
-        {notice &&
-          <div className="comment__notice-placeholder">
-            <div className="comment__notice" role="status">
-              <Icon name="info-circle" />
-              {notice}
-            </div>
-          </div>
-        }
       </>
     );
   }
@@ -367,27 +446,21 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     case 'editing':
       inner = this.renderEditing();
       break;
-
     case 'saving':
       inner = this.renderSaving();
       break;
-
     case 'save_error':
       inner = this.renderSaveError();
       break;
-
     case 'delete_confirm':
       inner = this.renderDeleteConfirm();
       break;
-
     case 'deleting':
       inner = this.renderDeleting();
       break;
-
     case 'delete_error':
       inner = this.renderDeleteError();
       break;
-
     default:
       inner = this.renderDefault();
       break;

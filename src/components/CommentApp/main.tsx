@@ -129,6 +129,37 @@ const getAuthor = (authors: Map<string, {type: string,
   };
 };
 
+function getAuthorByUserId(authors: Map<string, {type: string,
+  firstname: string,
+  lastname: string,
+  jobTitle: string,
+  organisation: string,
+  userId: number,
+}>, userId: number) {
+  for (const [_, value] of authors) {
+    if (value.userId === userId) {
+      return {
+        id: value.userId,
+        type: value.type,
+        firstname: value.firstname,
+        lastname: value.lastname,
+        jobTitle: value.jobTitle,
+        organisation: value.organisation,
+        userId: value.userId,
+      };
+    }
+  }
+  return {
+    id: 0,
+    type: '',
+    firstname: '',
+    lastname: '',
+    jobTitle: '',
+    organisation: '',
+    userId: 0,
+  };
+}
+
 function renderCommentsUi(
   store: Store,
   strings: TranslatableStrings,
@@ -170,7 +201,7 @@ export class CommentApp {
     });
     this.layout = new LayoutController();
   }
-  setUser(userId: any, authors: Map<string, {
+  setUser(userId: any, userType: string, authors: Map<string, {
     type: string,
     firstname: string,
     lastname: string,
@@ -178,9 +209,10 @@ export class CommentApp {
     organisation: string,
     userId: number,
   }>) {
+    const author = (userType === 'wagtail') ? getAuthorByUserId(authors, userId) : getAuthor(authors, userId);
     this.store.dispatch(
       updateGlobalSettings({
-        user: getAuthor(authors, userId)
+        user: author
       })
     );
   }
@@ -265,6 +297,7 @@ export class CommentApp {
     element: HTMLElement,
     outputElement: HTMLElement,
     userId: any,
+    userType: string,
     initialComments: InitialComment[],
     authors: Map<string, {
       type: string,
@@ -278,7 +311,7 @@ export class CommentApp {
     componentStyle: string | null,
   ) {
     let pinnedComment: number | null = null;
-    this.setUser(userId, authors);
+    this.setUser(userId, userType, authors);
     this.setComponentStyle(componentStyle);
 
     const strings = translationStrings || defaultStrings;

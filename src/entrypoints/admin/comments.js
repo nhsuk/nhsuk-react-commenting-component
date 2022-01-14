@@ -1,3 +1,4 @@
+import { any } from 'prop-types';
 import { initCommentApp, defaultStrings } from '../../components/CommentApp/main';
 import { STRINGS } from '../../config/wagtailConfig';
 const KEYCODE_M = 77;
@@ -252,6 +253,7 @@ window.comments = (() => {
         commentsElement,
         commentsOutputElement,
         commentData.userId,
+        commentData.userType,
         commentData.comments,
         new Map(Object.entries(commentData.authors)),
         defaultStrings,
@@ -270,10 +272,16 @@ window.comments = (() => {
     headerOptions = {},
     componentStyle = null) {
     const headers = new Headers(headerOptions);
+    const guestDataSpan = document.getElementById('guest-data');
+    let guestData = '{}';
+    if (guestDataSpan) {
+      guestData = guestDataSpan.innerHTML;
+    }
     const requestOptions = {
-      method: 'GET',
+      method: 'POST',
       headers,
       mode,
+      body: guestData,
     };
     const request = new Request(
       apiUrl + apiCommentsEntrypoint,

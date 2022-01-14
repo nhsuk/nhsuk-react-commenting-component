@@ -62,7 +62,7 @@ export function commentFromSomeoneWithAReallyLongName() {
     highlightedText: 'This is the highlighted text.',
     text: 'An example comment',
     author: {
-      id: 1,
+      id: 3,
       type: 'external',
       firstname: 'This person has a really long name',
       lastname: 'and it should wrap to the next line',

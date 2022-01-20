@@ -547,19 +547,19 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
         <div className="comment__original">
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
           <CommentFooter
-          descriptionId={descriptionId}
-          commentItem={comment}
+            descriptionId={descriptionId}
+            commentItem={comment}
           />
           <form onSubmit={onSave}>
-          <TextArea
-            focusTarget={isFocused}
-            className="comment__input nhsuk-input"
-            value={comment.newText}
-            additionalAttributes={{
-              'aria-describedby': descriptionId
-            }}
-            onChange={onChangeText}
-          />
+            <TextArea
+              focusTarget={isFocused}
+              className="comment__input nhsuk-input"
+              value={comment.newText}
+              additionalAttributes={{
+                'aria-describedby': descriptionId
+              }}
+              onChange={onChangeText}
+            />
             <div className="comment__actions">
               <button
                 disabled={comment.newText.length === 0}

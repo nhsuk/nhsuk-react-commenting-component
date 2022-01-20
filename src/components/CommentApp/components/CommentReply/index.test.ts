@@ -2,9 +2,9 @@ import { Comment, CommentReply } from '../../state/comments';
 import { createStore } from 'redux';
 import { Store, reducer } from '../../state';
 import { updateGlobalSettings } from '../../actions/settings';
+import * as utils from  '../utils';
 
 /* eslint-disable no-console */
-
 const myApp = require('./index');
 const consoleError = console.error;
 const store: Store = createStore(reducer);
@@ -68,45 +68,45 @@ const commentReply: CommentReply = {
 };
 
 test('Check saveCommentReply when successful', () => {
-  const makeRequestMock = jest.spyOn(myApp,
-    'makeRequest').mockReturnValue(Promise.resolve({ success: 'True' }));
+  const mock = jest.spyOn(utils, 'makeRequest');
+  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
   myApp.saveCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
-      expect(makeRequestMock).toHaveBeenCalled();
-      makeRequestMock.mockRestore();
+      expect(mock).toHaveBeenCalled();
+      mock.mockRestore();
     });
 });
 
 test('Check saveCommentReply when unsuccessful', () => {
-  const makeRequestMock = jest.spyOn(myApp,
-    'makeRequest').mockReturnValue(Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  const mock = jest.spyOn(utils, 'makeRequest');
+  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
   myApp.saveCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');
-      expect(makeRequestMock).toHaveBeenCalled();
-      makeRequestMock.mockRestore();
+      expect(mock).toHaveBeenCalled();
+      mock.mockRestore();
     });
 });
 
 test('Check deleteCommentReply when successful', () => {
-  const makeRequestMock = jest.spyOn(myApp,
-    'makeRequest').mockReturnValue(Promise.resolve({ success: 'True' }));
+  const mock = jest.spyOn(utils, 'makeRequest');
+  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
   myApp.deleteCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
-      expect(makeRequestMock).toHaveBeenCalled();
-      makeRequestMock.mockRestore();
+      expect(mock).toHaveBeenCalled();
+      mock.mockRestore();
     });
 });
 
 test('Check deleteCommentReply when unsuccessful', () => {
-  const makeRequestMock = jest.spyOn(myApp,
-    'makeRequest').mockReturnValue(Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  const mock = jest.spyOn(utils, 'makeRequest');
+  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
   myApp.deleteCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');
-      expect(makeRequestMock).toHaveBeenCalled();
-      makeRequestMock.mockRestore();
+      expect(mock).toHaveBeenCalled();
+      mock.mockRestore();
     });
 });

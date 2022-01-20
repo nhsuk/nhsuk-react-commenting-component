@@ -9,63 +9,12 @@ import type { TranslatableStrings } from '../../main';
 import { CommentMenu } from '../CommentMenu';
 import { CommentFooter } from '../CommentFooter';
 import TextArea from '../TextArea';
-
-export function getRequestOptions(verb: string, apiKey: string, body?: string) {
-  let csrftoken = document.cookie
-    .split('; ')
-    .find(row => row.startsWith('csrftoken='));
-  if (csrftoken) {
-    csrftoken = csrftoken.split('=')[1];
-  } else {
-    // error condition - error message and return
-    return {};
-  }
-  const headerOptions = {
-    'X-CSRFToken': csrftoken,
-    'subscription-key': apiKey,
-    'Content-Type': 'text/html; charset=UTF-8',
-  };
-  const headers = new Headers(headerOptions);
-  return {
-    method: verb,
-    headers,
-    mode: 'same-origin' as RequestMode,
-    body: body,
-  };
-}
-
-export async function makeRequest(remoteId: number,
-  verb: string,
-  action: string,
-  apiUrl: string,
-  apiKey: string,
-  body?: string) {
-  const request = new Request(
-    apiUrl + '/workflow-api/reply/' + remoteId + '/' + action + '/',
-    getRequestOptions(verb, apiKey, body),
-  );
-  const response = await fetch(request);
-  // Check the response status for != 200, show error message?
-  if (response.status !== 200) {
-    /* eslint-disable no-console */
-    console.error('Failed to make request ' + response);
-    console.error(response);
-    /* eslint-enable no-console */
-    return { success: 'False', error: response.status };
-  }
-
-  let decodedData = '';
-  if (response.body) {
-    const responseReader = response.body.getReader();
-    if (responseReader) {
-      const responseData = await responseReader.read();
-      decodedData = new TextDecoder().decode(responseData.value);
-      return decodedData;
-    }
-    return { success: 'False', error: 'Failed to retrieve response body' };
-  }
-  return { success: 'False', error: 'Failed to retrieve response body' };
-}
+import {
+  makeRequest,
+  getRequestBody,
+  getGuestUserDetails,
+  isAuthorTheCurrentUser
+} from '../utils';
 
 export async function saveCommentReply(
   comment: Comment,
@@ -98,12 +47,14 @@ export async function saveCommentReply(
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
     if (reply.remoteId) {
-      exports.makeRequest(reply.remoteId,
+      const requestBody = getRequestBody(reply.newText);
+      makeRequest(reply.remoteId,
+        'reply',
         'PUT',
         'update',
         settings.apiUrl,
         settings.apiKey,
-        reply.newText)
+        requestBody)
         .then(response => {
           /* eslint-disable-next-line dot-notation */
           if (response['success'] === 'False') {
@@ -139,11 +90,14 @@ export async function deleteCommentReply(
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
     if (reply.remoteId) {
-      exports.makeRequest(reply.remoteId,
+      const requestBody = getGuestUserDetails();
+      makeRequest(reply.remoteId,
+        'reply',
         'DELETE',
         'delete',
         settings.apiUrl,
-        settings.apiKey)
+        settings.apiKey,
+        requestBody)
         .then(response => {
           /* eslint-disable-next-line dot-notation */
           if (response['success'] === 'False') {
@@ -404,7 +358,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     // Show edit/delete buttons if this reply was authored by the current user
     let onEdit;
     let onDelete;
-    if (reply.author === null || this.props.user && this.props.user.id === reply.author.userId) {
+    if (isAuthorTheCurrentUser(reply.author, this.props.user)) {
       onEdit = () => {
         store.dispatch(
           updateReply(comment.localId, reply.localId, {

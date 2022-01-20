@@ -544,37 +544,40 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
 
     return (
       <>
-        <CommentFooter
+        <div className="comment__original">
+          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <CommentFooter
           descriptionId={descriptionId}
           commentItem={comment}
-        />
-        <form onSubmit={onSave}>
+          />
+          <form onSubmit={onSave}>
           <TextArea
             focusTarget={isFocused}
-            className="comment__input"
+            className="comment__input nhsuk-input"
             value={comment.newText}
             additionalAttributes={{
               'aria-describedby': descriptionId
             }}
             onChange={onChangeText}
           />
-          <div className="comment__actions">
-            <button
-              disabled={comment.newText.length === 0}
-              type="submit"
-              className="comment__button comment__button--primary"
-            >
-              {strings.SAVE}
-            </button>
-            <button
-              type="button"
-              onClick={onCancel}
-              className="comment__button"
-            >
-              {strings.CANCEL}
-            </button>
-          </div>
-        </form>
+            <div className="comment__actions">
+              <button
+                disabled={comment.newText.length === 0}
+                type="submit"
+                className="comment__button comment__button--primary"
+              >
+                {strings.SAVE}
+              </button>
+              <button
+                type="button"
+                onClick={onCancel}
+                className="comment__button"
+              >
+                {strings.CANCEL}
+              </button>
+            </div>
+          </form>
+        </div>
         {this.renderReplies({ hideNewReply: true })}
       </>
     );

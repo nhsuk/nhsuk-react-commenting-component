@@ -98,9 +98,10 @@ $box-padding: 10px;
         }
 
         &:focus {
-            outline: unset;
-            border-color: $color-textarea-border-focused;
+            border: 2px solid $color-textarea-border-focused;
             box-shadow: inset 0 0 0 2px;
+            outline: 4px solid #ffeb3b;
+            outline-offset: 0;
         }
     }
 

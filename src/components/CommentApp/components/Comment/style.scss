@@ -77,7 +77,8 @@
     }
 
     &--mode-editing form {
-        margin-top: 10px;
+        padding-left: 0;
+        border: 0;
     }
 
     &--mode-deleting &__text {

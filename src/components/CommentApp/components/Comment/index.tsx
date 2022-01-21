@@ -371,7 +371,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
         <form onSubmit={sendReply}>
           <TextArea
             className="comment__reply-input"
-            placeholder="Type your comment"
+            placeholder="Type your reply"
             value={comment.newReply}
             onChange={onChangeNewReply}
           />

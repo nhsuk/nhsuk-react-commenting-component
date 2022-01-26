@@ -282,12 +282,12 @@ window.comments = (() => {
       headers,
       mode,
       body: guestData,
+      referrerPolicy: 'origin',
     };
     const request = new Request(
       apiUrl + apiCommentsEntrypoint,
       requestOptions,
     );
-
     commentApp.setApiEnabled(true);
     commentApp.setApiUrl(apiUrl);
     commentApp.setApiKey(apiKey);

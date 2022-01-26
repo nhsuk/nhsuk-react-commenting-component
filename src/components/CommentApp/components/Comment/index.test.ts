@@ -103,7 +103,7 @@ test('Check request options with body', () => {
   const requestOptions = utils.getRequestOptions('POST', 'some-api-key', bodyData);
 
   expect(requestOptions.method).toBe('POST');
-  expect(requestOptions.mode).toBe('same-origin');
+  expect(requestOptions.mode).toBe('cors');
   expect(requestOptions.headers).toStrictEqual(headers);
   expect(requestOptions.body).toBe(bodyData);
 });
@@ -121,7 +121,7 @@ test('Check request options without body', () => {
   const requestOptions = utils.getRequestOptions('POST', 'some-api-key');
 
   expect(requestOptions.method).toBe('POST');
-  expect(requestOptions.mode).toBe('same-origin');
+  expect(requestOptions.mode).toBe('cors');
   expect(requestOptions.headers).toStrictEqual(headers);
   expect(requestOptions.body).toBeUndefined();
 });

@@ -18,8 +18,9 @@ export function getRequestOptions(verb: string, apiKey: string, body?: string) {
   return {
     method: verb,
     headers,
-    mode: 'same-origin' as RequestMode,
+    mode: 'cors' as RequestMode,
     body: body,
+    referrerPolicy: 'origin' as ReferrerPolicy,
   };
 }
 

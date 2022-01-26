@@ -13,6 +13,7 @@ export function getRequestOptions(verb: string, apiKey: string, body?: string) {
     'X-CSRFToken': csrftoken,
     'Subscription-Key': apiKey,
     'Content-Type': 'text/html; charset=UTF-8',
+    'Workflow-Cookie': document.cookie,
   };
   const headers = new Headers(headerOptions);
   return {

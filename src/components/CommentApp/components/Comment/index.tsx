@@ -24,7 +24,7 @@ import TextArea from '../TextArea';
 import {
   makeRequest,
   getRequestBody,
-  getGuestUserDetails,
+  getUserDetails,
   isAuthorTheCurrentUser
 } from '../utils';
 
@@ -60,7 +60,7 @@ export async function saveComment(comment: Comment, store: Store) {
   }
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
-    const requestBody = getRequestBody(comment.newText);
+    const requestBody = getRequestBody(comment.newText, settings.authUserId);
     makeRequest(comment.remoteId,
       'comment',
       'PUT',
@@ -96,7 +96,7 @@ export async function doDeleteComment(comment: Comment, store: Store) {
   }
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
-    const guestUserDetails = getGuestUserDetails();
+    const guestUserDetails = getUserDetails(settings.authUserId);
     makeRequest(comment.remoteId,
       'comment',
       'DELETE',
@@ -139,14 +139,15 @@ export async function doResolveComment(comment: Comment, store: Store) {
   }
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
-    const guestUserDetails = getGuestUserDetails();
+    const guestUserDetails = getUserDetails(settings.authUserId);
     makeRequest(comment.remoteId,
       'comment',
       'PUT',
       'resolve',
       settings.apiUrl,
       settings.apiKey,
-      guestUserDetails)
+      guestUserDetails
+    )
       .then(response => {
         /* eslint-disable-next-line dot-notation */
         if (response['success'] === 'False') {
@@ -165,7 +166,7 @@ function doReopenComment(comment: Comment, store: Store) {
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
     if (comment.remoteId) {
-      const guestUserDetails = getGuestUserDetails();
+      const guestUserDetails = getUserDetails(settings.authUserId);
       makeRequest(comment.remoteId,
         'comment',
         'PUT',
@@ -305,7 +306,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       const settings = store.getState().settings;
       if (settings.apiEnabled) {
         if (comment.remoteId) {
-          const requestBody = getRequestBody(comment.newReply);
+          const requestBody = getRequestBody(comment.newReply, settings.authUserId);
           makeRequest(comment.remoteId,
             'comment',
             'POST',

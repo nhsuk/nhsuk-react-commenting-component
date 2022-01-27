@@ -58,7 +58,10 @@ export async function makeRequest(remoteId: number,
   return { success: 'False', error: 'Failed to retrieve response body' };
 }
 
-export function getGuestUserDetails() {
+export function getUserDetails(authUserId: number | null) {
+  if (authUserId) {
+    return `{"wagtail_user_id": ${authUserId}}`;
+  }
   const guestData = document.getElementById('guest-data');
   if (!guestData) {
     return '{}';
@@ -66,8 +69,8 @@ export function getGuestUserDetails() {
   return guestData.innerHTML;
 }
 
-export function getRequestBody(newText: string) {
-  const guestJson = JSON.parse(getGuestUserDetails());
+export function getRequestBody(newText: string, authUserId: number | null) {
+  const guestJson = JSON.parse(getUserDetails(authUserId));
   guestJson.newText = newText;
   return JSON.stringify(guestJson);
 }

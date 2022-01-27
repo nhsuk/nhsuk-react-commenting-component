@@ -277,6 +277,11 @@ window.comments = (() => {
     if (guestDataSpan) {
       guestData = guestDataSpan.innerHTML;
     }
+    let authUserId = null;
+    const authUser = document.getElementById('request-user');
+    if (authUser) {
+      authUserId = JSON.parse(authUser.innerHTML).id;
+    }
     const requestOptions = {
       method: 'POST',
       headers,
@@ -291,6 +296,7 @@ window.comments = (() => {
     commentApp.setApiEnabled(true);
     commentApp.setApiUrl(apiUrl);
     commentApp.setApiKey(apiKey);
+    commentApp.setAuthUserId(authUserId);
 
     fetch(request)
       .then(response => {

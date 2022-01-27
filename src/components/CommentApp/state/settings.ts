@@ -11,6 +11,7 @@ export interface SettingsState {
   apiEnabled: boolean;
   apiUrl: string;
   apiKey: string;
+  authUserId: number | null;
 }
 
 export type SettingsStateUpdate = Partial<SettingsState>;
@@ -24,6 +25,7 @@ export const INITIAL_STATE: SettingsState = {
   apiEnabled: false,
   apiUrl: '',
   apiKey: '',
+  authUserId: null,
 };
 
 export const reducer = produce((draft: SettingsState, action: actions.Action) => {

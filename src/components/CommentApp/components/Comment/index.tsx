@@ -778,7 +778,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     // Show edit/delete buttons if this comment was authored by the current user
     let onEdit;
     let onDelete;
-    if (isAuthorTheCurrentUser(comment.author, this.props.user)) {
+    if (isAuthorTheCurrentUser(comment.author, store.getState().settings.authUserId)) {
       onEdit = () => {
         store.dispatch(
           updateComment(comment.localId, {

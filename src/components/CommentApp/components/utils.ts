@@ -75,22 +75,15 @@ export function getRequestBody(newText: string, authUserId: number | null) {
   return JSON.stringify(guestJson);
 }
 
-export function isAuthorTheCurrentUser(author: any, user: any) {
+export function isAuthorTheCurrentUser(author: any, userId: any) {
   if (!author) {
     return true;
   }
-  if (!user) {
+  if (!userId) {
     return false;
   }
-  if (user.type === 'external') {
-    if (user.id === author.id) {
-      return true;
-    }
-  }
-  if (user.type === 'wagtail') {
-    if (user.id === author.userId) {
-      return true;
-    }
+  if (userId === author.userId) {
+    return true;
   }
   return false;
 }

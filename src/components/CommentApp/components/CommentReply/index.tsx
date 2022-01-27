@@ -358,7 +358,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     // Show edit/delete buttons if this reply was authored by the current user
     let onEdit;
     let onDelete;
-    if (isAuthorTheCurrentUser(reply.author, this.props.user)) {
+    if (isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId)) {
       onEdit = () => {
         store.dispatch(
           updateReply(comment.localId, reply.localId, {

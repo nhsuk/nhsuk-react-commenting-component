@@ -253,6 +253,11 @@ export class CommentApp {
       apiKey: apiKey
     }));
   }
+  setAuthUserId(authUserId: number) {
+    this.store.dispatch(updateGlobalSettings({
+      authUserId: authUserId
+    }));
+  }
   makeComment(annotation: Annotation, contentpath: string, position = '') {
     const commentId = getNextCommentId();
 

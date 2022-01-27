@@ -12,7 +12,7 @@ import TextArea from '../TextArea';
 import {
   makeRequest,
   getRequestBody,
-  getGuestUserDetails,
+  getUserDetails,
   isAuthorTheCurrentUser
 } from '../utils';
 
@@ -47,7 +47,7 @@ export async function saveCommentReply(
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
     if (reply.remoteId) {
-      const requestBody = getRequestBody(reply.newText);
+      const requestBody = getRequestBody(reply.newText, settings.authUserId);
       makeRequest(reply.remoteId,
         'reply',
         'PUT',
@@ -90,7 +90,7 @@ export async function deleteCommentReply(
   const settings = store.getState().settings;
   if (settings.apiEnabled) {
     if (reply.remoteId) {
-      const requestBody = getGuestUserDetails();
+      const requestBody = getUserDetails(settings.authUserId);
       makeRequest(reply.remoteId,
         'reply',
         'DELETE',

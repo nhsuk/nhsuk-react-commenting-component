@@ -75,6 +75,22 @@ export function getRequestBody(newText: string, authUserId: number | null) {
   return JSON.stringify(guestJson);
 }
 
+export function isAuthorTheExternalUser(author: any, user: any) {
+  if (!author) {
+    return true;
+  }
+  if (!user) {
+    return false;
+  }
+  if (user.type !== 'external') {
+    return false;
+  }
+  if (author.id === user.id) {
+    return true;
+  }
+  return false;
+}
+
 export function isAuthorTheCurrentUser(author: any, userId: any) {
   if (!author) {
     return true;

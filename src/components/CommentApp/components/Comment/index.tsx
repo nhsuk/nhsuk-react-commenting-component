@@ -25,7 +25,8 @@ import {
   makeRequest,
   getRequestBody,
   getUserDetails,
-  isAuthorTheCurrentUser
+  isAuthorTheCurrentUser,
+  isAuthorTheExternalUser
 } from '../utils';
 
 export async function saveComment(comment: Comment, store: Store) {
@@ -778,7 +779,8 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     // Show edit/delete buttons if this comment was authored by the current user
     let onEdit;
     let onDelete;
-    if (isAuthorTheCurrentUser(comment.author, store.getState().settings.authUserId)) {
+    if (isAuthorTheExternalUser(comment.author, this.props.user) ||
+      isAuthorTheCurrentUser(comment.author, store.getState().settings.authUserId)) {
       onEdit = () => {
         store.dispatch(
           updateComment(comment.localId, {

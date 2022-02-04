@@ -148,6 +148,8 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
       );
     };
 
+    const charLimit = 500;
+
     return (
       <>
         <CommentMenu
@@ -163,10 +165,13 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
             value={reply.newText}
             onChange={onChangeText}
           />
+          <p className="comment__reply-character-limit">
+            Characters remaining: {charLimit - reply.newText.length}
+          </p>
           <div className="comment-reply__actions">
             <button
               type="submit"
-              disabled={reply.newText.length === 0}
+              disabled={reply.newText.length === 0 || reply.newText.length > charLimit}
               className="comment-reply__button comment-reply__button--primary"
             >
               {strings.SAVE}

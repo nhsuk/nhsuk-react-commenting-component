@@ -186,6 +186,11 @@
         margin-top: 10px !important;
     }
 
+    &__reply-character-limit {
+        font-size: 12px;
+        color: $nhsuk-secondary-text-color;
+    }
+
     ol {
         margin: 0;
     }

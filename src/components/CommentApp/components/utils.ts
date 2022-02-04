@@ -91,12 +91,15 @@ export function isAuthorTheExternalUser(author: any, user: any) {
   return false;
 }
 
-export function isAuthorTheCurrentUser(author: any, userId: any) {
+export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   if (!author) {
     return true;
   }
-  if (!userId) {
+  if (!userId && !user) {
     return false;
+  }
+  if (!userId && user && user.userId) {
+    userId = user.userId;
   }
   if (userId === author.userId) {
     return true;

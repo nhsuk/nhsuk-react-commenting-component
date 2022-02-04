@@ -365,7 +365,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     let onEdit;
     let onDelete;
     if (isAuthorTheExternalUser(reply.author, this.props.user) ||
-    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId)) {
+    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {
       onEdit = () => {
         store.dispatch(
           updateReply(comment.localId, reply.localId, {

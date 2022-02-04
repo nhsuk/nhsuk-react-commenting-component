@@ -367,6 +367,8 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     // Hide new reply if a reply is being edited as well
     const newReplyHidden = hideNewReply || replyBeingEdited;
 
+    const charLimit = 500;
+
     let replyForm = <></>;
     if (!newReplyHidden && (isFocused || comment.newReply)) {
       replyForm = (
@@ -377,9 +379,12 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             value={comment.newReply}
             onChange={onChangeNewReply}
           />
+          <p className="comment__reply-character-limit">
+            Characters remaining: {charLimit - comment.newReply.length}
+          </p>
           <div className="comment__reply-actions">
             <button
-              disabled={comment.newReply.length === 0}
+              disabled={comment.newReply.length === 0 || comment.newReply.length > charLimit}
               type="submit"
               className="comment__button comment__button--primary"
             >

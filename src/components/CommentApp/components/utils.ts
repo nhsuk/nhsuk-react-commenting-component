@@ -99,7 +99,9 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
     return false;
   }
   if (!userId && user && user.userId) {
-    userId = user.userId;
+    if (user.userId === author.userId) {
+      return true;
+    }
   }
   if (userId === author.userId) {
     return true;

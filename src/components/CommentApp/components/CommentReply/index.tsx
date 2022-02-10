@@ -148,7 +148,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
       );
     };
 
-    const charLimit = 500;
+    const charLimit = 5000;
 
     return (
       <>

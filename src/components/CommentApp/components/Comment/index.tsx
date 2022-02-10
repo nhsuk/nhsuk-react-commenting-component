@@ -367,7 +367,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     // Hide new reply if a reply is being edited as well
     const newReplyHidden = hideNewReply || replyBeingEdited;
 
-    const charLimit = 500;
+    const charLimit = 5000;
 
     let replyForm = <></>;
     if (!newReplyHidden && (isFocused || comment.newReply)) {

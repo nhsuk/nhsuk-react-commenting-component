@@ -3,6 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FocusTrap from 'focus-trap-react';
+import dateFormat from 'dateformat';
 
 import type { Store } from '../../state';
 import { Author, Comment, newCommentReply } from '../../state/comments';
@@ -452,6 +453,26 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     );
   }
 
+  renderResolvedInfo(): React.ReactFragment {
+    const { comment } = this.props;
+    const date = comment.resolvedDate;
+
+    if (!comment.resolved) {
+      return <></>;
+    }
+
+    return (
+      <>
+        <div className="comment__resolved-info">
+          <p>
+            Comment resolved in ...
+            <span className="resolved-date">{dateFormat(date, 'HH:MM mmmm d')}</span>
+          </p>
+        </div>
+      </>
+    );
+  }
+
   renderCreating(): React.ReactFragment {
     const { comment, store, strings, isFocused } = this.props;
 
@@ -822,6 +843,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           <CommentFooter commentItem={comment} />
         </div>
         {this.renderReplies()}
+        {this.renderResolvedInfo()}
       </>
     );
   }

@@ -121,8 +121,59 @@ export interface CommentReplyProps {
 }
 
 export default class CommentReplyComponent extends React.Component<CommentReplyProps> {
-  renderEditing(): React.ReactFragment {
+  renderReplyMenu(): React.ReactFragment {
     const { comment, reply, store, strings, isFocused } = this.props;
+
+    // If comment is resolved, don't show menu
+    if (comment.resolved) {
+      return <></>;
+    }
+
+    // Show edit/delete buttons if this reply was authored by the current user
+    if (isAuthorTheExternalUser(reply.author, this.props.user) ||
+    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {
+      const onEdit = () => {
+        store.dispatch(
+          updateReply(comment.localId, reply.localId, {
+            mode: 'editing',
+            newText: reply.text,
+          })
+        );
+      };
+
+      const onDelete = () => {
+        store.dispatch(
+          updateReply(comment.localId, reply.localId, {
+            mode: 'delete_confirm',
+          })
+        );
+      };
+
+      return (
+        <CommentMenu
+          commentItem={reply}
+          store={store}
+          strings={strings}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          focused={isFocused}
+        />
+      );
+    }
+
+    return (
+      <CommentMenu
+        commentItem={reply}
+        store={store}
+        strings={strings}
+        focused={isFocused}
+      />
+    );
+  }
+
+
+  renderEditing(): React.ReactFragment {
+    const { comment, reply, store, strings } = this.props;
 
     const onChangeText = (value: string) => {
       store.dispatch(
@@ -152,12 +203,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <CommentFooter commentItem={reply} />
         <form onSubmit={onSave}>
           <TextArea
@@ -190,16 +236,11 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderSaving(): React.ReactFragment {
-    const { reply, store, strings, isFocused } = this.props;
+    const { reply, strings } = this.props;
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
         <div className="comment-reply__progress">{strings.SAVING}</div>
@@ -208,7 +249,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderSaveError(): React.ReactFragment {
-    const { comment, reply, store, strings, isFocused } = this.props;
+    const { comment, reply, store, strings } = this.props;
 
     const onClickRetry = async (e: React.MouseEvent) => {
       e.preventDefault();
@@ -218,12 +259,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
         <div className="comment-reply__error">
@@ -241,7 +277,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderDeleteConfirm(): React.ReactFragment {
-    const { comment, reply, store, strings, isFocused } = this.props;
+    const { comment, reply, store, strings } = this.props;
 
     const onClickDelete = async (e: React.MouseEvent) => {
       e.preventDefault();
@@ -261,12 +297,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
         <div className="comment-reply__confirm-delete">
@@ -291,16 +322,11 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderDeleting(): React.ReactFragment {
-    const { reply, store, strings, isFocused } = this.props;
+    const { reply, strings } = this.props;
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
         <div className="comment-reply__progress">{strings.DELETING}</div>
@@ -309,7 +335,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderDeleteError(): React.ReactFragment {
-    const { comment, reply, store, strings, isFocused } = this.props;
+    const { comment, reply, store, strings } = this.props;
 
     const onClickRetry = async (e: React.MouseEvent) => {
       e.preventDefault();
@@ -329,12 +355,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
         <div className="comment-reply__error">
@@ -359,41 +380,11 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderDefault(): React.ReactFragment {
-    const { comment, reply, store, strings, isFocused } = this.props;
-
-    // Show edit/delete buttons if this reply was authored by the current user
-    let onEdit;
-    let onDelete;
-    if (isAuthorTheExternalUser(reply.author, this.props.user) ||
-    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {
-      onEdit = () => {
-        store.dispatch(
-          updateReply(comment.localId, reply.localId, {
-            mode: 'editing',
-            newText: reply.text,
-          })
-        );
-      };
-
-      onDelete = () => {
-        store.dispatch(
-          updateReply(comment.localId, reply.localId, {
-            mode: 'delete_confirm',
-          })
-        );
-      };
-    }
+    const { reply } = this.props;
 
     return (
       <>
-        <CommentMenu
-          commentItem={reply}
-          store={store}
-          strings={strings}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          focused={isFocused}
-        />
+        {this.renderReplyMenu()}
         <p className="comment-reply__text">{reply.text}</p>
         <CommentFooter commentItem={reply} />
       </>

@@ -457,6 +457,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     const { comment, store } = this.props;
     const date = comment.resolvedDate;
     const shareType = store.getState().settings.shareType;
+    const shareUrl = store.getState().settings.shareUrl;
 
     if (!comment.resolved) {
       return <></>;
@@ -466,7 +467,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       <>
         <div className="comment__resolved-info">
           <p>
-            Comment resolved in {shareType}
+            Comment resolved in <a href={shareUrl}>{shareType}</a>
             <span className="resolved-date">{dateFormat(date, 'HH:MM mmmm d')}</span>
           </p>
         </div>

@@ -304,6 +304,13 @@ export class CommentApp {
       })
     );
   }
+  setShareUrl(shareUrl: string) {
+    this.store.dispatch(
+      updateGlobalSettings({
+        shareUrl: shareUrl
+      })
+    );
+  }
 
   renderApp(
     element: HTMLElement,
@@ -322,11 +329,13 @@ export class CommentApp {
     translationStrings: TranslatableStrings | null,
     componentStyle: string | null,
     shareType: string,
+    shareUrl: string,
   ) {
     let pinnedComment: number | null = null;
     this.setUser(userId, userType, authors);
     this.setComponentStyle(componentStyle);
     this.setShareType(shareType);
+    this.setShareUrl(shareUrl);
 
     const strings = translationStrings || defaultStrings;
 

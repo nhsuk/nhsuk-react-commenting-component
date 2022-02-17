@@ -21,6 +21,7 @@ const testSettingsState: SettingsState = {
     organisation: 'Nhs',
   },
   shareType: 'First editorial check',
+  shareUrl: '#',
   commentsEnabled: true,
   currentTab: null,
   componentStyle: null,

@@ -284,7 +284,14 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     break;
   }
   case actions.SET_FOCUSED_COMMENT: {
-    if ((action.commentId === null) || (draft.comments.has(action.commentId)) && (!draft.comments.get(action.commentId).resolved)) {
+    if (action.commentId !== null && draft.comments.has(action.commentId)) {
+      const comment = draft.comments.get(action.commentId);
+      if (comment && comment.resolved) {
+        break;
+      }
+    }
+
+    if ((action.commentId === null) || (draft.comments.has(action.commentId))) {
       draft.focusedComment = action.commentId;
       if (action.updatePinnedComment) {
         draft.pinnedComment = action.commentId;

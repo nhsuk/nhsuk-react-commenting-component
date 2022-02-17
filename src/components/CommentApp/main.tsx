@@ -297,6 +297,13 @@ export class CommentApp {
       apiEnabled: useApi,
     }));
   }
+  setShareType(shareType: string) {
+    this.store.dispatch(
+      updateGlobalSettings({
+        shareType: shareType
+      })
+    );
+  }
 
   renderApp(
     element: HTMLElement,
@@ -314,10 +321,12 @@ export class CommentApp {
     }>,
     translationStrings: TranslatableStrings | null,
     componentStyle: string | null,
+    shareType: string,
   ) {
     let pinnedComment: number | null = null;
     this.setUser(userId, userType, authors);
     this.setComponentStyle(componentStyle);
+    this.setShareType(shareType);
 
     const strings = translationStrings || defaultStrings;
 

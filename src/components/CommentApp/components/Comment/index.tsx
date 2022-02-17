@@ -454,8 +454,9 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
   }
 
   renderResolvedInfo(): React.ReactFragment {
-    const { comment } = this.props;
+    const { comment, store } = this.props;
     const date = comment.resolvedDate;
+    const shareType = store.getState().settings.shareType;
 
     if (!comment.resolved) {
       return <></>;
@@ -465,7 +466,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       <>
         <div className="comment__resolved-info">
           <p>
-            Comment resolved in ...
+            Comment resolved in {shareType}
             <span className="resolved-date">{dateFormat(date, 'HH:MM mmmm d')}</span>
           </p>
         </div>

@@ -43,7 +43,7 @@ $color-focus-outline: #ffbf47;
 $color-text-base: darken($color-white, 85);
 $color-text-input: darken($color-white, 90);
 
-$color-comment-separator: #aeb7bd;
+$color-comment-separator: $color_nhsuk-grey-3;
 
 // Color states
 $color-state-live: #59b524;
@@ -52,7 +52,7 @@ $color-state-absent: #ff8f11;
 $color-state-live-draft: #43b1b0;
 
 $color-box-background: $color-white;
-$color-box-border: #aeb7bd;
+$color-box-border: $color_nhsuk-grey-3;
 $color-box-border-focused: $color-grey-2;
 $color-box-text: $color-black;
 $color-textarea-background: $color-white;

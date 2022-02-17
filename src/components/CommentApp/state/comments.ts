@@ -96,6 +96,7 @@ export interface Comment {
   mode: CommentMode;
   deleted: boolean;
   resolved: boolean;
+  resolvedDate?: number;
   author: Author | null;
   resolvedByAuthor?: Author;
   date: number;
@@ -219,6 +220,7 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     }
 
     comment.resolvedByAuthor = user;
+    comment.resolvedDate = Date.now();
   };
 
   const reopenComment = (comment: Comment) => {
@@ -282,6 +284,13 @@ export const reducer = produce((draft: CommentsState, action: actions.Action) =>
     break;
   }
   case actions.SET_FOCUSED_COMMENT: {
+    if (action.commentId !== null && draft.comments.has(action.commentId)) {
+      const comment = draft.comments.get(action.commentId);
+      if (comment && comment.resolved) {
+        break;
+      }
+    }
+
     if ((action.commentId === null) || (draft.comments.has(action.commentId))) {
       draft.focusedComment = action.commentId;
       if (action.updatePinnedComment) {

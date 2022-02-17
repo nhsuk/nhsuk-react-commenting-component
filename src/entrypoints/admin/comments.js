@@ -255,6 +255,8 @@ window.comments = (() => {
         commentData.userId,
         commentData.userType,
         commentData.comments,
+        commentData.shareType,
+        commentData.shareUrl,
         new Map(Object.entries(commentData.authors)),
         defaultStrings,
         componentStyle,

@@ -20,9 +20,15 @@ const testSettingsState: SettingsState = {
     jobTitle: 'Developer',
     organisation: 'Nhs',
   },
+  shareType: 'First editorial check',
+  shareUrl: '#',
   commentsEnabled: true,
   currentTab: null,
   componentStyle: null,
+  authUserId: null,
+  apiEnabled: null,
+  apiUrl: null,
+  apiKey: null,
 };
 
 export function ActiveAndResolvedComments() {

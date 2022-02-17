@@ -263,6 +263,18 @@ window.comments = (() => {
     }
   }
 
+  async function readAllData(responseReader) {
+    let commentData = '';
+    while (true) {
+      const { done, value } = await responseReader.read();
+      commentData += new TextDecoder().decode(value);
+      if (done) {
+        break;
+      }
+    }
+    return commentData;
+  }
+
   function initCommentsInterfaceFromApi(commentsElement,
     commentsOutputElement,
     apiUrl,
@@ -301,8 +313,7 @@ window.comments = (() => {
     fetch(request)
       .then(response => {
         const responseReader = response.body.getReader();
-        responseReader.read().then(({ done, value }) => {
-          const commentData =  new TextDecoder().decode(value);
+        readAllData(responseReader).then(commentData => {
           initCommentsInterface(commentsElement, commentsOutputElement, JSON.parse(commentData), componentStyle);
         });
       });

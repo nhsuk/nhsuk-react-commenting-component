@@ -1,3 +1,5 @@
+@import '../../../node_modules/nhsuk-frontend/packages/nhsuk';
+
 $color-teal: #007d7e;
 $color-teal-darker: darken(adjust-hue($color-teal, 1), 4);
 $color-teal-dark: darken(adjust-hue($color-teal, 1), 7);
@@ -203,4 +205,3 @@ $box-padding: 10px;
 @import 'components/CommentMenu/style';
 @import 'components/CommentReply/style';
 @import 'components/CommentsTabs/style';
-@import '../../../node_modules/nhsuk-frontend/packages/nhsuk';

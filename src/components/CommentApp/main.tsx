@@ -209,12 +209,14 @@ export class CommentApp {
     organisation: string,
     userId: number,
   }>) {
-    const author = (userType === 'wagtail') ? getAuthorByUserId(authors, userId) : getAuthor(authors, userId);
-    this.store.dispatch(
-      updateGlobalSettings({
-        user: author
-      })
-    );
+    if (userId) {
+      const author = (userType === 'wagtail') ? getAuthorByUserId(authors, userId) : getAuthor(authors, userId);
+      this.store.dispatch(
+        updateGlobalSettings({
+          user: author
+        })
+      );
+    }
   }
   updateAnnotation(
     annotation: Annotation,

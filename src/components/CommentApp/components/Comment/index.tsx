@@ -424,6 +424,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             </button>
             <button
               type="button"
+              disabled={comment.newReply.length === 0}
               onClick={onClickCancelReply}
               className="comment__button comment__button--cancel"
             >

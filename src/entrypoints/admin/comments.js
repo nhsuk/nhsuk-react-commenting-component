@@ -1,7 +1,13 @@
-import { any } from 'prop-types';
 import { initCommentApp, defaultStrings } from '../../components/CommentApp/main';
 import { STRINGS } from '../../config/wagtailConfig';
 const KEYCODE_M = 77;
+import {
+  newComment
+} from '../../components/CommentApp/state/comments';
+import { getNextCommentId } from '../../components/CommentApp/utils/sequences';
+import {
+  addComment,
+} from '../../components/CommentApp/actions/comments';
 
 /**
  * Entry point loaded when the comments system is in use.
@@ -190,19 +196,19 @@ window.comments = (() => {
           annotation.subscribeToUpdates(comment.localId);
         }
       });
-      const addComment = () => {
+      const addCommentHandler = () => {
         const annotation = this.getAnnotationForComment();
         const localId = commentApp.makeComment(annotation, this.contentpath);
         annotation.subscribeToUpdates(localId);
       };
       this.commentAdditionNode.addEventListener('click', () => {
         // Make the widget button clickable to add a comment
-        addComment();
+        addCommentHandler();
       });
       this.fieldNode.addEventListener('keyup', (e) => {
         if (currentlyEnabled && isCommentShortcut(e)) {
           if (currentComments.length === 0) {
-            addComment();
+            addCommentHandler();
           } else {
             commentApp.store.dispatch(
               commentApp.actions.setFocusedComment(
@@ -296,6 +302,7 @@ window.comments = (() => {
     if (authUser) {
       authUserId = JSON.parse(authUser.innerHTML).id;
     }
+
     const requestOptions = {
       method: 'POST',
       headers,
@@ -321,6 +328,24 @@ window.comments = (() => {
       });
   }
 
+  function addNewComment(contentText, contentPath, contentPosition) {
+    const commentId = getNextCommentId();
+    let author = {};
+    const authUser = document.getElementById('request-user');
+    if (authUser) {
+      author = JSON.parse(authUser.innerHTML);
+    }
+    const addCommentOptions = {
+      mode: 'creating',
+      highlightedText: contentText,
+    };
+    commentApp.store.dispatch(
+      addComment(
+        newComment(contentPath, contentPosition, commentId, null, author, Date.now(), addCommentOptions)
+      )
+    );
+  }
+
   return {
     commentApp,
     getContentPath,
@@ -328,5 +353,6 @@ window.comments = (() => {
     initAddCommentButton,
     initCommentsInterface,
     initCommentsInterfaceFromApi,
+    addNewComment,
   };
 })();

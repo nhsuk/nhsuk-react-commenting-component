@@ -57,27 +57,60 @@ export async function saveComment(comment: Comment, store: Store) {
     );
   }
 
-  if (!comment.remoteId || !comment.localId) {
+  if (!comment.remoteId && !comment.localId) {
     return;
-  }
-  const settings = store.getState().settings;
-  if (settings.apiEnabled) {
-    const requestBody = getRequestBody(comment.newText, settings.authUserId);
-    makeRequest(comment.remoteId,
-      'comment',
-      'PUT',
-      'update',
-      settings.apiUrl,
-      settings.apiKey,
-      requestBody)
-      .then(response => {
-        /* eslint-disable-next-line dot-notation */
-        if (response['success'] === 'False') {
-          /* eslint-disable-next-line no-console, dot-notation */
-          console.error(response['error']);
-          return;
-        }
-      });
+  } else if (comment.remoteId && comment.localId) {
+    // Edit of an existing comment
+    const settings = store.getState().settings;
+    if (settings.apiEnabled) {
+      const requestBody = getRequestBody(comment.newText, settings.authUserId);
+      makeRequest(comment.remoteId,
+        'comment',
+        'PUT',
+        'update',
+        settings.apiUrl,
+        settings.apiKey,
+        requestBody)
+        .then(response => {
+          /* eslint-disable-next-line dot-notation */
+          if (response['success'] === 'False') {
+            /* eslint-disable-next-line no-console, dot-notation */
+            console.error(response['error']);
+            return;
+          }
+        });
+    }
+  } else if (!comment.remoteId && comment.localId) {
+    // Add a new comment
+    const settings = store.getState().settings;
+    if (settings.apiEnabled) {
+      // Get the share_id from the url
+      let shareId = '';
+      const shareIdArray = document.location.href.match('/cms/share/(.*)/');
+      if (shareIdArray) {
+        shareId = shareIdArray[1];
+      }
+      const requestBody = getRequestBody(comment.newText,
+        settings.authUserId,
+        shareId,
+        comment.contentpath,
+        comment.position);
+      makeRequest(-1,
+        'comment',
+        'POST',
+        'add',
+        settings.apiUrl,
+        settings.apiKey,
+        requestBody)
+        .then(response => {
+          /* eslint-disable-next-line dot-notation */
+          if (response['success'] === 'False') {
+            /* eslint-disable-next-line no-console, dot-notation */
+            console.error(response['error']);
+            return;
+          }
+        });
+    }
   }
 }
 
@@ -189,7 +222,10 @@ function doReopenComment(comment: Comment, store: Store) {
 }
 
 function highlightContent(comment: Comment, mode: string) {
-  const highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  let highlightElement = document.getElementById(comment.contentpath);
+  if (comment.position) {
+    highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  }
   if (highlightElement) {
     if (mode === 'hover' && highlightElement.className === 'highlight-comment') {
       highlightElement.className = 'highlight-comment-hover';
@@ -200,7 +236,10 @@ function highlightContent(comment: Comment, mode: string) {
 }
 
 function unHighlightContent(comment: Comment) {
-  const highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  let highlightElement = document.getElementById(comment.contentpath);
+  if (comment.position) {
+    highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+  }
   if (highlightElement) {
     if (highlightElement.className === 'highlight-comment-hover') {
       highlightElement.className = 'highlight-comment';
@@ -212,13 +251,8 @@ export function getAdjustedIndex(contentText: string, start: number) {
   let actualIndex = 0;
   let adjustedIndex = 0;
   let countChars = true;
-  // This compensates for overlapping start and end values
-  let startPosition = start;
-  if (startPosition > 0) {
-    startPosition += 1;
-  }
   for (const char of Object.keys(contentText)) {
-    if (adjustedIndex === startPosition) {
+    if (adjustedIndex === start) {
       break;
     }
     actualIndex += 1;
@@ -233,9 +267,6 @@ export function getAdjustedIndex(contentText: string, start: number) {
     if (countChars) {
       adjustedIndex += 1;
     }
-  }
-  if (actualIndex > 0) {
-    actualIndex -= 1;
   }
   return actualIndex;
 }
@@ -886,7 +917,9 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           { updatePinnedComment: false, forceFocus: this.props.isFocused && this.props.forceFocus }
         )
       );
-      highlightContent(this.props.comment, 'click');
+      if (this.props.comment.mode !== 'creating') {
+        highlightContent(this.props.comment, 'click');
+      }
     };
 
     const onDoubleClick = () => {
@@ -896,11 +929,15 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     };
 
     const onMouseEnter = () => {
-      highlightContent(this.props.comment, 'hover');
+      if (this.props.comment.mode !== 'creating') {
+        highlightContent(this.props.comment, 'hover');
+      }
     };
 
     const onMouseLeave = () => {
-      unHighlightContent(this.props.comment);
+      if (this.props.comment.mode !== 'creating') {
+        unHighlightContent(this.props.comment);
+      }
     };
 
     // const top = this.props.layout.getCommentPosition(
@@ -982,8 +1019,12 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     const contentPositionsJson = JSON.parse(this.props.comment.position);
     for (const position of Object.keys(contentPositionsJson)) {
       const blockNode = highlightNode.querySelector('[data-block-key="' + contentPositionsJson[position].key + '"]');
-      const start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start);
-      const end = start + (contentPositionsJson[position].end - contentPositionsJson[position].start);
+      let start = contentPositionsJson[position].start;
+      let end = contentPositionsJson[position].end;
+      if (blockNode.innerHTML) {
+        start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start);
+        end = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].end);
+      }
       const highlighted = blockNode.innerHTML.slice(0, start)
         + '<span class="highlight-comment" id="'
         + this.props.comment.contentpath
@@ -997,6 +1038,9 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
   }
 
   highlightContent() {
+    if (this.props.comment.mode === 'creating') {
+      return;
+    }
     const contentPathParts = getContentPathParts(this.props.comment.contentpath);
     const highlightNode = this.getHighlightNode(contentPathParts, document);
     if (this.props.comment.resolved) {

@@ -255,6 +255,10 @@ window.comments = (() => {
 
   function initCommentsInterface(commentsElement, commentsOutputElement, commentData, componentStyle = null) {
     if (commentData && Object.keys(commentData).length > 0 && commentData.comments) {
+      let shareUrl = commentData.shareUrl;
+      if (!commentData.shareUrl) {
+        shareUrl = window.location.href.replace(/(https?:\/\/.*)\/(d+)\//g, '$1\\${comment.share_id}\\');
+      }
       commentApp.renderApp(
         commentsElement,
         commentsOutputElement,
@@ -265,7 +269,7 @@ window.comments = (() => {
         defaultStrings,
         componentStyle,
         commentData.shareType,
-        commentData.shareUrl,
+        shareUrl,
       );
       commentApp.setVisible(true);
     }

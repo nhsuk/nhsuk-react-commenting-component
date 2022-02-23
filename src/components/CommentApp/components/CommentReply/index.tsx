@@ -380,30 +380,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   }
 
   renderDefault(): React.ReactFragment {
-    const { comment, reply, store, strings, isFocused } = this.props;
-
-    // Show edit/delete buttons if this reply was authored by the current user
-    let onEdit;
-    let onDelete;
-    if (isAuthorTheExternalUser(reply.author, this.props.user) ||
-      isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {
-      onEdit = () => {
-        store.dispatch(
-          updateReply(comment.localId, reply.localId, {
-            mode: 'editing',
-            newText: reply.text,
-          })
-        );
-      };
-
-      onDelete = () => {
-        store.dispatch(
-          updateReply(comment.localId, reply.localId, {
-            mode: 'delete_confirm',
-          })
-        );
-      };
-    }
+    const { reply } = this.props;
 
     return (
       <>

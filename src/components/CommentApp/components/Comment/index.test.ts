@@ -71,13 +71,13 @@ test('Check adjusted index value', () => {
   expect(adjustedIndex).toBe(12);
 
   adjustedIndex = getAdjustedIndex(content, 13);
-  expect(adjustedIndex).toBe(36);
+  expect(adjustedIndex).toBe(13);
 
   adjustedIndex = getAdjustedIndex(content, 21);
   expect(adjustedIndex).toBe(44);
 
   adjustedIndex = getAdjustedIndex(content, 22);
-  expect(adjustedIndex).toBe(52);
+  expect(adjustedIndex).toBe(45);
 });
 
 test('Check content path parts', () => {

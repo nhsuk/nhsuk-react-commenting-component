@@ -32,10 +32,16 @@ export async function makeRequest(remoteId: number,
   apiUrl: string,
   apiKey: string,
   body?: string) {
-  const request = new Request(
+  let request = new Request(
     apiUrl + '/workflow-api/' + asset + '/' + remoteId + '/' + action + '/',
     getRequestOptions(verb, apiKey, body),
   );
+  if (remoteId === -1) {
+    request = new Request(
+      apiUrl + '/workflow-api/' + asset + '/' + action + '/',
+      getRequestOptions(verb, apiKey, body),
+    );
+  }
   const response = await fetch(request);
   // Check the response status for != 200, show error message?
   if (response.status !== 200) {
@@ -69,9 +75,22 @@ export function getUserDetails(authUserId: number | null) {
   return guestData.innerHTML;
 }
 
-export function getRequestBody(newText: string, authUserId: number | null) {
+export function getRequestBody(newText: string,
+  authUserId: number | null,
+  shareId?: string,
+  contentPath?: string,
+  position?: string) {
   const guestJson = JSON.parse(getUserDetails(authUserId));
   guestJson.newText = newText;
+  if (shareId) {
+    guestJson.shareId = shareId;
+  }
+  if (contentPath) {
+    guestJson.contentPath = contentPath;
+  }
+  if (position) {
+    guestJson.position = position;
+  }
   return JSON.stringify(guestJson);
 }
 

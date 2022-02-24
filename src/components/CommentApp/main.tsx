@@ -389,6 +389,9 @@ export class CommentApp {
 
     // Fetch existing comments
     for (const comment of initialComments) {
+      if (comment.id === -1) {
+        continue;
+      }
       const commentId = getNextCommentId();
       // Create comment
       this.store.dispatch(

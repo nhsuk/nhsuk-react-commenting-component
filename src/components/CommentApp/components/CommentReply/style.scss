@@ -32,6 +32,10 @@
 
     &__button {
         @include button;
+
+        &:disabled {
+            display: none;
+        }
     }
 
     &__actions,

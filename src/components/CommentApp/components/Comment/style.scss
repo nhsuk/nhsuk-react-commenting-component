@@ -113,6 +113,10 @@
     &__actions,
     &__reply-actions {
         text-align: right;
+
+        .comment__button:disabled {
+            display: none;
+        }
     }
 
     &__actions &__button,

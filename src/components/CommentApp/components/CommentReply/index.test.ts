@@ -69,7 +69,7 @@ const commentReply: CommentReply = {
 
 test('Check saveCommentReply when successful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
+  mock.mockImplementation(() => Promise.resolve('{"success":"True", "error":"" }'));
   myApp.saveCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
@@ -80,7 +80,7 @@ test('Check saveCommentReply when successful', () => {
 
 test('Check saveCommentReply when unsuccessful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "False", "error": "Failed to retrieve response body" }'));
   myApp.saveCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');
@@ -91,7 +91,7 @@ test('Check saveCommentReply when unsuccessful', () => {
 
 test('Check deleteCommentReply when successful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
+  mock.mockImplementation(() => Promise.resolve('{"success":"True", "error":"" }'));
   myApp.deleteCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
@@ -102,7 +102,7 @@ test('Check deleteCommentReply when successful', () => {
 
 test('Check deleteCommentReply when unsuccessful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "False", "error": "Failed to retrieve response body" }'));
   myApp.deleteCommentReply(comment, commentReply, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');

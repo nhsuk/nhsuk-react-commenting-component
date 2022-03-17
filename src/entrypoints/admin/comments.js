@@ -339,6 +339,12 @@ window.comments = (() => {
     if (authUser) {
       author = JSON.parse(authUser.innerHTML);
     }
+    if (author.first_name) {
+      author.firstname = author.first_name;
+    }
+    if (author.last_name) {
+      author.lastname = author.last_name;
+    }
     const addCommentOptions = {
       mode: 'creating',
       highlightedText: contentText,

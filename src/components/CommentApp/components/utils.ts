@@ -125,5 +125,8 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   if (userId === author.userId) {
     return true;
   }
+  if (userId === author.id) {
+    return true;
+  }
   return false;
 }

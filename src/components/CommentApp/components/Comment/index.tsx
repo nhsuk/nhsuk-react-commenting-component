@@ -93,7 +93,8 @@ export async function saveComment(comment: Comment, store: Store) {
         settings.authUserId,
         shareId,
         comment.contentpath,
-        comment.position);
+        comment.position,
+        comment.highlightedText);
       makeRequest(-1,
         'comment',
         'POST',

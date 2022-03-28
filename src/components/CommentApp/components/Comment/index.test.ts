@@ -128,7 +128,7 @@ test('Check request options without body', () => {
 
 test('Check doDeleteComment when successful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "True", "error": "" }'));
   myApp.doDeleteComment(newComment, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
@@ -137,7 +137,7 @@ test('Check doDeleteComment when successful', () => {
 
 test('Check doDeleteComment when unsuccessful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "False", "error": "Failed to retrieve response body" }'));
   myApp.doDeleteComment(newComment, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');
@@ -146,7 +146,7 @@ test('Check doDeleteComment when unsuccessful', () => {
 
 test('Check doResolveComment when successful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "True", "error": ""}'));
   myApp.doResolveComment(newComment, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
@@ -155,7 +155,7 @@ test('Check doResolveComment when successful', () => {
 
 test('Check doResolveComment when unsuccessful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "False", "error": "Failed to retrieve response body" }'));
   myApp.doResolveComment(newComment, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');
@@ -164,7 +164,7 @@ test('Check doResolveComment when unsuccessful', () => {
 
 test('Check saveComment when successful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'True', error: '' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "True", "error": ""}'));
   myApp.saveComment(newComment, store)
     .then(() => {
       expect(console.error).not.toHaveBeenCalled();
@@ -173,7 +173,7 @@ test('Check saveComment when successful', () => {
 
 test('Check saveComment when unsuccessful', () => {
   const mock = jest.spyOn(utils, 'makeRequest');
-  mock.mockImplementation(() => Promise.resolve({ success: 'False', error: 'Failed to retrieve response body' }));
+  mock.mockImplementation(() => Promise.resolve('{ "success": "False", "error": "Failed to retrieve response body" }'));
   myApp.saveComment(newComment, store)
     .then(() => {
       expect(console.error).toHaveBeenCalledWith('Failed to retrieve response body');

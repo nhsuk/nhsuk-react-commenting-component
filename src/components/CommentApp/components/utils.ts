@@ -130,3 +130,25 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   }
   return false;
 }
+
+export function checkSuccessFalse(response: any) {
+  const responseJson = JSON.parse(String(response));
+  /* eslint-disable-next-line dot-notation */
+  if (responseJson['success'] === 'False') {
+    /* eslint-disable-next-line no-console, dot-notation */
+    console.error(responseJson['error']);
+    return true;
+  }
+  return false;
+}
+
+export function getStatus() {
+  let status;
+  if (document.querySelectorAll('strong.status')[0]) {
+    status = document.querySelectorAll('strong.status')[0].textContent;
+  } else {
+    status = 'Pending';
+  }
+  return status;
+}
+

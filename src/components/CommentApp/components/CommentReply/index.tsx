@@ -14,7 +14,9 @@ import {
   getRequestBody,
   getUserDetails,
   isAuthorTheCurrentUser,
-  isAuthorTheExternalUser
+  isAuthorTheExternalUser,
+  checkSuccessFalse,
+  getStatus
 } from '../utils';
 
 export async function saveCommentReply(
@@ -57,10 +59,7 @@ export async function saveCommentReply(
         settings.apiKey,
         requestBody)
         .then(response => {
-          /* eslint-disable-next-line dot-notation */
-          if (response['success'] === 'False') {
-            /* eslint-disable-next-line no-console, dot-notation */
-            console.error(response['error']);
+          if (checkSuccessFalse(response)) {
             return;
           }
         });
@@ -100,10 +99,7 @@ export async function deleteCommentReply(
         settings.apiKey,
         requestBody)
         .then(response => {
-          /* eslint-disable-next-line dot-notation */
-          if (response['success'] === 'False') {
-            /* eslint-disable-next-line no-console, dot-notation */
-            console.error(response['error']);
+          if (checkSuccessFalse(response)) {
             return;
           }
         });
@@ -125,10 +121,10 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     const { comment, reply, store, strings, isFocused } = this.props;
 
     // If comment is resolved, don't show menu
-    if (comment.resolved) {
+    const status = getStatus();
+    if (status === 'Approved') {
       return <></>;
     }
-
     // Show edit/delete buttons if this reply was authored by the current user
     if (isAuthorTheExternalUser(reply.author, this.props.user) ||
     isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {

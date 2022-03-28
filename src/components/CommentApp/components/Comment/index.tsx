@@ -27,7 +27,9 @@ import {
   getRequestBody,
   getUserDetails,
   isAuthorTheCurrentUser,
-  isAuthorTheExternalUser
+  isAuthorTheExternalUser,
+  checkSuccessFalse,
+  getStatus
 } from '../utils';
 
 export async function saveComment(comment: Comment, store: Store) {
@@ -72,10 +74,7 @@ export async function saveComment(comment: Comment, store: Store) {
         settings.apiKey,
         requestBody)
         .then(response => {
-          /* eslint-disable-next-line dot-notation */
-          if (response['success'] === 'False') {
-            /* eslint-disable-next-line no-console, dot-notation */
-            console.error(response['error']);
+          if (checkSuccessFalse(response)) {
             return;
           }
         });
@@ -103,12 +102,15 @@ export async function saveComment(comment: Comment, store: Store) {
         settings.apiKey,
         requestBody)
         .then(response => {
-          /* eslint-disable-next-line dot-notation */
-          if (response['success'] === 'False') {
-            /* eslint-disable-next-line no-console, dot-notation */
-            console.error(response['error']);
+          if (checkSuccessFalse(response)) {
             return;
           }
+          const responseJson = JSON.parse(String(response));
+          store.dispatch(
+            updateComment(comment.localId, {
+              /* eslint-disable-next-line dot-notation */
+              remoteId: responseJson['commentId'],
+            }));
         });
     }
   }
@@ -140,10 +142,7 @@ export async function doDeleteComment(comment: Comment, store: Store) {
       settings.apiKey,
       guestUserDetails)
       .then(response => {
-        /* eslint-disable-next-line dot-notation */
-        if (response['success'] === 'False') {
-          /* eslint-disable-next-line no-console, dot-notation */
-          console.error(response['error']);
+        if (checkSuccessFalse(response)) {
           return;
         }
       });
@@ -184,10 +183,7 @@ export async function doResolveComment(comment: Comment, store: Store) {
       guestUserDetails
     )
       .then(response => {
-        /* eslint-disable-next-line dot-notation */
-        if (response['success'] === 'False') {
-          /* eslint-disable-next-line no-console, dot-notation */
-          console.error(response['error']);
+        if (checkSuccessFalse(response)) {
           return;
         }
       });
@@ -210,10 +206,7 @@ function doReopenComment(comment: Comment, store: Store) {
         settings.apiKey,
         guestUserDetails)
         .then(response => {
-          /* eslint-disable-next-line dot-notation */
-          if (response['success'] === 'False') {
-            /* eslint-disable-next-line no-console, dot-notation */
-            console.error(response['error']);
+          if (checkSuccessFalse(response)) {
             return;
           }
         });
@@ -348,10 +341,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             settings.apiKey,
             requestBody)
             .then(response => {
-              /* eslint-disable-next-line dot-notation */
-              if (response['success'] === 'False') {
-                /* eslint-disable-next-line no-console, dot-notation */
-                console.error(response['error']);
+              if (checkSuccessFalse(response)) {
                 return;
               }
             });
@@ -859,6 +849,17 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       };
     }
 
+    let resolveMethod;
+    let reopenMethod;
+    const status = getStatus();
+    if (status === 'Approved') {
+      onEdit = null;
+      onDelete = null;
+    } else {
+      resolveMethod = doResolveComment;
+      reopenMethod = doReopenComment;
+    }
+
     return (
       <>
         <div className="comment__original">
@@ -866,8 +867,8 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             commentItem={comment}
             store={store}
             strings={strings}
-            onResolve={doResolveComment}
-            onReopen={doReopenComment}
+            onResolve={resolveMethod}
+            onReopen={reopenMethod}
             onEdit={onEdit}
             onDelete={onDelete}
             focused={isFocused}
@@ -913,20 +914,26 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     }
 
     const onClick = () => {
-      this.props.store.dispatch(
-        setFocusedComment(this.props.comment.localId,
-          { updatePinnedComment: false, forceFocus: this.props.isFocused && this.props.forceFocus }
-        )
-      );
-      if (this.props.comment.mode !== 'creating') {
-        highlightContent(this.props.comment, 'click');
+      const status = getStatus();
+      if (status !== 'Approved') {
+        this.props.store.dispatch(
+          setFocusedComment(this.props.comment.localId,
+            { updatePinnedComment: false, forceFocus: this.props.isFocused && this.props.forceFocus }
+          )
+        );
+        if (this.props.comment.mode !== 'creating') {
+          highlightContent(this.props.comment, 'click');
+        }
       }
     };
 
     const onDoubleClick = () => {
-      this.props.store.dispatch(
-        setFocusedComment(this.props.comment.localId, { updatePinnedComment: true, forceFocus: true })
-      );
+      const status = getStatus();
+      if (status !== 'Approved') {
+        this.props.store.dispatch(
+          setFocusedComment(this.props.comment.localId, { updatePinnedComment: true, forceFocus: true })
+        );
+      }
     };
 
     const onMouseEnter = () => {

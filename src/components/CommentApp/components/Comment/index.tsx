@@ -215,7 +215,7 @@ function doReopenComment(comment: Comment, store: Store) {
 }
 
 function highlightContent(comment: Comment, mode: string) {
-  let highlightElement = document.getElementById(comment.contentpath);
+  let highlightElement = document.getElementById(comment.contentpath + '-');
   if (comment.position) {
     highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
   }
@@ -229,7 +229,7 @@ function highlightContent(comment: Comment, mode: string) {
 }
 
 function unHighlightContent(comment: Comment) {
-  let highlightElement = document.getElementById(comment.contentpath);
+  let highlightElement = document.getElementById(comment.contentpath + '-');
   if (comment.position) {
     highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
   }

@@ -79,7 +79,8 @@ export function getRequestBody(newText: string,
   authUserId: number | null,
   shareId?: string,
   contentPath?: string,
-  position?: string) {
+  position?: string,
+  highlightedText?: string) {
   const guestJson = JSON.parse(getUserDetails(authUserId));
   guestJson.newText = newText;
   if (shareId) {
@@ -90,6 +91,9 @@ export function getRequestBody(newText: string,
   }
   if (position) {
     guestJson.position = position;
+  }
+  if (highlightedText) {
+    guestJson.highlightedText = highlightedText;
   }
   return JSON.stringify(guestJson);
 }

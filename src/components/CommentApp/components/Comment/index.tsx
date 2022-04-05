@@ -215,27 +215,33 @@ function doReopenComment(comment: Comment, store: Store) {
 }
 
 function highlightContent(comment: Comment, mode: string) {
-  let highlightElement = document.getElementById(comment.contentpath);
+  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "']");
   if (comment.position) {
-    highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+    // eslint-disable-next-line quotes
+    highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");
   }
-  if (highlightElement) {
-    if (mode === 'hover' && highlightElement.className === 'highlight-comment') {
-      highlightElement.className = 'highlight-comment-hover';
-    } else if (mode === 'click' && highlightElement.className !== '') {
-      highlightElement.className = 'highlight-comment-selected';
+  if (highlightElements) {
+    for (let elem = 0;  elem < highlightElements.length; elem++) {
+      if (mode === 'hover' && highlightElements[elem].className === 'highlight-comment') {
+        highlightElements[elem].className = 'highlight-comment-hover';
+      } else if (mode === 'click' && highlightElements[elem].className !== '') {
+        highlightElements[elem].className = 'highlight-comment-selected';
+      }
     }
   }
 }
 
 function unHighlightContent(comment: Comment) {
-  let highlightElement = document.getElementById(comment.contentpath);
+  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "']");
   if (comment.position) {
-    highlightElement = document.getElementById(comment.contentpath + '-' + comment.position.replace(/"/gi, ''));
+    // eslint-disable-next-line quotes
+    highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");
   }
-  if (highlightElement) {
-    if (highlightElement.className === 'highlight-comment-hover') {
-      highlightElement.className = 'highlight-comment';
+  if (highlightElements) {
+    for (let elem = 0; elem < highlightElements.length; elem++) {
+      if (highlightElements[elem].className === 'highlight-comment-hover') {
+        highlightElements[elem].className = 'highlight-comment';
+      }
     }
   }
 }
@@ -1025,14 +1031,16 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       return;
     }
     const contentPositionsJson = JSON.parse(this.props.comment.position);
+    let numSpanWritten = 0;
     for (const position of Object.keys(contentPositionsJson)) {
       const blockNode = highlightNode.querySelector('[data-block-key="' + contentPositionsJson[position].key + '"]');
       let start = contentPositionsJson[position].start;
       let end = contentPositionsJson[position].end;
       if (blockNode.innerHTML) {
-        start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start);
+        start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start + numSpanWritten);
         end = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].end);
       }
+      start -= numSpanWritten;
       const highlighted = blockNode.innerHTML.slice(0, start)
         + '<span class="highlight-comment" id="'
         + this.props.comment.contentpath
@@ -1042,6 +1050,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
         + '</span>'
         + blockNode.innerHTML.slice(end, blockNode.innerHTML.length);
       blockNode.innerHTML = highlighted;
+      numSpanWritten += 1;
     }
   }
 

@@ -1053,7 +1053,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     const contentPathParts = getContentPathParts(this.props.comment.contentpath);
     const highlightNode = this.getHighlightNode(contentPathParts, document);
     if (this.props.comment.resolved) {
-      if (this.props.comment.position.length > 0) {
+      if (this.props.comment.position && this.props.comment.position.length > 0) {
         this.highlightBlocknode(highlightNode, true);
       } else if (highlightNode) {
         highlightNode.classList.remove('highlight-comment');
@@ -1062,7 +1062,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     }
 
     if (highlightNode) {
-      if (this.props.comment.position.length > 0) {
+      if (this.props.comment.position && this.props.comment.position.length > 0) {
         this.highlightBlocknode(highlightNode, false);
       } else {
         highlightNode.innerHTML = '<span class= "highlight-comment" id="'

@@ -928,9 +928,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             { updatePinnedComment: false, forceFocus: this.props.isFocused && this.props.forceFocus }
           )
         );
-        if (this.props.comment.mode !== 'creating') {
-          highlightContent(this.props.comment, 'click');
-        }
+        highlightContent(this.props.comment, 'click');
       }
     };
 
@@ -944,15 +942,11 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     };
 
     const onMouseEnter = () => {
-      if (this.props.comment.mode !== 'creating') {
-        highlightContent(this.props.comment, 'hover');
-      }
+      highlightContent(this.props.comment, 'hover');
     };
 
     const onMouseLeave = () => {
-      if (this.props.comment.mode !== 'creating') {
-        unHighlightContent(this.props.comment);
-      }
+      unHighlightContent(this.props.comment);
     };
 
     // const top = this.props.layout.getCommentPosition(
@@ -1056,9 +1050,6 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
   }
 
   highlightContent() {
-    if (this.props.comment.mode === 'creating') {
-      return;
-    }
     const contentPathParts = getContentPathParts(this.props.comment.contentpath);
     const highlightNode = this.getHighlightNode(contentPathParts, document);
     if (this.props.comment.resolved) {

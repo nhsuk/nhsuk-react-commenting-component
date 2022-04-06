@@ -216,13 +216,17 @@ function doReopenComment(comment: Comment, store: Store) {
 }
 
 function highlightContent(comment: Comment, mode: string) {
-  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "']");
+  console.log('highlightContent');
+  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-']");
   if (comment.position) {
+    console.log('comment.position is available');
     // eslint-disable-next-line quotes
     highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");
   }
   if (highlightElements) {
+    console.log('highlightElements.length ' + highlightElements.length);
     for (let elem = 0;  elem < highlightElements.length; elem++) {
+      console.log('around the loop');
       if (mode === 'hover' && highlightElements[elem].className === 'highlight-comment') {
         highlightElements[elem].className = 'highlight-comment-hover';
       } else if (mode === 'click' && highlightElements[elem].className !== '') {
@@ -233,7 +237,7 @@ function highlightContent(comment: Comment, mode: string) {
 }
 
 function unHighlightContent(comment: Comment) {
-  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "']");
+  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-']");
   if (comment.position) {
     // eslint-disable-next-line quotes
     highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");

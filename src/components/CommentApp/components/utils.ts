@@ -135,6 +135,28 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   return false;
 }
 
+export function isAuthorTheCurrentGuestUser(author: any) {
+  if (!author) {
+    return true;
+  }
+  const authUser = document.getElementById('request-user');
+  if (authUser) {
+    const authUserDetails = JSON.parse(authUser.innerText);
+    if (authUserDetails.is_authenticated !== 'False') {
+      return false;
+    }
+  }
+  const guestUser = document.getElementById('guest-data');
+  if (guestUser) {
+    const guestUserDetails = JSON.parse(guestUser.innerText);
+    if (author.firstname === guestUserDetails.first_name &&
+      author.lastname === guestUserDetails.last_name) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function checkSuccessFalse(response: any) {
   const responseJson = JSON.parse(String(response));
   /* eslint-disable-next-line dot-notation */

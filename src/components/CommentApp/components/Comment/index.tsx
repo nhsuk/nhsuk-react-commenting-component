@@ -28,6 +28,7 @@ import {
   getUserDetails,
   isAuthorTheCurrentUser,
   isAuthorTheExternalUser,
+  isAuthorTheCurrentGuestUser,
   checkSuccessFalse,
   getStatus
 } from '../utils';
@@ -216,17 +217,13 @@ function doReopenComment(comment: Comment, store: Store) {
 }
 
 function highlightContent(comment: Comment, mode: string) {
-  console.log('highlightContent');
   let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-']");
   if (comment.position) {
-    console.log('comment.position is available');
     // eslint-disable-next-line quotes
     highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");
   }
   if (highlightElements) {
-    console.log('highlightElements.length ' + highlightElements.length);
     for (let elem = 0;  elem < highlightElements.length; elem++) {
-      console.log('around the loop');
       if (mode === 'hover' && highlightElements[elem].className === 'highlight-comment') {
         highlightElements[elem].className = 'highlight-comment-hover';
       } else if (mode === 'click' && highlightElements[elem].className !== '') {
@@ -841,7 +838,8 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     let onEdit;
     let onDelete;
     if (isAuthorTheExternalUser(comment.author, this.props.user) ||
-      isAuthorTheCurrentUser(comment.author, store.getState().settings.authUserId)) {
+      isAuthorTheCurrentUser(comment.author, store.getState().settings.authUserId) ||
+      isAuthorTheCurrentGuestUser(comment.author)) {
       onEdit = () => {
         store.dispatch(
           updateComment(comment.localId, {

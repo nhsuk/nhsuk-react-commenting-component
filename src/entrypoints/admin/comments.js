@@ -332,23 +332,35 @@ window.comments = (() => {
       });
   }
 
+  function getAuthorDetails(elementId) {
+    let author = {};
+    const userDetails = document.getElementById(elementId);
+    if (userDetails) {
+      author = JSON.parse(userDetails.innerHTML);
+      if (author.is_authenticated === 'False') {
+        return { details_found: 'False' };
+      }
+      if (author.first_name) {
+        author.firstname = author.first_name;
+      }
+      if (author.last_name) {
+        author.lastname = author.last_name;
+      }
+    }
+    return { details_found: 'True', author: JSON.stringify(author) };
+  }
+
   function addNewComment(contentText, contentPath, contentPosition) {
     const commentId = getNextCommentId();
-    let author = {};
-    const authUser = document.getElementById('request-user');
-    if (authUser) {
-      author = JSON.parse(authUser.innerHTML);
-    }
-    if (author.first_name) {
-      author.firstname = author.first_name;
-    }
-    if (author.last_name) {
-      author.lastname = author.last_name;
-    }
     const addCommentOptions = {
       mode: 'creating',
       highlightedText: contentText,
     };
+    let authorDetails = getAuthorDetails('request-user');
+    if (authorDetails.details_found === 'False') {
+      authorDetails = getAuthorDetails('guest-data');
+    }
+    const author = JSON.parse(authorDetails.author);
     commentApp.store.dispatch(
       addComment(
         newComment(contentPath, contentPosition, commentId, null, author, Date.now(), addCommentOptions)

@@ -265,6 +265,17 @@ export function getAdjustedIndex(contentText: string, start: number) {
       countChars = true;
       continue;
     }
+    // Compensate for any html characters
+    if (contentText[char] === '&') {
+      countChars = false;
+      // HTML characters have a single character representation in the page content
+      adjustedIndex += 1;
+      continue;
+    }
+    if (contentText[char] === ';') {
+      countChars = true;
+      continue;
+    }
     if (countChars) {
       adjustedIndex += 1;
     }

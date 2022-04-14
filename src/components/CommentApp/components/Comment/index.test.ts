@@ -80,6 +80,28 @@ test('Check adjusted index value', () => {
   expect(adjustedIndex).toBe(45);
 });
 
+test('Check adjusted index value for HTML chars', () => {
+  // test that the getAdjustedIndex returns the correct value
+  const content = 'This is some&nbsp;content &lt;with&gt; HTML chars';
+  let adjustedIndex = getAdjustedIndex(content, 0);
+  expect(adjustedIndex).toBe(0);
+
+  adjustedIndex = getAdjustedIndex(content, 1);
+  expect(adjustedIndex).toBe(1);
+
+  adjustedIndex = getAdjustedIndex(content, 12);
+  expect(adjustedIndex).toBe(12);
+
+  adjustedIndex = getAdjustedIndex(content, 13);
+  expect(adjustedIndex).toBe(13);
+
+  adjustedIndex = getAdjustedIndex(content, 21);
+  expect(adjustedIndex).toBe(26);
+
+  adjustedIndex = getAdjustedIndex(content, 22);
+  expect(adjustedIndex).toBe(27);
+});
+
 test('Check content path parts', () => {
   // test that the content path is correctly split into the required parts
   let contentPathParts = getContentPathParts('content.xxxxxxxxx');

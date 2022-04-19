@@ -25,7 +25,7 @@ export const CommentFooter: FunctionComponent<CommentFooterProps> = ({
     <div className="comment-footer">
       <span id={descriptionId}>
         <p className="comment-footer__author comment-footer__date">
-          {author ? author.firstname : ''} {author ? author.lastname : ''} | {dateFormat(date, 'HH:MM mmmm d')}
+          {author ? author.firstname : ''} {author ? author.lastname : ''} | {dateFormat(date, 'd mmmm yyyy, HH:MM')}
         </p>
       </span>
     </div>

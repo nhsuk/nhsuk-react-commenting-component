@@ -87,6 +87,7 @@ export interface InitialComment {
   id: number;
   user: any;
   text: string;
+  highlightedText: string;
   created_at: string;
   updated_at: string;
   replies: InitialCommentReply[];
@@ -406,8 +407,9 @@ export class CommentApp {
             {
               remoteId: comment.id,
               text: comment.text,
+              highlightedText: comment.highlightedText,
               deleted: comment.deleted,
-              resolved: (comment.resolved_at !== null)
+              resolved: (comment.resolved_at !== null),
             }
           )
         )

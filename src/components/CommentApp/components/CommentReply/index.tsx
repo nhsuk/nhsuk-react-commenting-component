@@ -116,7 +116,22 @@ export interface CommentReplyProps {
   isFocused: boolean;
 }
 
-export default class CommentReplyComponent extends React.Component<CommentReplyProps> {
+export interface CommentReplyState {
+  isShowAll: boolean;
+}
+
+const replyLimit = 200;
+
+export default class CommentReplyComponent extends React.Component<CommentReplyProps, CommentReplyState> {
+  constructor(props) {
+    super(props);
+    let isShowAll = true;
+    if (this.props.reply.text.length > replyLimit) {
+      isShowAll = false;
+    }
+    this.state = { isShowAll  };
+  }
+
   renderReplyMenu(): React.ReactFragment {
     const { comment, reply, store, strings, isFocused } = this.props;
 
@@ -181,6 +196,11 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
     const onSave = async (e: React.FormEvent) => {
       e.preventDefault();
+      if (reply.newText.length <= replyLimit) {
+        this.setState({ isShowAll: true });
+      } else {
+        this.setState({ isShowAll: false });
+      }
       await saveCommentReply(comment, reply, store);
     };
 
@@ -377,11 +397,25 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
 
   renderDefault(): React.ReactFragment {
     const { reply } = this.props;
+    const limitedReply = reply.text.substring(0, replyLimit);
+
+    if (this.state.isShowAll) {
+      return (
+        <>
+          {this.renderReplyMenu()}
+          <p className="comment-reply__text">{reply.text}</p>
+          <CommentFooter commentItem={reply} />
+        </>
+      );
+    }
 
     return (
       <>
         {this.renderReplyMenu()}
-        <p className="comment-reply__text">{reply.text}</p>
+        <p className="comment-reply__text">
+          {limitedReply}
+          <a className="comment-reply__show-all" onClick={() => this.setState({ isShowAll: true })}>...</a>
+        </p>
         <CommentFooter commentItem={reply} />
       </>
     );

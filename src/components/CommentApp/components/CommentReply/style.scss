@@ -20,6 +20,12 @@
         }
     }
 
+    &__show-all {
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
     &--mode-deleting &__text {
         color: $color-grey-3;
     }

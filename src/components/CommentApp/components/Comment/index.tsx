@@ -248,39 +248,33 @@ function unHighlightContent(comment: Comment) {
   }
 }
 
-export function getAdjustedIndex(contentText: string, start: number) {
-  let actualIndex = 0;
-  let adjustedIndex = 0;
+export function getAdjustedIndex(html: string, targetIndex: number) {
+  let htmlIndex = 0;
+  let visibleCharsIndex = 0;
   let countChars = true;
-  for (const char of Object.keys(contentText)) {
-    if (adjustedIndex === start) {
-      break;
-    }
-    actualIndex += 1;
-    if (contentText[char] === '<') {
+  while (visibleCharsIndex < targetIndex) {
+    if (html[htmlIndex] === '<') {
       countChars = false;
-      continue;
     }
-    if (contentText[char] === '>') {
-      countChars = true;
-      continue;
-    }
-    // Compensate for any html characters
-    if (contentText[char] === '&') {
+    if (html[htmlIndex] === '&') {
       countChars = false;
-      // HTML characters have a single character representation in the page content
-      adjustedIndex += 1;
-      continue;
-    }
-    if (contentText[char] === ';') {
-      countChars = true;
-      continue;
     }
     if (countChars) {
-      adjustedIndex += 1;
+      visibleCharsIndex += 1;
     }
+    if (html[htmlIndex] === '>') {
+      countChars = true;
+    }
+    if (html[htmlIndex] === ';') {
+      countChars = true;
+      visibleCharsIndex += 1;  // html characters display as a single char
+    }
+    htmlIndex += 1;
   }
-  return actualIndex;
+  if (html.substring(htmlIndex, htmlIndex + 7) ===  '</span>') {
+    htmlIndex += 7;
+  }
+  return htmlIndex;
 }
 
 export function getContentPathParts(contentpath: string) {
@@ -1029,6 +1023,23 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     return this.getHighlightNode(contentPathParts, node);
   }
 
+  parseContentPositions(contentPositionsJson) {
+    const posDict = {};
+    for (const position of contentPositionsJson) {
+      if (position.key in posDict) {
+        if (position.start < posDict[position.key].start) {
+          posDict[position.key].start = position.start;
+        }
+        if (position.end > posDict[position.key].start) {
+          posDict[position.key].end = position.end;
+        }
+      } else {
+        posDict[position.key] = { start: position.start, end: position.end };
+      }
+    }
+    return posDict;
+  }
+
   highlightBlocknode(highlightNode, resolved: boolean) {
     if (resolved) {
       const highlightSpan = document.getElementById(this.props.comment.contentpath
@@ -1038,27 +1049,23 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       }
       return;
     }
-    const contentPositionsJson = JSON.parse(this.props.comment.position);
-    let numSpanWritten = 0;
-    for (const position of Object.keys(contentPositionsJson)) {
-      const blockNode = highlightNode.querySelector('[data-block-key="' + contentPositionsJson[position].key + '"]');
-      let start = contentPositionsJson[position].start;
-      let end = contentPositionsJson[position].end;
-      if (blockNode.innerHTML) {
-        start = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].start + numSpanWritten);
-        end = getAdjustedIndex(blockNode.innerHTML, contentPositionsJson[position].end);
+    const positions = this.parseContentPositions(JSON.parse(this.props.comment.position));
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key in positions) {
+      if (Object.prototype.hasOwnProperty.call(positions, key)) {
+        const blockNode = highlightNode.querySelector('[data-block-key="' + key + '"]');
+        const start = getAdjustedIndex(blockNode.innerHTML, positions[key].start);
+        const end = getAdjustedIndex(blockNode.innerHTML, positions[key].end);
+        const highlighted = blockNode.innerHTML.slice(0, start)
+          + '<span class="highlight-comment" id="'
+          + this.props.comment.contentpath
+          + '-'
+          + this.props.comment.position.replace(/"/gi, '') + '">'
+          + blockNode.innerHTML.slice(start, end)
+          + '</span>'
+          + blockNode.innerHTML.slice(end, blockNode.innerHTML.length);
+        blockNode.innerHTML = highlighted;
       }
-      start -= numSpanWritten;
-      const highlighted = blockNode.innerHTML.slice(0, start)
-        + '<span class="highlight-comment" id="'
-        + this.props.comment.contentpath
-        + '-'
-        + this.props.comment.position.replace(/"/gi, '') + '">'
-        + blockNode.innerHTML.slice(start, end)
-        + '</span>'
-        + blockNode.innerHTML.slice(end, blockNode.innerHTML.length);
-      blockNode.innerHTML = highlighted;
-      numSpanWritten += 1;
     }
   }
 

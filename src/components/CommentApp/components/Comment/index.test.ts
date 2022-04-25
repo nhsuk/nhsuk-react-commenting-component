@@ -77,7 +77,7 @@ test('Check adjusted index value', () => {
   expect(adjustedIndex).toBe(44);
 
   adjustedIndex = getAdjustedIndex(content, 22);
-  expect(adjustedIndex).toBe(45);
+  expect(adjustedIndex).toBe(52);
 });
 
 test('Check adjusted index value for HTML chars', () => {
@@ -93,13 +93,13 @@ test('Check adjusted index value for HTML chars', () => {
   expect(adjustedIndex).toBe(12);
 
   adjustedIndex = getAdjustedIndex(content, 13);
-  expect(adjustedIndex).toBe(13);
+  expect(adjustedIndex).toBe(18);
 
   adjustedIndex = getAdjustedIndex(content, 21);
   expect(adjustedIndex).toBe(26);
 
   adjustedIndex = getAdjustedIndex(content, 22);
-  expect(adjustedIndex).toBe(27);
+  expect(adjustedIndex).toBe(30);
 });
 
 test('Check content path parts', () => {

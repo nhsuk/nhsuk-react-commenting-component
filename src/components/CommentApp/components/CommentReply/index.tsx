@@ -120,6 +120,8 @@ export interface CommentReplyState {
   isShowAll: boolean;
 }
 
+// This value dictates how many characters from a reply will be displayed
+// before an action from the user is required to display the full reply
 const replyLimit = 200;
 
 export default class CommentReplyComponent extends React.Component<CommentReplyProps, CommentReplyState> {

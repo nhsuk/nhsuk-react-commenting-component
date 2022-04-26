@@ -53,6 +53,12 @@
         padding-bottom: 15px;
         max-width: calc(95%);
 
+        &-show-all {
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
         &--mode-deleting {
             color: $color-grey-1;
         }

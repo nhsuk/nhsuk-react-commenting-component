@@ -299,16 +299,25 @@ export interface CommentProps {
 
 export interface CommentState {
   collapseReplies: boolean;
+  isShowAll: boolean;
 }
+
+// This value dictates how many characters from a comment will be displayed
+// before an action from the user is required to display the full comment
+const characterLimit = 200;
 
 export default class CommentComponent extends React.Component<CommentProps, CommentState> {
   constructor(props) {
     super(props);
     let collapseReplies = false;
+    let isShowAll = true;
     if (props.comment.replies.size > 1) {
       collapseReplies = true;
     }
-    this.state = { collapseReplies };
+    if (this.props.comment.text.length > characterLimit) {
+      isShowAll = false;
+    }
+    this.state = { collapseReplies, isShowAll };
   }
 
   renderReplies({ hideNewReply = false } = {}): React.ReactFragment {
@@ -591,6 +600,12 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     const onSave = async (e: React.FormEvent) => {
       e.preventDefault();
 
+      if (comment.newText.length <= characterLimit) {
+        this.setState({ isShowAll: true });
+      } else {
+        this.setState({ isShowAll: false });
+      }
+
       await saveComment(comment, store);
     };
 
@@ -838,6 +853,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
 
   renderDefault(): React.ReactFragment {
     const { comment, store, strings, isFocused } = this.props;
+    const limitedComment = comment.text.substring(0, characterLimit);
 
     // Show edit/delete buttons if this comment was authored by the current user
     let onEdit;
@@ -874,6 +890,30 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       reopenMethod = doReopenComment;
     }
 
+    if (this.state.isShowAll) {
+      return (
+        <>
+          <div className="comment__original">
+            <CommentMenu
+              commentItem={comment}
+              store={store}
+              strings={strings}
+              onResolve={resolveMethod}
+              onReopen={reopenMethod}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              focused={isFocused}
+            />
+            <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+            <p className="comment__text">{comment.text}</p>
+            <CommentFooter commentItem={comment} />
+          </div>
+          {this.renderReplies()}
+          {this.renderResolvedInfo()}
+        </>
+      );
+    }
+
     return (
       <>
         <div className="comment__original">
@@ -888,7 +928,10 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             focused={isFocused}
           />
           <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
-          <p className="comment__text">{comment.text}</p>
+          <p className="comment__text">
+            {limitedComment}
+            <a className="comment__text-show-all" onClick={() => this.setState({ isShowAll: true })}>...</a>
+          </p>
           <CommentFooter commentItem={comment} />
         </div>
         {this.renderReplies()}

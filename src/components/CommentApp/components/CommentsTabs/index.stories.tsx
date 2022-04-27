@@ -39,7 +39,7 @@ export function ActiveAndResolvedComments() {
   addTestComment(store, {
     mode: 'default',
     text: 'An example active comment',
-    highlightedText: 'This is the highlighted text.',
+    highlightedText: 'This is the highlighted text Lorem ipsum dolor sit amet, consectetur adipiscing',
     resolved: false,
     deleted: false,
   });
@@ -47,7 +47,7 @@ export function ActiveAndResolvedComments() {
   addTestComment(store, {
     mode: 'default',
     text: 'An second example active comment',
-    highlightedText: 'This is the highlighted text.',
+    highlightedText: 'This is the highlighted text Lorem ipsum dolor sit amet, consectetur adipiscing',
     resolved: false,
     deleted: false,
   });
@@ -55,7 +55,7 @@ export function ActiveAndResolvedComments() {
   addTestComment(store, {
     mode: 'default',
     text: 'An example resolved comment',
-    highlightedText: 'This is the highlighted text.',
+    highlightedText: 'This is the highlighted text Lorem ipsum dolor sit amet, consectetur adipiscing',
     resolved: true,
     resolvedAuthor: {
       id: 2,
@@ -71,7 +71,7 @@ export function ActiveAndResolvedComments() {
   addTestComment(store, {
     mode: 'default',
     text: 'An second example resolved comment',
-    highlightedText: 'This is the highlighted text.',
+    highlightedText: 'This is the highlighted text Lorem ipsum dolor sit amet, consectetur adipiscing',
     resolved: true,
     resolvedAuthor: {
       id: 2,

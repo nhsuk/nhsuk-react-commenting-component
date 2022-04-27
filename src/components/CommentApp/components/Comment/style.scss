@@ -67,9 +67,13 @@
     &__highlighted_text {
         border-left: 3px solid $nhsuk-form-border-color;
         padding-left: 5px;
+        padding-right: 25px;
         font-style: italic;
         color: #4f6270;
         margin-bottom: 15px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     &--mode-creating form {

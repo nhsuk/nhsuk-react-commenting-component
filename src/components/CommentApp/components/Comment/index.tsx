@@ -248,6 +248,19 @@ function unHighlightContent(comment: Comment) {
   }
 }
 
+function removeHighlightContent(comment: Comment) {
+  let highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-']");
+  if (comment.position) {
+    // eslint-disable-next-line quotes
+    highlightElements = document.querySelectorAll("[id='" + comment.contentpath + "-" + comment.position.replace(/"/gi, '') + "']");
+  }
+  if (highlightElements) {
+    for (let elem = 0; elem < highlightElements.length; elem++) {
+      highlightElements[elem].replaceWith(highlightElements[elem].innerHTML);
+    }
+  }
+}
+
 export function getAdjustedIndex(html: string, targetIndex: number) {
   let htmlIndex = 0;
   let visibleCharsIndex = 0;
@@ -537,7 +550,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
 
     const onCancel = (e: React.MouseEvent) => {
       e.preventDefault();
-
+      removeHighlightContent(comment);
       store.dispatch(deleteComment(comment.localId));
     };
 
@@ -726,7 +739,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
 
     const onClickDelete = async (e: React.MouseEvent) => {
       e.preventDefault();
-
+      removeHighlightContent(comment);
       await doDeleteComment(comment, store);
     };
 

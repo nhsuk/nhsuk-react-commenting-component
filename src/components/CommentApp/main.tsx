@@ -312,6 +312,20 @@ export class CommentApp {
       })
     );
   }
+  overlapExists(element1: Element, element2: Element) {
+    const rect1 = element1.getBoundingClientRect();
+    const rect2 = element2.getBoundingClientRect();
+    var overlap = !(rect1.right < rect2.left || 
+      rect1.left > rect2.right || 
+      rect1.bottom < rect2.top || 
+      rect1.top > rect2.bottom);
+    return overlap;
+  }
+  moveItemDown(element1: Element, element2) {
+      let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
+      elem1Bottom += 10;
+      element2.style.top = elem1Bottom;
+  }
 
   renderApp(
     element: HTMLElement,
@@ -386,6 +400,14 @@ export class CommentApp {
           }
         }
       );
+      const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
+      if (commentListElems.length > 1) {
+        for (let i = 0; i < (commentListElems.length-1); i++) {
+          if (this.overlapExists(commentListElems[i], commentListElems[i+1])) {
+            this.moveItemDown(commentListElems[i], commentListElems[i+1]);
+          }
+        }
+      }
     };
 
     // Fetch existing comments

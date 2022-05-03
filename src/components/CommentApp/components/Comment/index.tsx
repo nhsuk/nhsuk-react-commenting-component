@@ -565,7 +565,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             strings={strings}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
         </div>
         <form onSubmit={onSave}>
           <TextArea
@@ -638,7 +638,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     return (
       <>
         <div className="comment__original">
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <CommentFooter
             descriptionId={descriptionId}
             commentItem={comment}
@@ -715,7 +715,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             strings={strings}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentItem={comment} />
           {this.renderReplies({ hideNewReply: true })}
@@ -762,7 +762,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             strings={strings}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentItem={comment} />
           <div className="comment__confirm-delete">
@@ -800,7 +800,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             strings={strings}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentItem={comment} />
           <div className="comment__progress">{strings.DELETING}</div>
@@ -838,7 +838,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             strings={strings}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <p className="comment__text">{comment.text}</p>
           <CommentFooter commentItem={comment} />
         </div>
@@ -917,7 +917,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
               onDelete={onDelete}
               focused={isFocused}
             />
-            <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+            <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
             <p className="comment__text">{comment.text}</p>
             <CommentFooter commentItem={comment} />
           </div>
@@ -940,7 +940,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
             onDelete={onDelete}
             focused={isFocused}
           />
-          <p className="comment__highlighted_text nhsuk-u-font-size-14">{comment.highlightedText}</p>
+          <p className="comment__highlighted_text nhsuk-u-font-size-16">{comment.highlightedText}</p>
           <p className="comment__text">
             {limitedComment}
             <a className="comment__text-show-all" onClick={() => this.setState({ isShowAll: true })}>...</a>

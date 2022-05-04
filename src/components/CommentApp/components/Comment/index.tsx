@@ -295,11 +295,22 @@ export function getAdjustedIndex(html: string, targetIndex: number) {
 
 export function getContentPathParts(contentpath: string) {
   const contentPathParts = contentpath.split('.');
-  if (contentPathParts[2] === 'content') {
-    contentPathParts[2] = 'content.' + contentPathParts[3];
-    contentPathParts.pop();
+  const returnPathParts : string[] = [];
+  returnPathParts[0] = contentPathParts[0];
+  returnPathParts[1] = contentPathParts[1];
+  let index = 2;
+  let returnIndex = 2;
+  while (index < contentPathParts.length) {
+    if (contentPathParts[index] === 'content' || contentPathParts[index] === 'body') {
+      returnPathParts[returnIndex] = contentPathParts[index] + '.' + contentPathParts[index + 1];
+      index += 1;
+    } else {
+      returnPathParts[returnIndex] = contentPathParts[index];
+    }
+    index += 1;
+    returnIndex += 1;
   }
-  return contentPathParts;
+  return returnPathParts;
 }
 
 export interface CommentProps {

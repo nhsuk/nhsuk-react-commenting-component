@@ -1094,6 +1094,15 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     if (!elem) {
       return 0;
     }
+    if (this.props.comment.contentpath.includes('.expanders.')) {
+      // If the expander is collapsed attrib data-contentpath, value is span body.<guid>
+      const expanderElem = elem.closest('.nhsuk-details.nhsuk-expander');
+      if (expanderElem) {
+        if (expanderElem.getAttribute('open') === null) {
+          return expanderElem.getBoundingClientRect().top + window.scrollY;
+        }
+      }
+    }
     return elem.getBoundingClientRect().top + window.scrollY;
   }
   

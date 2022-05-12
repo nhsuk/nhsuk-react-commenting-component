@@ -297,7 +297,9 @@ export function getContentPathParts(contentpath: string) {
   const contentPathParts = contentpath.split('.');
   const returnPathParts : string[] = [];
   returnPathParts[0] = contentPathParts[0];
-  returnPathParts[1] = contentPathParts[1];
+  if (contentPathParts[1]) {
+    returnPathParts[1] = contentPathParts[1];
+  }
   let index = 2;
   let returnIndex = 2;
   while (index < contentPathParts.length) {

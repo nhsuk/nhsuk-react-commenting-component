@@ -137,9 +137,9 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
   renderReplyMenu(): React.ReactFragment {
     const { comment, reply, store, strings, isFocused } = this.props;
 
-    // If comment is resolved, don't show menu
+    // If comment is resolved or page status is approved, don't show menu
     const status = getStatus();
-    if (status === 'Approved') {
+    if (status === 'Approved' || comment.resolved) {
       return <></>;
     }
     // Show edit/delete buttons if this reply was authored by the current user

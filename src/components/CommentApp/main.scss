@@ -92,6 +92,7 @@ $box-padding: 10px;
         -moz-outline-radius: 8px;
         color: $color-box-text;
         font-size: 16px;
+        min-height: 38px;
 
         &::placeholder {
             color: $color-textarea-placeholder-text;

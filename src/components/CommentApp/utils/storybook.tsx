@@ -69,6 +69,7 @@ interface AddTestCommentOptions extends NewCommentOptions {
   focused?: boolean;
   author?: Author;
   resolvedAuthor?: Author;
+  resolvedDated?: number;
 }
 
 export function addTestComment(
@@ -109,6 +110,7 @@ export function addTestComment(
 
   if (options.resolved === true) {
     addCommentOptions.resolvedAuthor = resolvedAuthor;
+    addCommentOptions.resolvedDate = Date.now();
   }
 
   store.dispatch(

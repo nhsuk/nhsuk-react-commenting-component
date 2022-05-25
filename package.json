@@ -1,6 +1,6 @@
 {
   "name": "nhsuk-react-commenting-component",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "engines": {
     "node": ">=10.0.0"
   },

@@ -120,6 +120,7 @@ export interface NewCommentOptions {
   highlightedText?: string;
   text?: string;
   resolved?: boolean;
+  resolvedDate?: number;
   deleted?: boolean;
   replies?: Map<number, CommentReply>;
 }
@@ -137,6 +138,7 @@ export function newComment(
     highlightedText = '',
     text = '',
     resolved = false,
+    resolvedDate = 0,
     deleted = false,
     replies = new Map(),
   }: NewCommentOptions
@@ -158,6 +160,7 @@ export function newComment(
     newText: '',
     deleted,
     resolved,
+    resolvedDate,
     remoteReplyCount: Array.from(replies.values()).reduce(
       (n, reply) => (reply.remoteId !== null ? n + 1 : n),
       0

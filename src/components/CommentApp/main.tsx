@@ -410,7 +410,7 @@ export class CommentApp {
               highlightedText: comment.highlightedText,
               deleted: comment.deleted,
               resolved: (comment.resolved_at !== null),
-              resolvedDate : Date.parse(comment.resolved_at),
+              resolvedDate: Date.parse(comment.resolved_at),
             }
           )
         )

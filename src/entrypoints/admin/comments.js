@@ -8,6 +8,9 @@ import { getNextCommentId } from '../../components/CommentApp/utils/sequences';
 import {
   addComment,
 } from '../../components/CommentApp/actions/comments';
+import {
+  getAuthorDetails,
+} from '../../components/CommentApp/components/utils';
 
 /**
  * Entry point loaded when the comments system is in use.
@@ -330,24 +333,6 @@ window.comments = (() => {
           initCommentsInterface(commentsElement, commentsOutputElement, JSON.parse(commentData), componentStyle);
         });
       });
-  }
-
-  function getAuthorDetails(elementId) {
-    let author = {};
-    const userDetails = document.getElementById(elementId);
-    if (userDetails) {
-      author = JSON.parse(userDetails.innerHTML);
-      if (author.is_authenticated === 'False') {
-        return { details_found: 'False' };
-      }
-      if (author.first_name) {
-        author.firstname = author.first_name;
-      }
-      if (author.last_name) {
-        author.lastname = author.last_name;
-      }
-    }
-    return { details_found: 'True', author: JSON.stringify(author) };
   }
 
   function addNewComment(contentText, contentPath, contentPosition) {

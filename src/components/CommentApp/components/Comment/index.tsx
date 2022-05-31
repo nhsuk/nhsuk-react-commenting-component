@@ -30,7 +30,8 @@ import {
   isAuthorTheExternalUser,
   isAuthorTheCurrentGuestUser,
   checkSuccessFalse,
-  getStatus
+  getStatus,
+  getAuthorDetails,
 } from '../utils';
 
 export async function saveComment(comment: Comment, store: Store) {
@@ -369,7 +370,15 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       e.preventDefault();
 
       const replyId = getNextReplyId();
-      const reply = newCommentReply(replyId, user, Date.now(), {
+
+
+      let authorDetails = getAuthorDetails('request-user');
+      if (authorDetails.details_found === 'False') {
+        authorDetails = getAuthorDetails('guest-data');
+      }
+      const author: Author = JSON.parse(authorDetails.author!);
+
+      const reply = newCommentReply(replyId, author, Date.now(), {
         text: comment.newReply,
         mode: 'default',
       });

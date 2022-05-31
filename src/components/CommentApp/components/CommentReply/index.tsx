@@ -15,6 +15,7 @@ import {
   getUserDetails,
   isAuthorTheCurrentUser,
   isAuthorTheExternalUser,
+  isAuthorTheCurrentGuestUser,
   checkSuccessFalse,
   getStatus
 } from '../utils';
@@ -144,7 +145,8 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
     }
     // Show edit/delete buttons if this reply was authored by the current user
     if (isAuthorTheExternalUser(reply.author, this.props.user) ||
-    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user)) {
+    isAuthorTheCurrentUser(reply.author, store.getState().settings.authUserId, this.props.user) ||
+    isAuthorTheCurrentGuestUser(reply.author)) {
       const onEdit = () => {
         store.dispatch(
           updateReply(comment.localId, reply.localId, {

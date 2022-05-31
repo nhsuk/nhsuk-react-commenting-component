@@ -1,4 +1,3 @@
-
 export function getRequestOptions(verb: string, apiKey: string, body?: string) {
   let csrftoken = document.cookie
     .split('; ')
@@ -129,6 +128,10 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   if (userId === author.userId) {
     return true;
   }
+  // If this is a new comment then author.userId will be 0 - but the author must be the current user.
+  if (author.userId === 0) {
+    return true;
+  }
   return false;
 }
 
@@ -175,3 +178,22 @@ export function getStatus() {
   return status;
 }
 
+export function getAuthorDetails(elementId) {
+  let author = {};
+  const userDetails = document.getElementById(elementId);
+  if (userDetails) {
+    author = JSON.parse(userDetails.innerHTML);
+    /* eslint-disable dot-notation */
+    if (author['is_authenticated'] === 'False') {
+      return { details_found: 'False' };
+    }
+    if (author['first_name']) {
+      author['firstname'] = author['first_name'];
+    }
+    if (author['last_name']) {
+      author['lastname'] = author['last_name'];
+    }
+    /* eslint-enable dot-notation */
+  }
+  return { details_found: 'True', author: JSON.stringify(author) };
+}

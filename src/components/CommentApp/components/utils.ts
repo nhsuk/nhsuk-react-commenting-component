@@ -132,6 +132,11 @@ export function isAuthorTheCurrentUser(author: any, userId: any, user?: any) {
   if (author.userId === 0) {
     return true;
   }
+  if (!author.hasOwnProperty('userId')) {
+    if (author.id === userId) {
+      return true;
+    }
+  }
   return false;
 }
 

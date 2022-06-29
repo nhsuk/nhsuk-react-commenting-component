@@ -46,6 +46,7 @@ const comment: Comment = {
   remoteReplyCount: 0,
   resolved: false,
   replies: new Map(),
+  contentTab: 'desktop',
 };
 
 const commentReply: CommentReply = {

@@ -56,6 +56,7 @@ const newComment: Comment = {
   remoteReplyCount: 0,
   resolved: false,
   replies: new Map(),
+  contentTab: 'desktop',
 };
 
 test('Check adjusted index value', () => {

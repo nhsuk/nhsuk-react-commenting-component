@@ -64,6 +64,7 @@ const remoteComment: Comment = {
   newText: '',
   remoteReplyCount: 1,
   replies: new Map([[remoteReply.localId, remoteReply], [localReply.localId, localReply]]),
+  contentTab: 'desktop',
 };
 
 const localComment: Comment = {
@@ -91,6 +92,7 @@ const localComment: Comment = {
   newText: '',
   replies: new Map(),
   remoteReplyCount: 0,
+  contentTab: 'desktop',
 };
 
 export const basicCommentsState: CommentsState = {

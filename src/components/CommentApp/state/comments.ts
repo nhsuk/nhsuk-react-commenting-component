@@ -112,6 +112,8 @@ export interface Comment {
   text: string;
   originalText: string;
   newText: string;
+  // Indicate which content tab this comment belongs
+  contentTab: string;
 }
 
 export interface NewCommentOptions {
@@ -141,7 +143,8 @@ export function newComment(
     resolvedDate = 0,
     deleted = false,
     replies = new Map(),
-  }: NewCommentOptions
+  }: NewCommentOptions,
+  contentTab: string
 ): Comment {
   return {
     contentpath,
@@ -165,6 +168,7 @@ export function newComment(
       (n, reply) => (reply.remoteId !== null ? n + 1 : n),
       0
     ),
+    contentTab
   };
 }
 

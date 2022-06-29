@@ -276,8 +276,9 @@ export class CommentApp {
           Date.now(),
           {
             mode: 'creating',
-          }
-        )
+          },
+          this.store.getState().settings.contentTab,
+        ),
       )
     );
 
@@ -309,6 +310,13 @@ export class CommentApp {
     this.store.dispatch(
       updateGlobalSettings({
         shareUrl: shareUrl
+      })
+    );
+  }
+  setContentTab(contentTab: string) {
+    this.store.dispatch(
+      updateGlobalSettings({
+        contentTab: contentTab
       })
     );
   }
@@ -394,6 +402,7 @@ export class CommentApp {
         continue;
       }
       const commentId = getNextCommentId();
+      const contentTab = comment.contentpath !== 'search_description' ? 'desktop' : 'metadata';
       // Create comment
       this.store.dispatch(
         addComment(
@@ -411,7 +420,8 @@ export class CommentApp {
               deleted: comment.deleted,
               resolved: (comment.resolved_at !== null),
               resolvedDate: Date.parse(comment.resolved_at),
-            }
+            },
+            contentTab,
           )
         )
       );

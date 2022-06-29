@@ -17,12 +17,18 @@ const author = {
 const comments: Comment[] = [];
 
 for (let i = 0; i < 6; i++) {
-  comments.push(newComment('test', '', getNextCommentId(), null, author, Date.now(), {
-    mode: 'default',
-    text: 'An example active comment',
-    resolved: false,
-    deleted: false,
-  }));
+  comments.push(newComment('test',
+    '',
+    getNextCommentId(),
+    null,
+    author, Date.now(),
+    {
+      mode: 'default',
+      text: 'An example active comment',
+      resolved: false,
+      deleted: false,
+    },
+    'desktop',));
 }
 
 const commentsToRender = Array.from(

@@ -21,6 +21,10 @@ export function filterActiveComments(commentsToRender: Comment[]) {
   return commentsToRender.filter(({ deleted, resolved }) => (!deleted && !resolved));
 }
 
+function filterNonVisibleComments(commentsToRender: Comment[], currentContentTab: string) {
+  return commentsToRender.filter(({ contentTab }) => (contentTab === currentContentTab));
+}
+
 export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
   store,
   strings,
@@ -34,13 +38,16 @@ export const CommentsTabs: FunctionComponent<CommentsTabsProps> = ({
     state.comments.comments.values()
   );
   const { focusedComment, forceFocus } = state.comments;
-  const { commentsEnabled, user, currentTab } = state.settings;
+  const { commentsEnabled, user, currentTab, contentTab } = state.settings;
   let resolvedCommentsToRender = filterResolvedComments(commentsToRender);
   let activeCommentsToRender = filterActiveComments(commentsToRender);
   if (!commentsEnabled || !user) {
     resolvedCommentsToRender = [];
     activeCommentsToRender = [];
   }
+
+  resolvedCommentsToRender = filterNonVisibleComments(resolvedCommentsToRender, contentTab);
+  activeCommentsToRender = filterNonVisibleComments(activeCommentsToRender, contentTab);
 
   function commentsRenderd(comments: Comment[]) {
     return comments.map((comment) => (

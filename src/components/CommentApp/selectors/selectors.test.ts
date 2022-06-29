@@ -55,7 +55,8 @@ test('Select is dirty', () => {
     {
       remoteId: null,
       text: 'my new comment'
-    }
+    },
+    'desktop',
   )));
 
   expect(selectIsDirty(stateWithUnsavedComment)).toBe(true);
@@ -70,7 +71,8 @@ test('Select is dirty', () => {
     {
       remoteId: 1,
       text: 'my saved comment'
-    }
+    },
+    'desktop',
   )));
 
   expect(selectIsDirty(stateWithSavedComment)).toBe(false);

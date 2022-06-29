@@ -325,6 +325,7 @@ window.comments = (() => {
     commentApp.setApiUrl(apiUrl);
     commentApp.setApiKey(apiKey);
     commentApp.setAuthUserId(authUserId);
+    commentApp.setContentTab('desktop');
 
     fetch(request)
       .then(response => {
@@ -346,11 +347,20 @@ window.comments = (() => {
       authorDetails = getAuthorDetails('guest-data');
     }
     const author = JSON.parse(authorDetails.author);
+    // When working, pass the contentTab name in with the rest of the data
+    let contentTab = 'desktop';
+    if (contentPath === 'search_description') {
+      contentTab = 'metadata';
+    }
     commentApp.store.dispatch(
       addComment(
-        newComment(contentPath, contentPosition, commentId, null, author, Date.now(), addCommentOptions)
+        newComment(contentPath, contentPosition, commentId, null, author, Date.now(), addCommentOptions, contentTab)
       )
     );
+  }
+
+  function setContentTab(contentTab) {
+    commentApp.setContentTab(contentTab);
   }
 
   return {
@@ -361,5 +371,6 @@ window.comments = (() => {
     initCommentsInterface,
     initCommentsInterfaceFromApi,
     addNewComment,
+    setContentTab,
   };
 })();

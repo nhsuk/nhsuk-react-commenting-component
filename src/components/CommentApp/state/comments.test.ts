@@ -44,6 +44,7 @@ test('New comment added to state', () => {
     remoteReplyCount: 0,
     resolved: false,
     replies: new Map(),
+    contentTab: 'desktop'
   };
   const commentAction = actions.addComment(newComment);
   const newState = reducer(basicCommentsState, commentAction);
@@ -79,6 +80,7 @@ test('Remote comment added to state', () => {
     newText: '',
     remoteReplyCount: 0,
     replies: new Map(),
+    contentTab: 'desktop',
   };
   const commentAction = actions.addComment(newComment);
   const newState = reducer(basicCommentsState, commentAction);

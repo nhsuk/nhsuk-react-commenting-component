@@ -14,6 +14,7 @@ export interface SettingsState {
   authUserId: number | null;
   shareType: string;
   shareUrl: string;
+  contentTab: string;
 }
 
 export type SettingsStateUpdate = Partial<SettingsState>;
@@ -30,6 +31,7 @@ export const INITIAL_STATE: SettingsState = {
   authUserId: null,
   shareType: '',
   shareUrl: '',
+  contentTab: 'desktop',
 };
 
 export const reducer = produce((draft: SettingsState, action: actions.Action) => {

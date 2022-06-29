@@ -276,8 +276,9 @@ export class CommentApp {
           Date.now(),
           {
             mode: 'creating',
-          }
-        )
+          },
+          this.store.getState().settings.contentTab,
+        ),
       )
     );
 
@@ -325,6 +326,13 @@ export class CommentApp {
       let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
       elem1Bottom += 10;
       element2.style.top = elem1Bottom;
+  }
+  setContentTab(contentTab: string) {
+    this.store.dispatch(
+      updateGlobalSettings({
+        contentTab: contentTab
+      })
+    );
   }
 
   renderApp(
@@ -416,6 +424,7 @@ export class CommentApp {
         continue;
       }
       const commentId = getNextCommentId();
+      const contentTab = comment.contentpath !== 'search_description' ? 'desktop' : 'metadata';
       // Create comment
       this.store.dispatch(
         addComment(
@@ -433,7 +442,8 @@ export class CommentApp {
               deleted: comment.deleted,
               resolved: (comment.resolved_at !== null),
               resolvedDate: Date.parse(comment.resolved_at),
-            }
+            },
+            contentTab,
           )
         )
       );

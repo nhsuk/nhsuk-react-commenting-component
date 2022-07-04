@@ -313,12 +313,57 @@ export class CommentApp {
       })
     );
   }
+  overlapExists(element1: Element, element2: Element) {
+    const rect1 = element1.getBoundingClientRect();
+    const rect2 = element2.getBoundingClientRect();
+    const overlap = !(rect1.right < rect2.left ||
+      rect1.left > rect2.right ||
+      rect1.bottom < rect2.top ||
+      rect1.top > rect2.bottom);
+    return overlap;
+  }
+  moveItemDown(element1: Element, element2) {
+    let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
+    elem1Bottom += 10;
+    /* eslint-disable-next-line no-param-reassign*/
+    element2.style.top = elem1Bottom;
+  }
   setContentTab(contentTab: string) {
     this.store.dispatch(
       updateGlobalSettings({
         contentTab: contentTab
       })
     );
+  }
+
+  calculateBoundingRectTop(comment: any) {
+    /* eslint-disable dot-notation */
+    let contentPath = comment['contentpath'];
+    if (contentPath.startsWith('content.')) {
+      contentPath = contentPath.substr(8, contentPath.length - 8);
+    }
+    const contentpathParts  = contentPath.split('.content.');
+    let contentTop = 0;
+    let contentElement = document.querySelector('*[data-contentpath="' + contentpathParts[0] + '"]');
+    if (contentElement && contentpathParts.length > 0) {
+      contentElement = contentElement.querySelector('*[data-contentpath="content.' + contentpathParts[1] + '"]');
+    }
+    // now get the key from the position - get the element for this
+    // Then get the bounding rectangle for this key element
+    if (contentElement && comment['position'] !== '') {
+      const pos = JSON.parse(comment['position']);
+      const positionKey = pos[0]['key'];
+      contentElement = contentElement.querySelector('*[data-block-key="' + positionKey + '"]');
+    }
+    if (contentElement) {
+      contentTop = contentElement.getBoundingClientRect().top;
+    }
+    if (comment['position'] !== '') {
+      const pos = JSON.parse(comment['position']);
+      contentTop += pos[0]['start'];
+    }
+    return contentTop;
+    /* eslint-enable dot-notation */
   }
 
   renderApp(
@@ -394,9 +439,18 @@ export class CommentApp {
           }
         }
       );
+      const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
+      if (commentListElems.length > 1) {
+        for (let i = 0; i < (commentListElems.length - 1); i++) {
+          if (this.overlapExists(commentListElems[i], commentListElems[i + 1])) {
+            this.moveItemDown(commentListElems[i], commentListElems[i + 1]);
+          }
+        }
+      }
     };
 
     // Fetch existing comments
+    initialComments.sort((a, b) => this.calculateBoundingRectTop(a) - this.calculateBoundingRectTop(b));
     for (const comment of initialComments) {
       if (comment.id === -1) {
         continue;

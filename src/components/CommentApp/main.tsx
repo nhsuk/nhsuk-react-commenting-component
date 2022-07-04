@@ -335,6 +335,34 @@ export class CommentApp {
     );
   }
 
+  calculateBoundingRectTop(comment: any) {
+    var contentPath = comment['contentpath'];
+    if (contentPath.startsWith("content.")) {
+      contentPath = contentPath.substr(8, contentPath.length-8);
+    }
+    const contentpathParts  = contentPath.split(".content.");
+    var contentTop = 0;
+    var contentElement = document.querySelector('*[data-contentpath="' + contentpathParts[0] + '"]');
+    if (contentElement && contentpathParts.length > 0) {
+      contentElement = contentElement.querySelector('*[data-contentpath="content.' + contentpathParts[1] + '"]');
+    }
+    //now get the key from the position - get the element for this
+    // Then get the bounding rectangle for this key element
+    if (contentElement && comment['position'] !== '') {
+      const pos = JSON.parse(comment['position']);
+      const positionKey = pos[0]['key'];
+      contentElement = contentElement.querySelector('*[data-block-key="' + positionKey + '"]');
+    }
+    if (contentElement) {
+      contentTop = contentElement.getBoundingClientRect().top;
+    }
+    if (comment['position'] !== '') {
+      const pos = JSON.parse(comment['position']);
+      contentTop += pos[0]['start'];
+    }
+    return contentTop;
+  }
+
   renderApp(
     element: HTMLElement,
     outputElement: HTMLElement,
@@ -374,7 +402,8 @@ export class CommentApp {
 
     const render = () => {
       const state = this.store.getState();
-      const commentList: Comment[] = Array.from(state.comments.comments.values());
+      var commentList: Comment[] = Array.from(state.comments.comments.values());
+
 
       ReactDOM.render(
         <CommentFormSetComponent
@@ -419,6 +448,7 @@ export class CommentApp {
     };
 
     // Fetch existing comments
+    initialComments.sort((a, b) => {return this.calculateBoundingRectTop(a) - this.calculateBoundingRectTop(b)});
     for (const comment of initialComments) {
       if (comment.id === -1) {
         continue;

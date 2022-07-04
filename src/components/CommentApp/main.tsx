@@ -316,16 +316,17 @@ export class CommentApp {
   overlapExists(element1: Element, element2: Element) {
     const rect1 = element1.getBoundingClientRect();
     const rect2 = element2.getBoundingClientRect();
-    var overlap = !(rect1.right < rect2.left || 
-      rect1.left > rect2.right || 
-      rect1.bottom < rect2.top || 
+    const overlap = !(rect1.right < rect2.left ||
+      rect1.left > rect2.right ||
+      rect1.bottom < rect2.top ||
       rect1.top > rect2.bottom);
     return overlap;
   }
   moveItemDown(element1: Element, element2) {
-      let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
-      elem1Bottom += 10;
-      element2.style.top = elem1Bottom;
+    let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
+    elem1Bottom += 10;
+    /* eslint-disable-next-line no-param-reassign*/
+    element2.style.top = elem1Bottom;
   }
   setContentTab(contentTab: string) {
     this.store.dispatch(
@@ -336,17 +337,18 @@ export class CommentApp {
   }
 
   calculateBoundingRectTop(comment: any) {
-    var contentPath = comment['contentpath'];
-    if (contentPath.startsWith("content.")) {
-      contentPath = contentPath.substr(8, contentPath.length-8);
+    /* eslint-disable dot-notation */
+    let contentPath = comment['contentpath'];
+    if (contentPath.startsWith('content.')) {
+      contentPath = contentPath.substr(8, contentPath.length - 8);
     }
-    const contentpathParts  = contentPath.split(".content.");
-    var contentTop = 0;
-    var contentElement = document.querySelector('*[data-contentpath="' + contentpathParts[0] + '"]');
+    const contentpathParts  = contentPath.split('.content.');
+    let contentTop = 0;
+    let contentElement = document.querySelector('*[data-contentpath="' + contentpathParts[0] + '"]');
     if (contentElement && contentpathParts.length > 0) {
       contentElement = contentElement.querySelector('*[data-contentpath="content.' + contentpathParts[1] + '"]');
     }
-    //now get the key from the position - get the element for this
+    // now get the key from the position - get the element for this
     // Then get the bounding rectangle for this key element
     if (contentElement && comment['position'] !== '') {
       const pos = JSON.parse(comment['position']);
@@ -361,6 +363,7 @@ export class CommentApp {
       contentTop += pos[0]['start'];
     }
     return contentTop;
+    /* eslint-enable dot-notation */
   }
 
   renderApp(
@@ -402,8 +405,7 @@ export class CommentApp {
 
     const render = () => {
       const state = this.store.getState();
-      var commentList: Comment[] = Array.from(state.comments.comments.values());
-
+      const commentList: Comment[] = Array.from(state.comments.comments.values());
 
       ReactDOM.render(
         <CommentFormSetComponent
@@ -439,16 +441,16 @@ export class CommentApp {
       );
       const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
       if (commentListElems.length > 1) {
-        for (let i = 0; i < (commentListElems.length-1); i++) {
-          if (this.overlapExists(commentListElems[i], commentListElems[i+1])) {
-            this.moveItemDown(commentListElems[i], commentListElems[i+1]);
+        for (let i = 0; i < (commentListElems.length - 1); i++) {
+          if (this.overlapExists(commentListElems[i], commentListElems[i + 1])) {
+            this.moveItemDown(commentListElems[i], commentListElems[i + 1]);
           }
         }
       }
     };
 
     // Fetch existing comments
-    initialComments.sort((a, b) => {return this.calculateBoundingRectTop(a) - this.calculateBoundingRectTop(b)});
+    initialComments.sort((a, b) => this.calculateBoundingRectTop(a) - this.calculateBoundingRectTop(b));
     for (const comment of initialComments) {
       if (comment.id === -1) {
         continue;

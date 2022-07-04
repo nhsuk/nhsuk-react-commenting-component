@@ -1042,7 +1042,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     //   this.props.comment.localId
     // );
 
-    //const contentTop = this.getContentTop()
+    // const contentTop = this.getContentTop()
 
     return (
       <FocusTrap
@@ -1116,26 +1116,28 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     }
     return elem.getBoundingClientRect().top + window.scrollY;
   }
-  
 
   getAttribAndValue(comment) {
-    // Get data-block-key and the first data-block-key value 
+    // Get data-block-key and the first data-block-key value
     // or data-content and the last contentpath value
-    const attribAndValue = {attrib:'data-block-key', value: ''};
+    /* eslint-disable dot-notation */
+    const attribAndValue = { attrib: 'data-block-key', value: '' };
     if (comment.position && comment.position.length > 0) {
       const positionJson = JSON.parse(comment.position);
-      attribAndValue['value'] = positionJson[0].key
+      attribAndValue['value'] = positionJson[0].key;
       return attribAndValue;
     }
     attribAndValue['attrib'] = 'data-contentpath';
     const contentPath = comment.contentpath.replaceAll('content.', '').split('.');
-    const lastPath = contentPath[contentPath.length-1];
+    const lastPath = contentPath[contentPath.length - 1];
+    /* eslint-disable-next-line no-useless-escape */
     if (lastPath.match('^[0-9a-f]{8}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{4}\-[0-9a-f]{12}$')) {
       attribAndValue['value'] = 'content.' + lastPath;
     } else {
       attribAndValue['value'] = lastPath;
     }
     return attribAndValue;
+    /* eslint-enable dot-notation */
   }
 
   getHighlightNode(contentPathParts: string[], parentNode: any) {

@@ -17,7 +17,8 @@ import {
   isAuthorTheExternalUser,
   isAuthorTheCurrentGuestUser,
   checkSuccessFalse,
-  getStatus
+  getStatus,
+  arrangeComments,
 } from '../utils';
 
 export async function saveCommentReply(
@@ -217,6 +218,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
           newText: reply.text,
         })
       );
+      arrangeComments();
     };
 
     const charLimit = 5000;
@@ -451,6 +453,7 @@ export default class CommentReplyComponent extends React.Component<CommentReplyP
       inner = this.renderDefault();
       break;
     }
+    arrangeComments();
 
     return (
       <li

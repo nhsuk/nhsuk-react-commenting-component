@@ -32,6 +32,7 @@ import {
   checkSuccessFalse,
   getStatus,
   getAuthorDetails,
+  arrangeComments,
 } from '../utils';
 
 
@@ -1008,6 +1009,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
       inner = this.renderDefault();
       break;
     }
+    arrangeComments();
 
     const onClick = () => {
       const status = getStatus();
@@ -1018,6 +1020,7 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           )
         );
         highlightContent(this.props.comment, 'click');
+        arrangeComments();
       }
     };
 
@@ -1042,7 +1045,16 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
     //   this.props.comment.localId
     // );
 
-    // const contentTop = this.getContentTop()
+    const contentTop = this.getContentTop();
+
+    let commentsLeft = 0;
+    let commentsWidth = 500;
+    const elem = document.querySelector('#comments');
+    if (elem) {
+      commentsLeft = elem.getBoundingClientRect().left;
+      const commentsRight = elem.getBoundingClientRect().right;
+      commentsWidth = commentsRight - commentsLeft;
+    }
 
     return (
       <FocusTrap
@@ -1065,13 +1077,13 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
           className={
             `comment comment--mode-${this.props.comment.mode} ${this.props.isFocused ? 'comment--focused' : ''}`
           }
-          // style={{
-          //   position: 'absolute',
-          //   top: `${contentTop}px`,
-          //   display: this.props.isVisible ? 'block' : 'none',
-          //   right: '113px',
-          //   width: '592px',
-          // }}
+          style={{
+            position: 'absolute',
+            top: `${contentTop}px`,
+            display: this.props.isVisible ? 'block' : 'none',
+            left: `${commentsLeft}px`,
+            width: `${commentsWidth}px`,
+          }}
           data-comment-id={this.props.comment.localId}
           onClick={onClick}
           onDoubleClick={onDoubleClick}

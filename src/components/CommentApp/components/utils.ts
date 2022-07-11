@@ -202,3 +202,32 @@ export function getAuthorDetails(elementId) {
   }
   return { details_found: 'True', author: JSON.stringify(author) };
 }
+
+function overlapExists(element1: Element, element2: Element) {
+  const rect1 = element1.getBoundingClientRect();
+  const rect2 = element2.getBoundingClientRect();
+  const overlap = !(rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top ||
+    rect1.top > rect2.bottom);
+  return overlap;
+}
+
+function moveItemDown(element1: HTMLElement, element2: HTMLElement) {
+  const element1Top = element1.style.top;
+  const element1TopInt = parseInt(element1Top.substring(0, element1Top.length - 2), 10);
+  const element1BottomInt = element1TopInt + element1.clientHeight + 10;
+  /* eslint-disable-next-line no-param-reassign*/
+  element2.style.top = element1BottomInt + 'px';
+}
+
+export function arrangeComments() {
+  const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
+  for (let element1 = 0; element1 < commentListElems.length; element1++) {
+    for (let element2 = element1 + 1; element2 < commentListElems.length; element2++) {
+      if (overlapExists(commentListElems[element1], commentListElems[element2])) {
+        moveItemDown((commentListElems[element1] as HTMLElement), commentListElems[element2] as HTMLElement);
+      }
+    }
+  }
+}

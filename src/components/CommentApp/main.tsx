@@ -29,6 +29,7 @@ import {
 import { CommentsTabs } from './components/CommentsTabs/index';
 import { CommentFormSetComponent } from './components/Form';
 import { INITIAL_STATE as INITIAL_SETTINGS_STATE } from './state/settings';
+import { arrangeComments } from './components/utils';
 
 import './main.scss';
 
@@ -313,21 +314,6 @@ export class CommentApp {
       })
     );
   }
-  overlapExists(element1: Element, element2: Element) {
-    const rect1 = element1.getBoundingClientRect();
-    const rect2 = element2.getBoundingClientRect();
-    const overlap = !(rect1.right < rect2.left ||
-      rect1.left > rect2.right ||
-      rect1.bottom < rect2.top ||
-      rect1.top > rect2.bottom);
-    return overlap;
-  }
-  moveItemDown(element1: Element, element2) {
-    let elem1Bottom = element1.getBoundingClientRect().bottom + window.scrollY;
-    elem1Bottom += 10;
-    /* eslint-disable-next-line no-param-reassign*/
-    element2.style.top = elem1Bottom;
-  }
   setContentTab(contentTab: string) {
     this.store.dispatch(
       updateGlobalSettings({
@@ -439,14 +425,7 @@ export class CommentApp {
           }
         }
       );
-      const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
-      if (commentListElems.length > 1) {
-        for (let i = 0; i < (commentListElems.length - 1); i++) {
-          if (this.overlapExists(commentListElems[i], commentListElems[i + 1])) {
-            this.moveItemDown(commentListElems[i], commentListElems[i + 1]);
-          }
-        }
-      }
+      arrangeComments();
     };
 
     // Fetch existing comments
@@ -534,6 +513,16 @@ export class CommentApp {
       this.layout.refreshDesiredPositions(this.store.getState().settings.currentTab);
       if (this.layout.refreshLayout()) {
         render();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const commentingPanel = document.querySelector('.commenting-panel');
+      if (commentingPanel) {
+        const commentListElems = document.querySelectorAll('ol.comments-list li.comment');
+        for (let elem = 0; elem < commentListElems.length; elem++) {
+          (commentListElems[elem] as HTMLElement).style.left = (commentingPanel as HTMLElement).offsetLeft + 'px';
+        }
       }
     });
   }

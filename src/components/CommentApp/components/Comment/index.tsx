@@ -259,9 +259,9 @@ function removeHighlightContent(comment: Comment) {
   }
   if (highlightElements) {
     for (let elem = 0; elem < highlightElements.length; elem++) {
-      const innerText = highlightElements[elem].textContent;
-      if (innerText) {
-        highlightElements[elem].replaceWith(highlightElements[elem].textContent!);
+      const innerHTML = highlightElements[elem].innerHTML;
+      if (innerHTML) {
+        highlightElements[elem].outerHTML = innerHTML;
       }
     }
   }

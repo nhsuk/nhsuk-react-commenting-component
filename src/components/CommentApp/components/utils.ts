@@ -146,14 +146,14 @@ export function isAuthorTheCurrentGuestUser(author: any) {
   }
   const authUser = document.getElementById('request-user');
   if (authUser) {
-    const authUserDetails = JSON.parse(authUser.innerText);
+    const authUserDetails = JSON.parse(authUser.innerHTML);
     if (authUserDetails.is_authenticated !== 'False') {
       return false;
     }
   }
   const guestUser = document.getElementById('guest-data');
   if (guestUser) {
-    const guestUserDetails = JSON.parse(guestUser.innerText);
+    const guestUserDetails = JSON.parse(guestUser.innerHTML);
     if (author.firstname === guestUserDetails.first_name &&
       author.lastname === guestUserDetails.last_name) {
       return true;

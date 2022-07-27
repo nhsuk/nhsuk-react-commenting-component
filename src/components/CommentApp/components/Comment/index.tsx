@@ -1153,10 +1153,11 @@ export default class CommentComponent extends React.Component<CommentProps, Comm
   }
 
   getHighlightNode(contentPathParts: string[], parentNode: any) {
-    if (contentPathParts[0].includes('.undefined')) {
-      contentPathParts[0] = contentPathParts[0].split('.')[0];
+    let contentPathPart = contentPathParts[0];
+    if (contentPathPart.includes('.undefined')) {
+      contentPathPart = contentPathParts[0].split('.')[0];
     }
-    const node = parentNode.querySelector('[data-contentpath="' + contentPathParts[0] + '"]');
+    const node = parentNode.querySelector('[data-contentpath="' + contentPathPart + '"]');
     if (contentPathParts.length === 1) {
       return node;
     }
